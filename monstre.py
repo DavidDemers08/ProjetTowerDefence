@@ -4,6 +4,7 @@ class Monstre():
         self.y = y
         self.vitesse = 3
 
+
     def avancer_monstre(self, cibleX, cibleY):
         # cibleX va représenter le premier composant du vecteur dans le tablau du chemin
         # cibleX va représenter le deuxième composant du vecteur dans le tablau du chemin

@@ -27,6 +27,11 @@ class Modele():
         self.parent = parent
         self.largeur = 1000
         self.hauteur = 800
+        self.monstreList = []
+
+
+    def avancer_Monstres(self):
+        pass
 
 
 class Controleur():
