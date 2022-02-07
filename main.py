@@ -30,7 +30,7 @@ class Modele:
         self.parent = parent
         self.largeur = 1000
         self.hauteur = 800
-        self.chemin = [(self.largeur,self.hauteur/2)] #tableau de chemin (ici juste la ligne droite)
+        self.chemin = [[self.largeur,self.hauteur/2]] #tableau de chemin (ici juste la ligne droite)
         self.monstreList = []
         self.creer_monstres()
 
