@@ -21,8 +21,8 @@ class Vue:
                                          self.modele.hauteur / 2 + 50, fill="beige")
 
     def afficher_partie(self):
-        pass
-
+        for i in self.modele.monstreList:
+            self.cadre_info.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="red")
 
 
 class Modele:
@@ -30,21 +30,20 @@ class Modele:
         self.parent = parent
         self.largeur = 1000
         self.hauteur = 800
-        self.chemin = [(self.largeur,self.hauteur/2)] #tableau de chemin (ici juste la ligne droite)
+        self.chemin = [(self.largeur, self.hauteur / 2)]  # tableau de chemin (ici juste la ligne droite)
         self.monstreList = []
         self.creer_monstres()
 
-
     def avancer_monstres(self):
-        pass
+        for i in self.monstreList:
+            i.avancer_monstre(1000, 400)
 
     def creer_monstres(self):
         for i in range(51):
-            self.monstreList.append(Monstre(-10,random.randrange(350,450)))
+            self.monstreList.append(Monstre(-10, random.randrange(350, 450)))
 
 
-
-class Controleur():
+class Controleur:
     def __init__(self):
         self.modele = Modele(self)
         self.vue = Vue(self)

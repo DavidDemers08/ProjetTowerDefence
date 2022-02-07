@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d52ef0f7-c9bb-4dce-bd44-7f181277d4f2" name="Default Changelist" comment="mise a jour">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="d52ef0f7-c9bb-4dce-bd44-7f181277d4f2" name="Default Changelist" comment="creer_monstres()">
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/monstre.py" beforeDir="false" afterPath="$PROJECT_DIR$/monstre.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +100,21 @@
       <option name="project" value="LOCAL" />
       <updated>1644271525134</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="creer_monstres()">
+      <created>1644272731314</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1644272731314</updated>
+    </task>
+    <task id="LOCAL-00006" summary="creer_monstres()">
+      <created>1644272792036</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1644272792036</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -119,6 +133,7 @@
     <MESSAGE value="salut" />
     <MESSAGE value="changement nom" />
     <MESSAGE value="mise a jour" />
-    <option name="LAST_COMMIT_MESSAGE" value="mise a jour" />
+    <MESSAGE value="creer_monstres()" />
+    <option name="LAST_COMMIT_MESSAGE" value="creer_monstres()" />
   </component>
 </project>
