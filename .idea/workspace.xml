@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d52ef0f7-c9bb-4dce-bd44-7f181277d4f2" name="Default Changelist" comment="changement nom">
+    <list default="true" id="d52ef0f7-c9bb-4dce-bd44-7f181277d4f2" name="Default Changelist" comment="mise a jour">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/monstre.py" beforeDir="false" afterPath="$PROJECT_DIR$/monstre.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +93,14 @@
       <option name="project" value="LOCAL" />
       <updated>1644270399299</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="mise a jour">
+      <created>1644271525134</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1644271525134</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -111,6 +118,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="salut" />
     <MESSAGE value="changement nom" />
-    <option name="LAST_COMMIT_MESSAGE" value="changement nom" />
+    <MESSAGE value="mise a jour" />
+    <option name="LAST_COMMIT_MESSAGE" value="mise a jour" />
   </component>
 </project>
