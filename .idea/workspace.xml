@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d52ef0f7-c9bb-4dce-bd44-7f181277d4f2" name="Default Changelist" comment="creer_monstres()">
+    <list default="true" id="d52ef0f7-c9bb-4dce-bd44-7f181277d4f2" name="Default Changelist" comment="afficher partie avec creep">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/monstre.py" beforeDir="false" afterPath="$PROJECT_DIR$/monstre.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,7 +114,14 @@
       <option name="project" value="LOCAL" />
       <updated>1644272792036</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="afficher partie avec creep">
+      <created>1644273273111</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1644273273111</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -134,6 +141,7 @@
     <MESSAGE value="changement nom" />
     <MESSAGE value="mise a jour" />
     <MESSAGE value="creer_monstres()" />
-    <option name="LAST_COMMIT_MESSAGE" value="creer_monstres()" />
+    <MESSAGE value="afficher partie avec creep" />
+    <option name="LAST_COMMIT_MESSAGE" value="afficher partie avec creep" />
   </component>
 </project>
