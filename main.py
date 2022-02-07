@@ -1,13 +1,15 @@
 from tkinter import *
 
+
 class Vue():
-    def __init__(self,parent):
+    def __init__(self, parent):
         self.parent = parent
         self.root = Tk()
-        self.root.title("TowerDefence 0.1")
+        self.root.title("JMDefence 0.1")
+
 
 class Modele():
-    def __init__(self,parent):
+    def __init__(self, parent):
         self.parent = parent
 
 
@@ -16,7 +18,6 @@ class Controleur():
         self.vue = Vue(self)
         self.modele = Modele(self)
         self.vue.root.mainloop()
-
 
 
 if __name__ == '__main__':
