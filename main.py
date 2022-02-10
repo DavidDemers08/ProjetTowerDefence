@@ -44,6 +44,7 @@ class Modele:
         self.hauteur_carte = 800
         self.vague = 0
         self.liste_monstres = []
+        self.path = [[0,300],[200,100]]
 
     def creer_monstre(self):
 
@@ -56,14 +57,6 @@ class Modele:
             i.avancer_monstre()
 
 
-class Monstre:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.vitesse = 3
-
-    def avancer_monstre(self):
-        self.x += self.vitesse
 
 
 class Controleur:

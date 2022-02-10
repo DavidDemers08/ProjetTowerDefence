@@ -14,3 +14,6 @@ class Monstre:
 
         if self.y < cibleY - self.vitesse:
             self.y = self.y + self.vitesse
+
+        self.x += self.vitesse
+
