@@ -28,14 +28,14 @@ class Vue:
         self.afficher_partie()
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                          i.y + i.demie_taille, fill="black", stipple="@Images/Question-Mark-Emoji100x100.xbm",offset="center")
+                                          i.y + i.demie_taille, fill="black", stipple="gray25")
     def afficher_partie(self):
         self.canevas.delete(ALL)
 
         self.canevas.create_rectangle(0, self.modele.hauteur_carte / 2 - 50, self.modele.largeur_carte,
                                       self.modele.hauteur_carte / 2 + 50, fill="beige")
 
-        self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg)
+        self.canevas.create_image(self.modele.largeur_carte/2, self.modele.hauteur_carte/2, image=self.bg)
         for i in self.modele.liste_monstres:
             self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black")
         for i in self.modele.liste_tours:
@@ -50,7 +50,7 @@ class Modele:
         self.hauteur_carte = 800
         self.vague = 0
         self.liste_monstres = []
-        self.path = [[200,450],[200,200],[450,200],[450,520]]
+        self.path = [[200,450],[200,200],[440,200],[440,520],[760,520],[760,370],[1250,370]]
         self.liste_tours = []
         self.creer_tour()
 
@@ -60,6 +60,7 @@ class Modele:
             self.liste_monstres.append(monstre.Monstre(-10, 450))
 
     def creer_tour(self):
+
         self.liste_tours.append(tour.Tour(320, 290, 5, 50))
 
 
@@ -67,7 +68,6 @@ class Modele:
 
         for i in self.liste_monstres:
             i.avancer_monstre(self.path)
-
 
 
 class Controleur:
@@ -84,14 +84,12 @@ class Controleur:
             self.jouer_partie()
             self.modele.vague = 1
             self.modele.creer_monstre()
-            self.modele.creer_tour()
 
 
     def jouer_partie(self):
         if self.partie_en_cours:
             self.vue.root.after(40, self.jouer_partie)
             self.modele.bouger_monstres()
-
         self.vue.afficher_partie()
 
 
