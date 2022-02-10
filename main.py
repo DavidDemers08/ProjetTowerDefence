@@ -1,6 +1,7 @@
 import random
 from tkinter import *
 import monstre
+import tour
 
 class Vue:
     def __init__(self, parent):
@@ -55,21 +56,12 @@ class Modele:
 
     def creer_tour(self):
 
-        self.liste_tours.append(Tour(300,400,5))
+        self.liste_tours.append(tour.Tour(300,400,5))
 
     def bouger_monstres(self):
 
         for i in self.liste_monstres:
             i.avancer_monstre(self.path)
-
-class Tour:
-    def __init__(self, x, y, rayon):
-        self.x = x
-        self.y = y
-        self.rayon = rayon
-
-    def emplacement_valide(self):
-        pass
 
 
 
