@@ -14,7 +14,7 @@ class Vue:
 
     def creer_interface(self):
         # cadre HUD affichant la duree
-        self.bg = PhotoImage(file="carte.png")
+        self.bg = PhotoImage(file="Images/carte.png")
         self.bg.width()
 
         cadre_depart = Frame(self.root, bg='gray')
@@ -40,7 +40,7 @@ class Vue:
             self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black")
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                          i.y + i.demie_taille, fill="black", stipple="question")
+                                          i.y + i.demie_taille, fill="black", stipple="@Images/Question-Mark-Emoji100x100.xbm",offset="center")
 
 
 class Modele:
