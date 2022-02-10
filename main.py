@@ -1,6 +1,8 @@
 import random
 from tkinter import *
 
+from monstre import Monstre
+
 
 class Vue:
     def __init__(self, parent):
@@ -22,10 +24,13 @@ class Vue:
 
         cadre_depart.pack(expand=True, fill=BOTH)
         bouton_depart.pack(side=TOP)
+
         self.canevas.pack()
 
         self.afficher_partie()
-
+        for i in self.modele.liste_tours:
+            self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
+                                          i.y + i.demie_taille, fill="black", stipple="gray25")
     def afficher_partie(self):
         self.canevas.delete(ALL)
 
@@ -35,6 +40,9 @@ class Vue:
         self.canevas.create_image(self.modele.largeur_carte/2, self.modele.hauteur_carte/2, image=self.bg)
         for i in self.modele.liste_monstres:
             self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black")
+        for i in self.modele.liste_tours:
+            self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
+                                          i.y + i.demie_taille, fill="black", stipple="gray25")
 
 
 class Modele:
@@ -45,7 +53,7 @@ class Modele:
         self.vague = 0
         self.liste_monstres = []
         self.liste_tours = []
-
+        self.creer_tour()
 
     def creer_monstre(self):
 
@@ -54,18 +62,20 @@ class Modele:
 
     def creer_tour(self):
 
-        self.liste_tours.append(Tour(300,400,5))
+        self.liste_tours.append(Tour(300,400,5,50))
+
 
     def bouger_monstres(self):
 
         for i in self.liste_monstres:
-            i.avancer_monstre()
+            i.avancer_monstre(0,350)
 
 class Tour:
-    def __init__(self, x, y, rayon):
+    def __init__(self, x, y, rayon,demie_taille):
         self.x = x
         self.y = y
         self.rayon = rayon
+        self.demie_taille = demie_taille
 
     def emplacement_valide(self):
         pass
@@ -86,7 +96,7 @@ class Controleur:
             self.jouer_partie()
             self.modele.vague = 1
             self.modele.creer_monstre()
-            self.modele.creer_tour()
+
 
     def jouer_partie(self):
         if self.partie_en_cours:
