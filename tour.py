@@ -7,16 +7,8 @@ class Tour:
         self.rayon = rayon
         self.demie_taille = demie_taille
 
-    def emplacement_valide(self):
-        pass
 
-    def analyse_rayon(self, monstre_list):
-        for monstre in monstre_list:
-            if helper.Helper().calcDistance(self.x, self.y, monstre.x, monstre.y) <= self.rayon:
-                pass #le monstre est dans le rayon dans la tour
-
-
-
-
-
+    def analyse_rayon(self, monstre):
+        if helper.Helper().calcDistance(self.x, self.y, monstre.x, monstre.y) <= self.rayon:
+            return True
 

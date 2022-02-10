@@ -61,7 +61,7 @@ class Modele:
 
     def creer_tour(self):
 
-        self.liste_tours.append(tour.Tour(320, 290, 5, 50))
+        self.liste_tours.append(tour.Tour(320, 290, 150, 50))
 
 
     def bouger_monstres(self):
@@ -69,6 +69,10 @@ class Modele:
         for i in self.liste_monstres:
             i.avancer_monstre(self.path)
 
+    def analyser_tours(self):
+        for tour in self.liste_tours:
+            for monstre in self.liste_monstres:
+                tour.analyse_rayon(monstre)
 
 class Controleur:
     def __init__(self):
@@ -90,8 +94,12 @@ class Controleur:
         if self.partie_en_cours:
             self.vue.root.after(40, self.jouer_partie)
             self.modele.bouger_monstres()
+            self.modele.analyser_tours()
         self.vue.afficher_partie()
 
+
+    def attaquer_tour(self):
+        pass
 
 if __name__ == '__main__':
     c = Controleur()
