@@ -47,10 +47,11 @@ class Modele:
 
     def creer_monstre(self):
 
-        for i in range(10):
-            self.liste_monstres.append(Monstre(0, random.randrange(350, 450)))
+        for i in range(50):
+            self.liste_monstres.append(Monstre(-10, random.randrange(350, 450)))
 
     def bouger_monstres(self):
+
         for i in self.liste_monstres:
             i.avancer_monstre()
 
