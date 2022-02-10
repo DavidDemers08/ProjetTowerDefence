@@ -39,7 +39,7 @@ class Vue:
                                       self.modele.hauteur_carte / 2 + 50, fill="beige")
 
         self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg)
-        for i in self.modele.liste_monstres:
+        for i in self.modele.liste_monstres_terrain:
             self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black")
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
@@ -53,13 +53,18 @@ class Modele:
         self.largeur_carte = 1200
         self.hauteur_carte = 800
         self.vague = 0
-        self.liste_monstres = []
+        self.liste_monstres_terrain = []
+        self.liste_monstres_entrepot = []
         self.path = [[200, 450], [200, 200], [440, 200], [440, 520], [760, 520], [760, 370], [1250, 370]]
         self.liste_tours = []
+        self.delai_creation_creep = 0
+        self.delai_creation_creep_max = 50
         self.creer_tour()
+        self.nb_creep_vague = 1
 
     def creer_monstre(self):
-            self.liste_monstres.append(monstre.Monstre(-10, 450))
+        for i in range(self.nb_creep_vague * self.vague):
+            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450))
 
     def creer_tour(self):
 
@@ -67,15 +72,29 @@ class Modele:
 
     def bouger_monstres(self):
 
-        for i in self.liste_monstres:
+        for i in self.liste_monstres_terrain:
             i.avancer_monstre(self.path)
 
         self.tuer_monstre()
 
     def tuer_monstre(self):
-        for i in self.liste_monstres:
+        for i in self.liste_monstres_terrain:
             if i.x > 1240:
-                self.liste_monstres.remove(i)
+                self.liste_monstres_terrain.remove(i)
+
+    def jouer_partie(self):
+        self.delai_creation_creep += 1
+        if self.delai_creation_creep == self.delai_creation_creep_max and len(self.liste_monstres_entrepot) != 0:
+            temp = self.liste_monstres_entrepot.pop(0)
+            self.liste_monstres_terrain.append(temp)
+            self.delai_creation_creep = 0
+        self.bouger_monstres()
+        if len(self.liste_monstres_entrepot) == 0 and len(self.liste_monstres_terrain) == 0:
+            self.vague += 1
+            self.creer_monstre()
+            print(self.vague)
+            print(len(self.liste_monstres_entrepot))
+            self.delai_creation_creep_max -= 10
 
 
 class Controleur:
@@ -92,14 +111,13 @@ class Controleur:
             self.jouer_partie()
             self.modele.vague = 1
 
+
     def jouer_partie(self):
         if self.partie_en_cours:
-            self.vue.root.after(40, self.jouer_partie)
-
-            self.modele.creer_monstre()
-            if len(self.modele.liste_monstres) != 0:
+            self.modele.jouer_partie()
+            if len(self.modele.liste_monstres_terrain) != 0:
                 self.modele.bouger_monstres()
-            print(len(self.modele.liste_monstres))
+            self.vue.root.after(40, self.jouer_partie)
         self.vue.afficher_partie()
 
 
