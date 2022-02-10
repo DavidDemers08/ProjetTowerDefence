@@ -28,7 +28,7 @@ class Vue:
         self.afficher_partie()
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                          i.y + i.demie_taille, fill="black", stipple="gray25")
+                                          i.y + i.demie_taille, fill="black", stipple="@Images/Question-Mark-Emoji100x100.xbm",offset="center")
     def afficher_partie(self):
         self.canevas.delete(ALL)
 
