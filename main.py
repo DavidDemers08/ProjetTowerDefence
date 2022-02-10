@@ -59,7 +59,6 @@ class Modele:
         self.creer_tour()
 
     def creer_monstre(self):
-        for i in range(51):
             self.liste_monstres.append(monstre.Monstre(-10, 450))
 
     def creer_tour(self):
@@ -90,15 +89,17 @@ class Controleur:
     def debuter_partie(self):
         if not self.partie_en_cours:
             self.partie_en_cours = 1
-            self.modele.creer_monstre()
             self.jouer_partie()
             self.modele.vague = 1
 
     def jouer_partie(self):
         if self.partie_en_cours:
             self.vue.root.after(40, self.jouer_partie)
+
+            self.modele.creer_monstre()
             if len(self.modele.liste_monstres) != 0:
                 self.modele.bouger_monstres()
+            print(len(self.modele.liste_monstres))
         self.vue.afficher_partie()
 
 

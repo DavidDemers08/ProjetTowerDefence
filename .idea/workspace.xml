@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d52ef0f7-c9bb-4dce-bd44-7f181277d4f2" name="Default Changelist" comment="fin du patterne">
+    <list default="true" id="d52ef0f7-c9bb-4dce-bd44-7f181277d4f2" name="Default Changelist" comment="detruire monstre si hors champ">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -179,7 +179,21 @@
       <option name="project" value="LOCAL" />
       <updated>1644527031295</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="detruire monstre si hors champ">
+      <created>1644528582506</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1644528582506</updated>
+    </task>
+    <task id="LOCAL-00015" summary="detruire monstre si hors champ">
+      <created>1644528588879</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1644528588879</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -206,6 +220,7 @@
     <MESSAGE value="bien placer tour" />
     <MESSAGE value="tour est bien placer et path fonctionne" />
     <MESSAGE value="fin du patterne" />
-    <option name="LAST_COMMIT_MESSAGE" value="fin du patterne" />
+    <MESSAGE value="detruire monstre si hors champ" />
+    <option name="LAST_COMMIT_MESSAGE" value="detruire monstre si hors champ" />
   </component>
 </project>
