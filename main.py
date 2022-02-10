@@ -40,7 +40,7 @@ class Vue:
             self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black")
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                          i.y + i.demie_taille, fill="black", stipple="gray25")
+                                          i.y + i.demie_taille, fill="black", stipple="question")
 
 
 class Modele:
@@ -61,7 +61,7 @@ class Modele:
 
     def creer_tour(self):
 
-        self.liste_tours.append(tour.Tour(300, 400, 5, 50))
+        self.liste_tours.append(tour.Tour(320, 290, 5, 50))
 
 
     def bouger_monstres(self):
