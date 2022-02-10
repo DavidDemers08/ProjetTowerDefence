@@ -45,21 +45,31 @@ class Modele:
         self.vague = 0
         self.liste_monstres = []
         self.path = [[200,450],[200,200],[450,200],[450,520]]
+        self.liste_tours = []
+
 
     def creer_monstre(self):
 
         for i in range(50):
             self.liste_monstres.append(monstre.Monstre(-10, 450))
 
+    def creer_tour(self):
+
+        self.liste_tours.append(Tour(300,400,5))
+
     def bouger_monstres(self):
-       # isArrive = False
-        #for j in self.path:
-            #while not isArrive:
-               # for i in self.liste_monstres:
-                   # isArrive = i.avancer_monstre(j)
+
         for i in self.liste_monstres:
             i.avancer_monstre(self.path)
 
+class Tour:
+    def __init__(self, x, y, rayon):
+        self.x = x
+        self.y = y
+        self.rayon = rayon
+
+    def emplacement_valide(self):
+        pass
 
 
 
@@ -77,6 +87,7 @@ class Controleur:
             self.jouer_partie()
             self.modele.vague = 1
             self.modele.creer_monstre()
+            self.modele.creer_tour()
 
 
     def jouer_partie(self):
