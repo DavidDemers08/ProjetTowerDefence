@@ -1,4 +1,4 @@
-class Monstre():
+class Monstre:
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -9,6 +9,7 @@ class Monstre():
         # cibleX va représenter le deuxième composant du vecteur dans le tablau du chemin
         if self.x < cibleX - self.vitesse:
             self.x = self.x + self.vitesse
+            print("allo")
 
         if self.y < cibleY - self.vitesse:
             self.y = self.y + self.vitesse
