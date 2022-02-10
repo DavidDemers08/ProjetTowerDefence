@@ -35,7 +35,7 @@ class Vue:
         self.canevas.create_rectangle(0, self.modele.hauteur_carte / 2 - 50, self.modele.largeur_carte,
                                       self.modele.hauteur_carte / 2 + 50, fill="beige")
 
-        self.canevas.create_image(self.modele.largeur_carte/2, self.modele.hauteur_carte/2, image=self.bg)
+        self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg)
         for i in self.modele.liste_monstres:
             self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black")
         for i in self.modele.liste_tours:
@@ -60,7 +60,6 @@ class Modele:
             self.liste_monstres.append(monstre.Monstre(-10, 450))
 
     def creer_tour(self):
-
         self.liste_tours.append(tour.Tour(320, 290, 5, 50))
 
 
@@ -68,6 +67,7 @@ class Modele:
 
         for i in self.liste_monstres:
             i.avancer_monstre(self.path)
+
 
 
 class Controleur:
@@ -84,12 +84,14 @@ class Controleur:
             self.jouer_partie()
             self.modele.vague = 1
             self.modele.creer_monstre()
+            self.modele.creer_tour()
 
 
     def jouer_partie(self):
         if self.partie_en_cours:
             self.vue.root.after(40, self.jouer_partie)
             self.modele.bouger_monstres()
+
         self.vue.afficher_partie()
 
 
