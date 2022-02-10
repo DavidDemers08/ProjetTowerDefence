@@ -61,23 +61,13 @@ class Modele:
 
     def creer_tour(self):
 
-        self.liste_tours.append(Tour(300,400,5,50))
+        self.liste_tours.append(tour.Tour(300, 400, 5, 50))
 
 
     def bouger_monstres(self):
 
         for i in self.liste_monstres:
-            i.avancer_monstre()
-
-class Tour:
-    def __init__(self, x, y, rayon):
-        self.x = x
-        self.y = y
-        self.rayon = rayon
-
-    def emplacement_valide(self):
-        pass
-
+            i.avancer_monstre(self.path)
 
 
 class Controleur:
