@@ -69,6 +69,8 @@ class Modele:
     def creer_tour(self):
 
         self.liste_tours.append(tour.Tour(320, 290, 5, 50))
+        self.liste_tours.append(tour.Tour(535, 425, 5, 50))
+        self.liste_tours.append(tour.Tour(645, 425, 5, 50))
 
     def bouger_monstres(self):
 
