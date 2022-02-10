@@ -13,13 +13,15 @@ class Vue:
 
     def creer_interface(self):
         # cadre HUD affichant la duree
+        self.bg = PhotoImage(file="carte.png")
+        self.bg.width()
+
         cadre_depart = Frame(self.root, bg='gray')
         bouton_depart = Button(cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
-        self.canevas = Canvas(self.root, width=self.modele.largeur_carte, height=self.modele.hauteur_carte,
-                              bg="darkgreen")
+        self.canevas = Canvas(self.root, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
 
         cadre_depart.pack(expand=True, fill=BOTH)
-        bouton_depart.pack()
+        bouton_depart.pack(side=TOP)
         self.canevas.pack()
 
         self.afficher_partie()
@@ -30,6 +32,7 @@ class Vue:
         self.canevas.create_rectangle(0, self.modele.hauteur_carte / 2 - 50, self.modele.largeur_carte,
                                       self.modele.hauteur_carte / 2 + 50, fill="beige")
 
+        self.canevas.create_image(self.modele.largeur_carte/2, self.modele.hauteur_carte/2, image=self.bg)
         for i in self.modele.liste_monstres:
             self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black")
 
@@ -37,17 +40,18 @@ class Vue:
 class Modele:
     def __init__(self, parent):
         self.parent = parent
-        self.largeur_carte = 800
+        self.largeur_carte = 1200
         self.hauteur_carte = 800
         self.vague = 0
         self.liste_monstres = []
 
     def creer_monstre(self):
 
-        for i in range(10):
-            self.liste_monstres.append(Monstre(0, random.randrange(350, 450)))
+        for i in range(50):
+            self.liste_monstres.append(Monstre(-10, random.randrange(350, 450)))
 
     def bouger_monstres(self):
+
         for i in self.liste_monstres:
             i.avancer_monstre()
 
