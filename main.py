@@ -44,7 +44,7 @@ class Modele:
         self.hauteur_carte = 800
         self.vague = 0
         self.liste_monstres = []
-        self.path = [[200,450],[200,200],[450,200]]
+        self.path = [[200,450],[200,200],[450,200],[450,520]]
 
     def creer_monstre(self):
 
