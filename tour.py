@@ -8,3 +8,12 @@ class Tour:
     def emplacement_valide(self):
         pass
 
+    def analyse_rayon(self, monstre_list):
+        for monstre in monstre_list:
+            if monstre.x == self.x + self.rayon and monstre.x == self.x - self.rayon:
+                pass
+
+
+
+
+
