@@ -99,7 +99,7 @@ class Modele:
             self.delai_creation_creep = 0
 
             print(len(self.liste_monstres_entrepot))
-            self.delai_creation_creep_max -= 10
+            self.delai_creation_creep_max -= 5
 
 
 class Controleur:
