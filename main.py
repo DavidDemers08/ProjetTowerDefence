@@ -60,7 +60,7 @@ class Modele:
         self.delai_creation_creep = 0
         self.delai_creation_creep_max = 50
         self.creer_tour()
-        self.nb_creep_vague = 1
+        self.nb_creep_vague = 2
 
     def creer_monstre(self):
         for i in range(self.nb_creep_vague * self.vague):
@@ -84,15 +84,18 @@ class Modele:
 
     def jouer_partie(self):
         self.delai_creation_creep += 1
+        print(self.delai_creation_creep)
         if self.delai_creation_creep == self.delai_creation_creep_max and len(self.liste_monstres_entrepot) != 0:
             temp = self.liste_monstres_entrepot.pop(0)
             self.liste_monstres_terrain.append(temp)
             self.delai_creation_creep = 0
-        self.bouger_monstres()
+        if len(self.liste_monstres_terrain) != 0:
+            self.bouger_monstres()
         if len(self.liste_monstres_entrepot) == 0 and len(self.liste_monstres_terrain) == 0:
             self.vague += 1
             self.creer_monstre()
-            print(self.vague)
+            self.delai_creation_creep = 0
+
             print(len(self.liste_monstres_entrepot))
             self.delai_creation_creep_max -= 10
 
@@ -111,12 +114,9 @@ class Controleur:
             self.jouer_partie()
             self.modele.vague = 1
 
-
     def jouer_partie(self):
         if self.partie_en_cours:
             self.modele.jouer_partie()
-            if len(self.modele.liste_monstres_terrain) != 0:
-                self.modele.bouger_monstres()
             self.vue.root.after(40, self.jouer_partie)
         self.vue.afficher_partie()
 
