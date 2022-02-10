@@ -1,8 +1,7 @@
 import random
 from tkinter import *
-
-from monstre import Monstre
-
+import monstre
+import tour
 
 class Vue:
     def __init__(self, parent):
@@ -24,7 +23,6 @@ class Vue:
 
         cadre_depart.pack(expand=True, fill=BOTH)
         bouton_depart.pack(side=TOP)
-
         self.canevas.pack()
 
         self.afficher_partie()
@@ -52,13 +50,14 @@ class Modele:
         self.hauteur_carte = 800
         self.vague = 0
         self.liste_monstres = []
+        self.path = [[200,450],[200,200],[450,200],[450,520]]
         self.liste_tours = []
         self.creer_tour()
 
     def creer_monstre(self):
 
         for i in range(50):
-            self.liste_monstres.append(Monstre(-10, random.randrange(350, 450)))
+            self.liste_monstres.append(monstre.Monstre(-10, 450))
 
     def creer_tour(self):
 
@@ -68,14 +67,13 @@ class Modele:
     def bouger_monstres(self):
 
         for i in self.liste_monstres:
-            i.avancer_monstre(0,350)
+            i.avancer_monstre()
 
 class Tour:
-    def __init__(self, x, y, rayon,demie_taille):
+    def __init__(self, x, y, rayon):
         self.x = x
         self.y = y
         self.rayon = rayon
-        self.demie_taille = demie_taille
 
     def emplacement_valide(self):
         pass
