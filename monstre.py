@@ -20,9 +20,12 @@ class Monstre:
             elif self.y > cibleY:
                 self.y -= self.vitesse
 
-            print(self.x, self.y)
-
             if self.y == cibleY and self.x == cibleX:
                 self.x = cibleX
                 self.y = cibleY
                 self.index += 1
+
+
+
+
+
