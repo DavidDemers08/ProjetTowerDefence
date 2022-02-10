@@ -1,6 +1,6 @@
 import random
 from tkinter import *
-
+import monstre
 
 class Vue:
     def __init__(self, parent):
@@ -44,17 +44,21 @@ class Modele:
         self.hauteur_carte = 800
         self.vague = 0
         self.liste_monstres = []
-        self.path = [[0,300],[200,100]]
+        self.path = [[200,450],[200,200],[450,200]]
 
     def creer_monstre(self):
 
         for i in range(50):
-            self.liste_monstres.append(Monstre(-10, random.randrange(350, 450)))
+            self.liste_monstres.append(monstre.Monstre(-10, 450))
 
     def bouger_monstres(self):
-
+       # isArrive = False
+        #for j in self.path:
+            #while not isArrive:
+               # for i in self.liste_monstres:
+                   # isArrive = i.avancer_monstre(j)
         for i in self.liste_monstres:
-            i.avancer_monstre()
+            i.avancer_monstre(self.path)
 
 
 
@@ -74,10 +78,12 @@ class Controleur:
             self.modele.vague = 1
             self.modele.creer_monstre()
 
+
     def jouer_partie(self):
         if self.partie_en_cours:
             self.vue.root.after(40, self.jouer_partie)
             self.modele.bouger_monstres()
+
         self.vue.afficher_partie()
 
 
