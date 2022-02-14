@@ -59,6 +59,9 @@ class Vue:
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                           i.y + i.demie_taille, fill="red", tags="none")
+            self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
+                                          i.y + i.demie_taille, fill="black", tags="none")
+
             self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="")
 
         if len(self.modele.liste_projectiles) != 0:
@@ -118,23 +121,29 @@ class Modele:
 
 
     def attaque_tours(self):
+
+        ciblex =0
         for tour in self.liste_tours:
             tour.delai_tire += 1
             for monstre in self.liste_monstres_terrain:
+
+                if monstre.x > ciblex :
+                    ciblex = monstre.x
+
                 if tour.analyse_rayon(monstre) and tour.delai_tire >= tour.vitesse_attaque:
                     self.liste_projectiles.append(projectile.Projectile(tour,monstre))
                     tour.delai_tire = 0
                 if len(self.liste_projectiles) != 0:
                     for i in self.liste_projectiles:
-                        i.cibleX = monstre.x
+                        i.cibleX = ciblex
                         i.cibleY = monstre.y
 
     def lancer_projectiles(self):
         if len(self.liste_projectiles) != 0:
             for projectile in self.liste_projectiles:
                 projectile.lancer_projectile()
-                if projectile.y == projectile.cibleY and projectile.x == projectile.cibleX:
-                    self.liste_projectiles.remove(projectile) ##watch out
+                if projectile.x <= projectile.cibleX + 2 or projectile.y >= projectile.cibleY - 2:
+                    self.liste_projectiles.remove(projectile)
 
     def creer_tours(self, event):
         x = event.x
