@@ -4,7 +4,7 @@ class Projectile:
         self.y =tour.y
         self.cibleX = monstre.x
         self.cibleY = monstre.y
-        self.vitesse = 5
+        self.vitesse = 10
 
     def lancer_projectile(self):
         if self.x < self.cibleX:
@@ -17,7 +17,7 @@ class Projectile:
         elif self.y > self.cibleY:
             self.y -= self.vitesse
 
-        if self.y == self.cibleY and self.x == self.cibleX:
+        if (self.cibleX + 5 >= self.x >= self.cibleX - 5) and (self.cibleY +5 >= self.y >= self.cibleY - 5):
             self.x = self.cibleX
             self.y = self.cibleY
 

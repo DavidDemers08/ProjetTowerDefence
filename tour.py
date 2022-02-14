@@ -18,17 +18,19 @@ class Tour:
 
     def attaque(self, liste_monstre):
         ciblex = 0
+        cibley = 0
         self.delai_tire += 1
         for monstre in liste_monstre:
             if monstre.x > ciblex:
                 ciblex = monstre.x
+                cibley = monstre.y
             if self.analyse_rayon(monstre) and self.delai_tire >= self.vitesse_attaque:
                 self.liste_projectiles.append(projectile.Projectile(self, monstre))
                 self.delai_tire = 0
             if len(self.liste_projectiles) != 0:
                 for i in self.liste_projectiles:
                     i.cibleX = ciblex
-                    i.cibleY = monstre.y
+                    i.cibleY = cibley
 
         self.lancer_projectiles()
 

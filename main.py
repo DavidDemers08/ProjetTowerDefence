@@ -91,10 +91,8 @@ class Modele:
             self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450))
 
     def bouger_monstres(self):
-
         for i in self.liste_monstres_terrain:
             i.avancer_monstre(self.path)
-
         self.tuer_monstre()
 
     def tuer_monstre(self):
