@@ -13,8 +13,10 @@ class Tour:
             return True
 
 
-    def attaque_tour(self,monstre,projectile):
+    def attaque_tour(self,monstre,projectile_list):
+
         if self.analyse_rayon(monstre):
+            projectile_list.append(Projectile(self.x,self.y,monstre.x,monstre.y))
 
 
 
