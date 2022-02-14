@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d52ef0f7-c9bb-4dce-bd44-7f181277d4f2" name="Default Changelist" comment="modif fonction attaque">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projectile.py" beforeDir="false" afterPath="$PROJECT_DIR$/projectile.py" afterDir="false" />
+    <list default="true" id="d52ef0f7-c9bb-4dce-bd44-7f181277d4f2" name="Default Changelist" comment="angle d'attaque dans lancer_projectile">
+      <change beforePath="$PROJECT_DIR$/tour.py" beforeDir="false" afterPath="$PROJECT_DIR$/tour.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -237,7 +236,14 @@
       <option name="project" value="LOCAL" />
       <updated>1644874605865</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="angle d'attaque dans lancer_projectile">
+      <created>1644876114932</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1644876114932</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -270,6 +276,7 @@
     <MESSAGE value="jc et sam tour attaque" />
     <MESSAGE value="modifications de la structure du modele" />
     <MESSAGE value="modif fonction attaque" />
-    <option name="LAST_COMMIT_MESSAGE" value="modif fonction attaque" />
+    <MESSAGE value="angle d'attaque dans lancer_projectile" />
+    <option name="LAST_COMMIT_MESSAGE" value="angle d'attaque dans lancer_projectile" />
   </component>
 </project>
