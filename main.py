@@ -63,26 +63,38 @@ class Vue:
                                           i.y + i.demie_taille, fill="red", tags="none")
             self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="")
 
+        if len(self.modele.liste_projectiles) != 0:
+            for i in self.modele.liste_projectiles:
+                self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="blue")
 
 class Modele:
     def __init__(self, parent):
         self.parent = parent
         self.largeur_carte = 1200
         self.hauteur_carte = 800
+        self.path = [[200, 450], [200, 200], [440, 200], [440, 520], [760, 520], [760, 370], [1250, 370]]
         self.vague = 0
         self.liste_monstres_terrain = []
         self.liste_monstres_entrepot = []
-        self.path = [[200, 450], [200, 200], [440, 200], [440, 520], [760, 520], [760, 370], [1250, 370]]
+        self.liste_projectiles = []
         self.liste_tours = []
         self.delai_creation_creep = 0
         self.delai_creation_creep_max = 50
 
         self.nb_creep_vague = 2
-        self.liste_projectiles = []
+
+        self.creer_tour()
+
 
     def creer_monstre(self):
         for i in range(self.nb_creep_vague * self.vague):
             self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450))
+
+    def creer_tour(self):
+
+        self.liste_tours.append(tour.Tour(320, 290, 200, 50))
+        self.liste_tours.append(tour.Tour(535, 425, 200, 50))
+        self.liste_tours.append(tour.Tour(645, 425, 200, 50))
 
     def bouger_monstres(self):
 
@@ -99,6 +111,7 @@ class Modele:
     def jouer_partie(self):
         self.spawn_monstre_terrain()
         self.attaque_tours()
+        self.mouvement_projectiles()
 
     def spawn_monstre_terrain(self):
         self.delai_creation_creep += 1
@@ -123,6 +136,19 @@ class Modele:
                 if tour.analyse_rayon(monstre) and tour.delai_tire >= tour.vitesse_attaque:
                     tour.delai_tire = 0
                     print("tirer")
+                    if tour.analyse_rayon(monstre) and tour.delai_tire >= tour.vitesse_attaque:
+                        tour.delai_tire = 0
+                        self.liste_projectiles.append(projectile.Projectile(tour,monstre))
+
+    def mouvement_projectiles(self):
+        if len(self.liste_projectiles) != 0:
+            for projectile in self.liste_projectiles:
+                projectile.lancer_projectile()
+                if projectile.y == projectile.cibleY and projectile.x == projectile.cibleX:
+                     #LE MINION EST TOUCHÉ
+                    self.liste_projectiles.remove(projectile) ##watch out
+
+
 
 
 class Controleur:
