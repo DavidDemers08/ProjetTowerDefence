@@ -14,6 +14,12 @@ class Vue:
         self.root.title("TowerDefence, alpha_0.1")
         self.creer_interface()
 
+    def creer_tour(self, event):
+        x = event.x
+        y = event.y
+        self.modele.liste_tours.append(tour.Tour(x, y, 75, 10))
+        print("salut")
+
     def creer_interface(self):
         # cadre HUD affichant la duree
         self.bg = PhotoImage(file="Images/carte.png")
@@ -35,16 +41,19 @@ class Vue:
     def afficher_partie(self):
         self.canevas.delete(ALL)
 
-        self.canevas.create_rectangle(0, self.modele.hauteur_carte / 2 - 50, self.modele.largeur_carte,
-                                      self.modele.hauteur_carte / 2 + 50, fill="beige")
+        demitaille = 50
 
         self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg)
+        self.canevas.bind("<Button-1>", self.creer_tour)
         for i in self.modele.liste_monstres_terrain:
             self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black")
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                          i.y + i.demie_taille, fill="black",
-                                          stipple="@Images/Question-Mark-Emoji100x100.xbm", offset="center")
+                                          i.y + i.demie_taille, fill="red")
+            self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="")
+        for i in self.modele.path:
+            self.canevas.create_rectangle(i[0] - demitaille, i[1] - demitaille, i[0] + demitaille, i[1] + demitaille,
+                                          fill="blue")
 
 
 class Modele:
@@ -102,6 +111,8 @@ class Modele:
             self.vague += 1
             self.creer_monstre()
             self.delai_creation_creep = 0
+
+            print(len(self.liste_monstres_entrepot))
             self.delai_creation_creep_max -= 5
 
 
