@@ -112,16 +112,17 @@ class Modele:
 
 
     def attaque_tours(self):
+        print(len(self.liste_monstres_terrain))
         for tour in self.liste_tours:
             tour.delai_tire += 1
             for monstre in self.liste_monstres_terrain:
-                    if tour.analyse_rayon(monstre) and tour.delai_tire >= tour.vitesse_attaque:
-                        self.liste_projectiles.append(projectile.Projectile(tour,monstre))
-                        tour.delai_tire = 0
-                    if len(self.liste_projectiles) != 0:
-                        for i in self.liste_projectiles:
-                            i.cibleX = monstre.x
-                            i.cibleY = monstre.y
+                if tour.analyse_rayon(monstre) and tour.delai_tire >= tour.vitesse_attaque:
+                    self.liste_projectiles.append(projectile.Projectile(tour,monstre))
+                    tour.delai_tire = 0
+                if len(self.liste_projectiles) != 0:
+                    for i in self.liste_projectiles:
+                        i.cibleX = monstre.x
+                        i.cibleY = monstre.y
 
     def lancer_projectiles(self):
         if len(self.liste_projectiles) != 0:
