@@ -118,6 +118,10 @@ class Modele:
                     if tour.analyse_rayon(monstre) and tour.delai_tire >= tour.vitesse_attaque:
                         tour.delai_tire = 0
                         self.liste_projectiles.append(projectile.Projectile(tour,monstre))
+                    if len(self.liste_projectiles)!=0:
+                        for i in self.liste_projectiles:
+                            i.cibleX = monstre.x
+                            i.cibleY = monstre.y
 
     def lancer_projectiles(self):
         if len(self.liste_projectiles) != 0:
