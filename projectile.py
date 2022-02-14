@@ -1,24 +1,19 @@
+import helper
 class Projectile:
     def __init__(self,tour,monstre):
-        self.x=tour.x
+        self.x= tour.x
         self.y =tour.y
         self.cibleX = monstre.x
         self.cibleY = monstre.y
         self.vitesse = 10
 
     def lancer_projectile(self):
-        if self.x < self.cibleX:
-            self.x = self.x + self.vitesse
-        elif self.x > self.cibleX:
-            self.x -= self.vitesse
 
-        if self.y < self.cibleY:
-            self.y += self.vitesse
-        elif self.y > self.cibleY:
-            self.y -= self.vitesse
-
-        if (self.cibleX + 5 >= self.x >= self.cibleX - 5) and (self.cibleY +5 >= self.y >= self.cibleY - 5):
-            self.x = self.cibleX
-            self.y = self.cibleY
+        distance = helper.Helper.calcDistance(self.x, self.y, self.cibleX, self.cibleY)
+        if distance > 0:
+            angle = helper.Helper.calcAngle(self.x, self.y, self.cibleX, self.cibleY)
+            cible = helper.Helper.getAngledPoint(angle,self.vitesse,self.x,self.y)
+            self.x = cible[0]
+            self.y = cible[1]
 
 
