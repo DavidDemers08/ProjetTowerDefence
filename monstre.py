@@ -7,9 +7,9 @@ class Monstre:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.vitesse = 2
+        self.vitesse = 10
         self.index = 0
-        self.vie = random.randrange(50,100)
+        self.vie = 100
 
     def avancer_monstre(self, path):
         # cibleX va représenter le premier composant du vecteur dans le tablau du chemin

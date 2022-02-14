@@ -9,7 +9,7 @@ class Tour:
         self.demie_taille = demie_taille
         self.delai_tire = 0
         self.liste_projectiles = []
-        self.vitesse_attaque = 10
+        self.vitesse_attaque = 1
         # mitraillette vitesse = 2
 
     def analyse_rayon(self, monstre):
@@ -28,11 +28,12 @@ class Tour:
                         i.cibleX = monstre.x
                         i.cibleY = monstre.y
 
-        self.lancer_projectiles()
+        self.lancer_projectiles(liste_monstre)
 
-    def lancer_projectiles(self):
+    def lancer_projectiles(self,liste_monstre):
         if len(self.liste_projectiles) != 0:
             for projectile in self.liste_projectiles:
                 projectile.lancer_projectile()
                 if (projectile.cibleX + 5 >= projectile.x >= projectile.cibleX - 5) and (projectile.cibleY +5 >= projectile.y >= projectile.cibleY - 5):
                     self.liste_projectiles.remove(projectile)
+                    projectile.monstre.vie -= 5

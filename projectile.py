@@ -6,6 +6,7 @@ class Projectile:
         self.cibleX = monstre.x
         self.cibleY = monstre.y
         self.vitesse = 10
+        self.monstre = monstre
 
     def lancer_projectile(self):
 

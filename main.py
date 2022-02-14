@@ -101,17 +101,19 @@ class Modele:
         self.liste_projectiles = []
         self.liste_tours = []
         self.delai_creation_creep = 0
-        self.delai_creation_creep_max = 50
-        self.nb_creep_vague = 5
+        self.delai_creation_creep_max = 10
+        self.nb_creep_vague = 10000
+        self.pointage = 0
 
     def creer_monstre(self):
         for i in range(self.nb_creep_vague * self.vague):
             self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450))
 
     def bouger_monstres(self):
-        for i in self.liste_monstres_terrain:
-            i.avancer_monstre(self.path)
-        self.tuer_monstre()
+        if len(self.liste_monstres_terrain) != 0:
+            for i in self.liste_monstres_terrain:
+                i.avancer_monstre(self.path)
+            self.tuer_monstre()
 
     def tuer_monstre(self):
         for i in self.liste_monstres_terrain:
@@ -120,7 +122,10 @@ class Modele:
 
     def jouer_partie(self):
         self.spawn_monstre()
+        self.bouger_monstres()
         self.attaque_monstres()
+        self.verifier_etat_monstre()
+
 
     def spawn_monstre(self):
         self.delai_creation_creep += 1
@@ -128,8 +133,7 @@ class Modele:
             temp = self.liste_monstres_entrepot.pop(0)
             self.liste_monstres_terrain.append(temp)
             self.delai_creation_creep = 0
-        if len(self.liste_monstres_terrain) != 0:
-            self.bouger_monstres()
+
         if len(self.liste_monstres_entrepot) == 0 and len(self.liste_monstres_terrain) == 0:
             self.vague += 1
             self.creer_monstre()
@@ -143,7 +147,13 @@ class Modele:
     def creer_tours(self, event):
         x = event.x
         y = event.y
-        self.liste_tours.append(tour.Tour(x, y, 75, 10))
+        self.liste_tours.append(tour.Tour(x, y, 200, 10))
+
+    def verifier_etat_monstre(self):
+        for i in self.liste_monstres_terrain:
+            if i.vie <= 0:
+                self.pointage += 5
+                self.liste_monstres_terrain.remove(i)
 
 
 
