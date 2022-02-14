@@ -7,7 +7,8 @@ class Tour:
         self.rayon = rayon
         self.demie_taille = demie_taille
         self.delai_tire = 0
-        self.vitesse_attaque = 75
+        self.vitesse_attaque = 10
+        #mitraillette vitesse = 2
 
 
     def analyse_rayon(self, monstre):
