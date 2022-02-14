@@ -3,6 +3,7 @@ import time
 from tkinter import *
 import monstre
 import tour
+import projectile
 
 
 class Vue:
@@ -113,11 +114,16 @@ class Modele:
             for monstre in self.liste_monstres_terrain:
                     if tour.analyse_rayon(monstre) and tour.delai_tire >= tour.vitesse_attaque:
                         tour.delai_tire = 0
+                        self.liste_projectiles.append(projectile.Projectile(tour,monstre))
 
     def mouvement_projectiles(self):
         if len(self.liste_projectiles) != 0:
             for projectile in self.liste_projectiles:
-                pass
+                projectile.lancer_projectile()
+                if projectile.y == projectile.cibleY and projectile.x == projectile.cibleX:
+                     #LE MINION EST TOUCHÉ
+                    self.liste_projectiles.remove(projectile) ##watch out
+
 
 
 class Controleur:
