@@ -47,6 +47,9 @@ class Vue:
                                           i.y + i.demie_taille, fill="black",
                                           stipple="@Images/Question-Mark-Emoji100x100.xbm", offset="center")
 
+        if len(self.modele.liste_projectiles) != 0:
+            for i in self.modele.liste_projectiles:
+                self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="blue")
 
 class Modele:
     def __init__(self, parent):
