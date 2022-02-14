@@ -69,6 +69,8 @@ class Modele:
     def creer_tour(self):
 
         self.liste_tours.append(tour.Tour(320, 290, 5, 50))
+        self.liste_tours.append(tour.Tour(535, 425, 5, 50))
+        self.liste_tours.append(tour.Tour(645, 425, 5, 50))
 
     def bouger_monstres(self):
 
@@ -97,7 +99,7 @@ class Modele:
             self.delai_creation_creep = 0
 
             print(len(self.liste_monstres_entrepot))
-            self.delai_creation_creep_max -= 10
+            self.delai_creation_creep_max -= 5
 
 
 class Controleur:
