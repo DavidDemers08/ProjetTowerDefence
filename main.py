@@ -47,12 +47,12 @@ class Vue:
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
 
         self.canevas.create_rectangle(0, 400, 240, 475, fill="", outline="")
-        self.canevas.create_rectangle(160, 160, 240, 400, fill="",outline="")
-        self.canevas.create_rectangle(160, 160, 485, 250, fill="",outline="")
-        self.canevas.create_rectangle(400, 160, 485, 560, fill="",outline="")
-        self.canevas.create_rectangle(400, 480, 800, 560, fill="",outline="")
-        self.canevas.create_rectangle(720, 320, 800, 560, fill="",outline="")
-        self.canevas.create_rectangle(720, 320, 1200, 400, fill="",outline="")
+        self.canevas.create_rectangle(160, 160, 240, 400, fill="", outline="")
+        self.canevas.create_rectangle(160, 160, 485, 250, fill="", outline="")
+        self.canevas.create_rectangle(400, 160, 485, 560, fill="", outline="")
+        self.canevas.create_rectangle(400, 480, 800, 560, fill="", outline="")
+        self.canevas.create_rectangle(720, 320, 800, 560, fill="", outline="")
+        self.canevas.create_rectangle(720, 320, 1200, 400, fill="", outline="")
 
         for i in self.modele.liste_monstres_terrain:
             self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black", tags='monstre')

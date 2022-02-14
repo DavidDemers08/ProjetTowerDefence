@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d52ef0f7-c9bb-4dce-bd44-7f181277d4f2" name="Default Changelist" comment="delai monstre réussi">
-      <change beforePath="$PROJECT_DIR$/.idea/ProjetTowerDefence.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ProjetTowerDefence.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="d52ef0f7-c9bb-4dce-bd44-7f181277d4f2" name="Default Changelist" comment="barre de vie dynamique">
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -224,7 +221,14 @@
       <option name="project" value="LOCAL" />
       <updated>1644869302763</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="barre de vie dynamique">
+      <created>1644875652117</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1644875652117</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -255,6 +259,7 @@
     <MESSAGE value="delai monstre" />
     <MESSAGE value="delai monstre réussi" />
     <MESSAGE value="jc et sam tour attaque" />
-    <option name="LAST_COMMIT_MESSAGE" value="jc et sam tour attaque" />
+    <MESSAGE value="barre de vie dynamique" />
+    <option name="LAST_COMMIT_MESSAGE" value="barre de vie dynamique" />
   </component>
 </project>
