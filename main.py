@@ -56,11 +56,13 @@ class Vue:
 
         for i in self.modele.liste_monstres_terrain:
             self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black")
+            self.canevas.create_rectangle(i.x - 10, i.y - 15, i.x + 10, i.y - 10, fill="green")
+
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                          i.y + i.demie_taille, fill="red", tags="none")
+                                          i.y + i.demie_taille, fill="red")
             self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                          i.y + i.demie_taille, fill="black", tags="none")
+                                     i.y + i.demie_taille, fill="black")
 
             self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="")
 
