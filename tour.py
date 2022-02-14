@@ -6,17 +6,14 @@ class Tour:
         self.y = y
         self.rayon = rayon
         self.demie_taille = demie_taille
+        self.delai_tire = 0
+        self.vitesse_attaque = 75
 
 
     def analyse_rayon(self, monstre):
         if helper.Helper().calcDistance(self.x, self.y, monstre.x, monstre.y) <= self.rayon:
             return True
 
-
-    def attaque_tour(self,monstre,projectile_list):
-
-        if self.analyse_rayon(monstre):
-            projectile_list.append(Projectile(self.x,self.y,monstre.x,monstre.y))
 
 
 

@@ -61,6 +61,7 @@ class Modele:
         self.delai_creation_creep_max = 50
         self.creer_tour()
         self.nb_creep_vague = 2
+        self.liste_projectiles = []
 
     def creer_monstre(self):
         for i in range(self.nb_creep_vague * self.vague):
@@ -68,9 +69,9 @@ class Modele:
 
     def creer_tour(self):
 
-        self.liste_tours.append(tour.Tour(320, 290, 75, 50))
-        self.liste_tours.append(tour.Tour(535, 425, 75, 50))
-        self.liste_tours.append(tour.Tour(645, 425, 75, 50))
+        self.liste_tours.append(tour.Tour(320, 290, 200, 50))
+        self.liste_tours.append(tour.Tour(535, 425, 200, 50))
+        self.liste_tours.append(tour.Tour(645, 425, 200, 50))
 
     def bouger_monstres(self):
 
@@ -85,8 +86,12 @@ class Modele:
                 self.liste_monstres_terrain.remove(i)
 
     def jouer_partie(self):
+        self.spawn_monstre_terrain()
+        self.attaque_tours()
+
+
+    def spawn_monstre_terrain(self):
         self.delai_creation_creep += 1
-        print(self.delai_creation_creep)
         if self.delai_creation_creep == self.delai_creation_creep_max and len(self.liste_monstres_entrepot) != 0:
             temp = self.liste_monstres_entrepot.pop(0)
             self.liste_monstres_terrain.append(temp)
@@ -97,10 +102,16 @@ class Modele:
             self.vague += 1
             self.creer_monstre()
             self.delai_creation_creep = 0
-
-            print(len(self.liste_monstres_entrepot))
             self.delai_creation_creep_max -= 5
 
+
+    def attaque_tours(self):
+        for tour in self.liste_tours:
+            tour.delai_tire += 1
+            for monstre in self.liste_monstres_terrain:
+                    if tour.analyse_rayon(monstre) and tour.delai_tire >= tour.vitesse_attaque:
+                        tour.delai_tire = 0
+                        print("tirer")
 
 class Controleur:
     def __init__(self):
