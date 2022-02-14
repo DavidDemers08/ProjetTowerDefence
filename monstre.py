@@ -1,9 +1,15 @@
+import random
+
+
 class Monstre:
+    vie_max = 100
+
     def __init__(self, x, y):
         self.x = x
         self.y = y
         self.vitesse = 2
         self.index = 0
+        self.vie = random.randrange(50,100)
 
     def avancer_monstre(self, path):
         # cibleX va représenter le premier composant du vecteur dans le tablau du chemin
@@ -24,8 +30,3 @@ class Monstre:
                 self.x = cibleX
                 self.y = cibleY
                 self.index += 1
-
-
-
-
-
