@@ -56,17 +56,20 @@ class Vue:
 
         for i in self.modele.liste_monstres_terrain:
             self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black")
+            self.canevas.create_rectangle(i.x - 10, i.y - 15, i.x + 10, i.y - 10, fill="green")
+
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                          i.y + i.demie_taille, fill="red", tags="none")
+                                          i.y + i.demie_taille, fill="red")
             self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                          i.y + i.demie_taille, fill="black", tags="none")
+                                     i.y + i.demie_taille, fill="black")
 
             self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="")
 
         if len(self.modele.liste_projectiles) != 0:
             for i in self.modele.liste_projectiles:
                 self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="blue")
+
 
 class Modele:
     def __init__(self, parent):
@@ -104,7 +107,6 @@ class Modele:
         self.attaque_tours()
         self.lancer_projectiles()
 
-
     def spawn_monstre_terrain(self):
         self.delai_creation_creep += 1
         if self.delai_creation_creep == self.delai_creation_creep_max and len(self.liste_monstres_entrepot) != 0:
@@ -119,19 +121,18 @@ class Modele:
             self.delai_creation_creep = 0
             self.delai_creation_creep_max -= 5
 
-
     def attaque_tours(self):
 
-        ciblex =0
+        ciblex = 0
         for tour in self.liste_tours:
             tour.delai_tire += 1
             for monstre in self.liste_monstres_terrain:
 
-                if monstre.x > ciblex :
+                if monstre.x > ciblex:
                     ciblex = monstre.x
 
                 if tour.analyse_rayon(monstre) and tour.delai_tire >= tour.vitesse_attaque:
-                    self.liste_projectiles.append(projectile.Projectile(tour,monstre))
+                    self.liste_projectiles.append(projectile.Projectile(tour, monstre))
                     tour.delai_tire = 0
                 if len(self.liste_projectiles) != 0:
                     for i in self.liste_projectiles:
@@ -174,7 +175,6 @@ class Controleur:
     def creer_tour(self, event):
         if self.partie_en_cours == 1:
             self.modele.creer_tours(event)
-
 
 
 if __name__ == '__main__':
