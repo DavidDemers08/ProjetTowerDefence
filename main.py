@@ -46,27 +46,21 @@ class Vue:
                                   tags="bg")
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
 
-        self.canevas.create_rectangle(0, 400, 240, 475, fill="beige")
-        self.canevas.create_rectangle(160, 160, 240, 400, fill="beige")
-        self.canevas.create_rectangle(160, 160, 485, 250, fill="beige")
-        self.canevas.create_rectangle(400, 160, 485, 560, fill="beige")
-        self.canevas.create_rectangle(400, 480, 800, 560, fill="beige")
-        self.canevas.create_rectangle(720, 320, 800, 560, fill="beige")
-        self.canevas.create_rectangle(720, 320, 1200, 400, fill="beige")
-
-
+        self.canevas.create_rectangle(0, 400, 240, 475, fill="", outline="")
+        self.canevas.create_rectangle(160, 160, 240, 400, fill="",outline="")
+        self.canevas.create_rectangle(160, 160, 485, 250, fill="",outline="")
+        self.canevas.create_rectangle(400, 160, 485, 560, fill="",outline="")
+        self.canevas.create_rectangle(400, 480, 800, 560, fill="",outline="")
+        self.canevas.create_rectangle(720, 320, 800, 560, fill="",outline="")
+        self.canevas.create_rectangle(720, 320, 1200, 400, fill="",outline="")
 
         for i in self.modele.liste_monstres_terrain:
-            self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black",tags='monstre')
-            x1 = i.x-10
+            self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black", tags='monstre')
+            x1 = i.x - 10
             x2 = x1 + 20
-            x3 = x1 + (i.vie/monstre.Monstre.vie_max*20)
+            x3 = x1 + (i.vie / monstre.Monstre.vie_max * 20)
             self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red")
             self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green")
-
-            #vie/viemax*20
-
-
 
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
@@ -76,10 +70,11 @@ class Vue:
 
             self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="")
 
-
             if len(i.liste_projectiles) != 0:
                 for projectile in i.liste_projectiles:
-                    self.canevas.create_oval(projectile.x - 5, projectile.y - 5, projectile.x + 5, projectile.y + 5, fill="blue")
+                    self.canevas.create_oval(projectile.x - 5, projectile.y - 5, projectile.x + 5, projectile.y + 5,
+                                             fill="blue")
+
 
 class Modele:
     def __init__(self, parent):
@@ -114,7 +109,6 @@ class Modele:
         self.spawn_monstre()
         self.attaque_monstres()
 
-
     def spawn_monstre(self):
         self.delai_creation_creep += 1
         if self.delai_creation_creep == self.delai_creation_creep_max and len(self.liste_monstres_entrepot) != 0:
@@ -129,12 +123,9 @@ class Modele:
             self.delai_creation_creep = 0
             self.delai_creation_creep_max -= 5
 
-
     def attaque_monstres(self):
         for tour in self.liste_tours:
             tour.attaque(self.liste_monstres_terrain)
-
-
 
     def creer_tours(self, event):
         x = event.x
@@ -165,7 +156,6 @@ class Controleur:
     def creer_tour(self, event):
         if self.partie_en_cours == 1:
             self.modele.creer_tours(event)
-
 
 
 if __name__ == '__main__':
