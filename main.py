@@ -64,9 +64,10 @@ class Vue:
 
             self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="")
 
-        if len(self.modele.liste_projectiles) != 0:
-            for i in self.modele.liste_projectiles:
-                self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="blue")
+
+            if len(i.liste_projectiles) != 0:
+                for projectile in i.liste_projectiles:
+                    self.canevas.create_oval(projectile.x - 5, projectile.y - 5, projectile.x + 5, projectile.y + 5, fill="blue")
 
 class Modele:
     def __init__(self, parent):
@@ -100,12 +101,11 @@ class Modele:
                 self.liste_monstres_terrain.remove(i)
 
     def jouer_partie(self):
-        self.spawn_monstre_terrain()
-        self.attaque_tours()
-        self.lancer_projectiles()
+        self.spawn_monstre()
+        self.attaque_monstres()
 
 
-    def spawn_monstre_terrain(self):
+    def spawn_monstre(self):
         self.delai_creation_creep += 1
         if self.delai_creation_creep == self.delai_creation_creep_max and len(self.liste_monstres_entrepot) != 0:
             temp = self.liste_monstres_entrepot.pop(0)
@@ -120,30 +120,11 @@ class Modele:
             self.delai_creation_creep_max -= 5
 
 
-    def attaque_tours(self):
-
-        ciblex =0
+    def attaque_monstres(self):
         for tour in self.liste_tours:
-            tour.delai_tire += 1
-            for monstre in self.liste_monstres_terrain:
+            tour.attaque(self.liste_monstres_terrain)
 
-                if monstre.x > ciblex :
-                    ciblex = monstre.x
 
-                if tour.analyse_rayon(monstre) and tour.delai_tire >= tour.vitesse_attaque:
-                    self.liste_projectiles.append(projectile.Projectile(tour,monstre))
-                    tour.delai_tire = 0
-                if len(self.liste_projectiles) != 0:
-                    for i in self.liste_projectiles:
-                        i.cibleX = ciblex
-                        i.cibleY = monstre.y
-
-    def lancer_projectiles(self):
-        if len(self.liste_projectiles) != 0:
-            for projectile in self.liste_projectiles:
-                projectile.lancer_projectile()
-                if projectile.x <= projectile.cibleX + 2 or projectile.y >= projectile.cibleY - 2:
-                    self.liste_projectiles.remove(projectile)
 
     def creer_tours(self, event):
         x = event.x
