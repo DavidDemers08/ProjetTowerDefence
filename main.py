@@ -54,9 +54,19 @@ class Vue:
         self.canevas.create_rectangle(720, 320, 800, 560, fill="beige")
         self.canevas.create_rectangle(720, 320, 1200, 400, fill="beige")
 
+
+
         for i in self.modele.liste_monstres_terrain:
-            self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black")
-            self.canevas.create_rectangle(i.x - 10, i.y - 15, i.x + 10, i.y - 10, fill="green")
+            self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black",tags='monstre')
+            x1 = i.x-10
+            x2 = x1 + 20
+            x3 = x1 + (i.vie/monstre.Monstre.vie_max*20)
+            self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red")
+            self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green")
+
+            #vie/viemax*20
+
+
 
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
@@ -84,7 +94,7 @@ class Modele:
         self.liste_tours = []
         self.delai_creation_creep = 0
         self.delai_creation_creep_max = 50
-        self.nb_creep_vague = 2
+        self.nb_creep_vague = 5
 
     def creer_monstre(self):
         for i in range(self.nb_creep_vague * self.vague):
