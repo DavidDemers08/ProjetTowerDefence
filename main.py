@@ -43,17 +43,25 @@ class Vue:
 
         demitaille = 50
 
-        self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg)
-        self.canevas.bind("<Button-1>", self.creer_tour)
+        self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg,
+                                  tags="bg")
+        self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
+
+        self.canevas.create_rectangle(0, 400, 240, 475, fill="beige")
+        self.canevas.create_rectangle(160, 160, 240, 400, fill="beige")
+        self.canevas.create_rectangle(160, 160, 485, 250, fill="beige")
+        self.canevas.create_rectangle(400, 160, 485, 560, fill="beige")
+        self.canevas.create_rectangle(400, 480, 800, 560, fill="beige")
+        self.canevas.create_rectangle(720, 320, 800, 560, fill="beige")
+        self.canevas.create_rectangle(720, 320, 1200, 400, fill="beige")
+
         for i in self.modele.liste_monstres_terrain:
             self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black")
+
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                          i.y + i.demie_taille, fill="red")
+                                          i.y + i.demie_taille, fill="red", tags="none")
             self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="")
-        for i in self.modele.path:
-            self.canevas.create_rectangle(i[0] - demitaille, i[1] - demitaille, i[0] + demitaille, i[1] + demitaille,
-                                          fill="blue")
 
 
 class Modele:
@@ -68,19 +76,13 @@ class Modele:
         self.liste_tours = []
         self.delai_creation_creep = 0
         self.delai_creation_creep_max = 50
-        self.creer_tour()
+
         self.nb_creep_vague = 2
         self.liste_projectiles = []
 
     def creer_monstre(self):
         for i in range(self.nb_creep_vague * self.vague):
             self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450))
-
-    def creer_tour(self):
-
-        self.liste_tours.append(tour.Tour(320, 290, 200, 50))
-        self.liste_tours.append(tour.Tour(535, 425, 200, 50))
-        self.liste_tours.append(tour.Tour(645, 425, 200, 50))
 
     def bouger_monstres(self):
 
@@ -98,7 +100,6 @@ class Modele:
         self.spawn_monstre_terrain()
         self.attaque_tours()
 
-
     def spawn_monstre_terrain(self):
         self.delai_creation_creep += 1
         if self.delai_creation_creep == self.delai_creation_creep_max and len(self.liste_monstres_entrepot) != 0:
@@ -115,14 +116,14 @@ class Modele:
             print(len(self.liste_monstres_entrepot))
             self.delai_creation_creep_max -= 5
 
-
     def attaque_tours(self):
         for tour in self.liste_tours:
             tour.delai_tire += 1
             for monstre in self.liste_monstres_terrain:
-                    if tour.analyse_rayon(monstre) and tour.delai_tire >= tour.vitesse_attaque:
-                        tour.delai_tire = 0
-                        print("tirer")
+                if tour.analyse_rayon(monstre) and tour.delai_tire >= tour.vitesse_attaque:
+                    tour.delai_tire = 0
+                    print("tirer")
+
 
 class Controleur:
     def __init__(self):
