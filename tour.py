@@ -14,6 +14,3 @@ class Tour:
         if helper.Helper().calcDistance(self.x, self.y, monstre.x, monstre.y) <= self.rayon:
             return True
 
-
-
-

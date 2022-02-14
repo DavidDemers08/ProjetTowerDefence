@@ -52,16 +52,18 @@ class Modele:
         self.parent = parent
         self.largeur_carte = 1200
         self.hauteur_carte = 800
+        self.path = [[200, 450], [200, 200], [440, 200], [440, 520], [760, 520], [760, 370], [1250, 370]]
         self.vague = 0
         self.liste_monstres_terrain = []
         self.liste_monstres_entrepot = []
-        self.path = [[200, 450], [200, 200], [440, 200], [440, 520], [760, 520], [760, 370], [1250, 370]]
+        self.liste_projectiles = []
         self.liste_tours = []
         self.delai_creation_creep = 0
         self.delai_creation_creep_max = 50
-        self.creer_tour()
         self.nb_creep_vague = 2
-        self.liste_projectiles = []
+
+        self.creer_tour()
+
 
     def creer_monstre(self):
         for i in range(self.nb_creep_vague * self.vague):
@@ -77,7 +79,6 @@ class Modele:
 
         for i in self.liste_monstres_terrain:
             i.avancer_monstre(self.path)
-
         self.tuer_monstre()
 
     def tuer_monstre(self):
@@ -88,6 +89,7 @@ class Modele:
     def jouer_partie(self):
         self.spawn_monstre_terrain()
         self.attaque_tours()
+        self.mouvement_projectiles()
 
 
     def spawn_monstre_terrain(self):
@@ -111,7 +113,12 @@ class Modele:
             for monstre in self.liste_monstres_terrain:
                     if tour.analyse_rayon(monstre) and tour.delai_tire >= tour.vitesse_attaque:
                         tour.delai_tire = 0
-                        print("tirer")
+
+    def mouvement_projectiles(self):
+        if len(self.liste_projectiles) != 0:
+            for projectile in self.liste_projectiles:
+                pass
+
 
 class Controleur:
     def __init__(self):
