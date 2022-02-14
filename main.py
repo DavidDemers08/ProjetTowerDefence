@@ -24,12 +24,25 @@ class Vue:
         self.bg = PhotoImage(file="Images/carte.png")
         self.bg.width()
 
-        cadre_depart = Frame(self.root, bg='gray')
-        bouton_depart = Button(cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
+        self.cadre_depart = Frame(self.root, bg='gray')
+        bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
+
+        self.image_vie = PhotoImage(file="Images/health_bar.png")
+        label_image_vie = Label(self.cadre_depart, image=self.image_vie, height=17, width=96)
+
+        self.image_argent = PhotoImage(file="Images/money.png")
+        label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=17)
+
+        #self.var_argent = StringVar()
+        label_argent = Label(self.cadre_depart, text='0,00$', width=10)  #textvariable=self.var_argent
+
         self.canevas = Canvas(self.root, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
 
-        cadre_depart.pack(expand=True, fill=BOTH)
-        bouton_depart.pack(side=TOP)
+        self.cadre_depart.pack(expand=True, fill=BOTH)
+        bouton_depart.pack(side=LEFT)
+        label_argent.pack(side=RIGHT)
+        label_image_argent.pack(side=RIGHT)
+        label_image_vie.pack(side=RIGHT, padx=20)
         self.canevas.pack()
 
         self.afficher_partie()
@@ -131,6 +144,7 @@ class Modele:
         x = event.x
         y = event.y
         self.liste_tours.append(tour.Tour(x, y, 75, 10))
+
 
 
 class Controleur:
