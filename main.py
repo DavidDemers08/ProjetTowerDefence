@@ -15,6 +15,10 @@ class Vue:
         self.root.title("TowerDefence, alpha_0.1")
         self.creer_interface()
 
+    def creer_tour(self, event):
+
+        self.parent.creer_tour(event)
+
     def creer_interface(self):
         # cadre HUD affichant la duree
         self.bg = PhotoImage(file="Images/carte.png")
@@ -36,16 +40,26 @@ class Vue:
     def afficher_partie(self):
         self.canevas.delete(ALL)
 
-        self.canevas.create_rectangle(0, self.modele.hauteur_carte / 2 - 50, self.modele.largeur_carte,
-                                      self.modele.hauteur_carte / 2 + 50, fill="beige")
+        demitaille = 50
 
-        self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg)
+        self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg,
+                                  tags="bg")
+        self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
+
+        self.canevas.create_rectangle(0, 400, 240, 475, fill="beige")
+        self.canevas.create_rectangle(160, 160, 240, 400, fill="beige")
+        self.canevas.create_rectangle(160, 160, 485, 250, fill="beige")
+        self.canevas.create_rectangle(400, 160, 485, 560, fill="beige")
+        self.canevas.create_rectangle(400, 480, 800, 560, fill="beige")
+        self.canevas.create_rectangle(720, 320, 800, 560, fill="beige")
+        self.canevas.create_rectangle(720, 320, 1200, 400, fill="beige")
+
         for i in self.modele.liste_monstres_terrain:
             self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black")
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                          i.y + i.demie_taille, fill="black",
-                                          stipple="@Images/Question-Mark-Emoji100x100.xbm", offset="center")
+                                          i.y + i.demie_taille, fill="red", tags="none")
+            self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="")
 
         if len(self.modele.liste_projectiles) != 0:
             for i in self.modele.liste_projectiles:
@@ -66,23 +80,15 @@ class Modele:
         self.delai_creation_creep_max = 50
         self.nb_creep_vague = 2
 
-        self.creer_tour()
-
-
     def creer_monstre(self):
         for i in range(self.nb_creep_vague * self.vague):
             self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450))
-
-    def creer_tour(self):
-
-        self.liste_tours.append(tour.Tour(320, 290, 200, 50))
-        self.liste_tours.append(tour.Tour(535, 425, 200, 50))
-        self.liste_tours.append(tour.Tour(645, 425, 200, 50))
 
     def bouger_monstres(self):
 
         for i in self.liste_monstres_terrain:
             i.avancer_monstre(self.path)
+
         self.tuer_monstre()
 
     def tuer_monstre(self):
@@ -112,7 +118,6 @@ class Modele:
 
 
     def attaque_tours(self):
-        print(len(self.liste_monstres_terrain))
         for tour in self.liste_tours:
             tour.delai_tire += 1
             for monstre in self.liste_monstres_terrain:
@@ -131,6 +136,10 @@ class Modele:
                 if projectile.y == projectile.cibleY and projectile.x == projectile.cibleX:
                     self.liste_projectiles.remove(projectile) ##watch out
 
+    def creer_tours(self, event):
+        x = event.x
+        y = event.y
+        self.liste_tours.append(tour.Tour(x, y, 75, 10))
 
 
 class Controleur:
@@ -152,6 +161,11 @@ class Controleur:
             self.modele.jouer_partie()
             self.vue.root.after(40, self.jouer_partie)
         self.vue.afficher_partie()
+
+    def creer_tour(self, event):
+        if self.partie_en_cours == 1:
+            self.modele.creer_tours(event)
+
 
 
 if __name__ == '__main__':
