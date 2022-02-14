@@ -2,7 +2,7 @@ class Monstre:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.vitesse = 10
+        self.vitesse = 2
         self.index = 0
 
     def avancer_monstre(self, path):

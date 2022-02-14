@@ -93,7 +93,7 @@ class Modele:
     def jouer_partie(self):
         self.spawn_monstre_terrain()
         self.attaque_tours()
-        self.mouvement_projectiles()
+        self.lancer_projectiles()
 
 
     def spawn_monstre_terrain(self):
@@ -119,12 +119,11 @@ class Modele:
                         tour.delai_tire = 0
                         self.liste_projectiles.append(projectile.Projectile(tour,monstre))
 
-    def mouvement_projectiles(self):
+    def lancer_projectiles(self):
         if len(self.liste_projectiles) != 0:
             for projectile in self.liste_projectiles:
                 projectile.lancer_projectile()
                 if projectile.y == projectile.cibleY and projectile.x == projectile.cibleX:
-                     #LE MINION EST TOUCHÉ
                     self.liste_projectiles.remove(projectile) ##watch out
 
 
