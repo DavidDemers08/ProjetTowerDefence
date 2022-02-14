@@ -2,6 +2,7 @@ import random
 import time
 from tkinter import *
 import monstre
+import projectile
 import tour
 
 
@@ -15,10 +16,8 @@ class Vue:
         self.creer_interface()
 
     def creer_tour(self, event):
-        x = event.x
-        y = event.y
-        self.modele.liste_tours.append(tour.Tour(x, y, 75, 10))
-        print("salut")
+
+        self.parent.creer_tour(event)
 
     def creer_interface(self):
         # cadre HUD affichant la duree
@@ -67,6 +66,7 @@ class Vue:
             for i in self.modele.liste_projectiles:
                 self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="blue")
 
+
 class Modele:
     def __init__(self, parent):
         self.parent = parent
@@ -83,18 +83,9 @@ class Modele:
 
         self.nb_creep_vague = 2
 
-        self.creer_tour()
-
-
     def creer_monstre(self):
         for i in range(self.nb_creep_vague * self.vague):
             self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450))
-
-    def creer_tour(self):
-
-        self.liste_tours.append(tour.Tour(320, 290, 200, 50))
-        self.liste_tours.append(tour.Tour(535, 425, 200, 50))
-        self.liste_tours.append(tour.Tour(645, 425, 200, 50))
 
     def bouger_monstres(self):
 
@@ -125,8 +116,6 @@ class Modele:
             self.vague += 1
             self.creer_monstre()
             self.delai_creation_creep = 0
-
-            print(len(self.liste_monstres_entrepot))
             self.delai_creation_creep_max -= 5
 
     def attaque_tours(self):
@@ -149,9 +138,14 @@ class Modele:
             for projectile in self.liste_projectiles:
                 projectile.lancer_projectile()
                 if projectile.y == projectile.cibleY and projectile.x == projectile.cibleX:
+                    # LE MINION EST TOUCHÉ
+                    self.liste_projectiles.remove(projectile)  ##watch out
                     self.liste_projectiles.remove(projectile) ##watch out
 
-
+    def creer_tours(self, event):
+        x = event.x
+        y = event.y
+        self.liste_tours.append(tour.Tour(x, y, 75, 10))
 
 
 class Controleur:
@@ -173,6 +167,11 @@ class Controleur:
             self.modele.jouer_partie()
             self.vue.root.after(40, self.jouer_partie)
         self.vue.afficher_partie()
+
+    def creer_tour(self, event):
+        if self.partie_en_cours == 1:
+            self.modele.creer_tours(event)
+
 
 
 if __name__ == '__main__':
