@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d52ef0f7-c9bb-4dce-bd44-7f181277d4f2" name="Default Changelist" comment="changer la classe monstre">
+    <list default="true" id="d52ef0f7-c9bb-4dce-bd44-7f181277d4f2" name="Default Changelist" comment="organisation classe vue">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/boss.py" beforeDir="false" afterPath="$PROJECT_DIR$/boss.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -268,7 +270,21 @@
       <option name="project" value="LOCAL" />
       <updated>1645127163782</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="classe Boss">
+      <created>1645127333503</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1645127333503</updated>
+    </task>
+    <task id="LOCAL-00027" summary="organisation classe vue">
+      <created>1645127534713</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1645127534713</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -307,9 +323,11 @@
     <MESSAGE value="ajout de la vie pour l'utilisateur" />
     <MESSAGE value="modif jc et sam" />
     <MESSAGE value="changer la classe monstre" />
-    <option name="LAST_COMMIT_MESSAGE" value="changer la classe monstre" />
+    <MESSAGE value="classe Boss" />
+    <MESSAGE value="organisation classe vue" />
+    <option name="LAST_COMMIT_MESSAGE" value="organisation classe vue" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ProjetTowerDefence$main.coverage" NAME="main Coverage Results" MODIFIED="1645126375098" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ProjetTowerDefence$main.coverage" NAME="main Coverage Results" MODIFIED="1645128279677" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

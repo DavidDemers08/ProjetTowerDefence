@@ -1,6 +1,8 @@
 import random
 import time
 from tkinter import *
+
+import boss
 import monstre
 import tour
 import projectile
@@ -36,8 +38,6 @@ class Vue:
         self.var_argent = StringVar()
         label_argent = Label(self.cadre_depart, text='0,00$', width=10,
                              textvariable=self.var_argent)  # textvariable=self.var_argent
-
-
 
         self.canevas = Canvas(self.root, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
 
@@ -77,12 +77,22 @@ class Vue:
 
     def afficher_monstres(self):
         for i in self.modele.liste_monstres_terrain:
-            self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black", tags='monstre')
-            x1 = i.x - 10
-            x2 = x1 + 20
-            x3 = x1 + (i.vie / monstre.Monstre.vie_max * 20)
-            self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red")
-            self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green")
+
+            if isinstance(i, monstre.Monstre):
+                self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black", tags='monstre')
+                x1 = i.x - 10
+                x2 = x1 + 20
+                x3 = x1 + (i.vie / monstre.Monstre.vie_max * 20)
+                self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red")
+                self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green")
+
+            if isinstance(i, boss.Boss):
+                self.canevas.create_oval(i.x - 15, i.y - 15, i.x + 15, i.y + 15, fill="red", tags='boss')
+                x1 = i.x - 10
+                x2 = x1 + 20
+                x3 = x1 + (i.vie / boss.Boss.vie_max * 20)
+                self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red")
+                self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green")
 
     def afficher_tours(self):
         for i in self.modele.liste_tours:
@@ -100,6 +110,7 @@ class Vue:
 
     def afficher_fin_partie(self):
         print("fin de partie")
+
 
 class Modele:
     def __init__(self, parent):
@@ -123,10 +134,10 @@ class Modele:
         if len(self.liste_monstres_entrepot) == 0 and len(self.liste_monstres_terrain) == 0:
             self.vague += 1
             for i in range(self.nb_creep_vague * self.vague):
-                self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450,10,100))
+                self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, 10, 100))
+
+            self.liste_monstres_entrepot.append(boss.Boss(-10, 450, 10, 200))
             self.delai_creation_creep = 0
-
-
 
     def bouger_monstres(self):
         if len(self.liste_monstres_terrain) != 0:
@@ -140,7 +151,7 @@ class Modele:
         self.attaque_monstres()
         self.verifier_etat_monstre()
         self.verifier_etat_joueur()
-        print(self.vie)
+
 
     def spawn_monstre(self):
         self.delai_creation_creep += 1
@@ -149,14 +160,12 @@ class Modele:
             self.liste_monstres_terrain.append(temp)
             self.delai_creation_creep = 0
 
-
     def attaque_monstres(self):
         for tour in self.liste_tours:
             tour.attaque(self.liste_monstres_terrain)
 
     def creer_tours(self, event):
         self.argent -= tour.Tour.prix
-        print(self.argent)
         x = event.x
         y = event.y
         self.liste_tours.append(tour.Tour(x, y, 200, 10))
@@ -185,6 +194,7 @@ class Modele:
         self.pointage = 0
         self.argent = 1000
 
+
 class Controleur:
     def __init__(self):
         self.partie_en_cours = 0
@@ -210,7 +220,6 @@ class Controleur:
     def finir_partie(self):
         self.vue.afficher_fin_partie()
         self.modele.reinitialiser()
-
 
     def creer_tour(self, event):
         if self.partie_en_cours == 1:
