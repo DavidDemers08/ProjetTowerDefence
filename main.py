@@ -140,6 +140,7 @@ class Modele:
         self.nb_creep_vague = 10000
         self.pointage = 0
         self.argent = 1000
+        self.score = 0
         self.vie = 3
 
     def creer_monstre(self):
