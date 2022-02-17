@@ -24,7 +24,7 @@ class Projectile:
 
         cibleX = self.monstre.x
         cibleY = self.monstre.y
-        if (cibleX + 7 >= self.x >= cibleX - 7) and (cibleY + 7 >= self.y >= cibleY - 7):
+        if (cibleX + 8 >= self.x >= cibleX - 8) and (cibleY + 8 >= self.y >= cibleY - 8):
             isDead = True
             self.monstre.vie -= self.tour.degat
 
