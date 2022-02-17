@@ -1,11 +1,8 @@
-import random
-import time
 from tkinter import *
 
 import boss
 import monstre
 import tour
-import projectile
 
 
 class Vue:
@@ -29,9 +26,6 @@ class Vue:
         self.cadre_depart = Frame(self.root, bg='gray')
         bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
 
-        self.image_vie = PhotoImage(file="Images/health_bar.png")
-        label_image_vie = Label(self.cadre_depart, image=self.image_vie, height=53, width=96)
-
         self.image_argent = PhotoImage(file="Images/money.png")
         label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=53)
 
@@ -52,7 +46,7 @@ class Vue:
         bouton_depart.pack(side=LEFT)
         label_argent.pack(side=RIGHT)
         label_image_argent.pack(side=RIGHT)
-        label_image_vie.pack(side=RIGHT, padx=20)
+
         label_score.pack(side=RIGHT)
         label_image_score.pack(side=RIGHT)
         self.canevas.pack()
@@ -136,8 +130,8 @@ class Modele:
         self.delai_creation_creep = 0
         self.delai_creation_creep_max = 100
         self.nb_creep_vague = 10
-        self.delai_creation_creep_max = 10
-        self.nb_creep_vague = 10000
+        self.delai_creation_creep_max = 100
+        self.nb_creep_vague = 5
         self.pointage = 0
         self.argent = 1000
         self.score = 0
@@ -145,7 +139,7 @@ class Modele:
 
     def creer_monstre(self):
         for i in range(self.nb_creep_vague * self.vague):
-            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450))
+            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, 2, 100))
 
     def bouger_monstres(self):
         if len(self.liste_monstres_terrain) != 0:
@@ -183,12 +177,14 @@ class Modele:
         print(self.argent)
         x = event.x
         y = event.y
-        self.liste_tours.append(tour.Tour(x, y, 200, 10))
+        self.liste_tours.append(tour.Tour(x, y, 100, 10))
 
     def verifier_etat_monstre(self):
         for i in self.liste_monstres_terrain:
             if i.vie <= 0:
                 self.pointage += 5
+                self.score += 50
+                self.argent += 50
                 self.liste_monstres_terrain.remove(i)
             if i.x > 1240:
                 self.liste_monstres_terrain.remove(i)
@@ -221,7 +217,6 @@ class Controleur:
         else:
             self.vue.afficher_fin_partie()
         self.vue.afficher_partie()
-
 
     def creer_tour(self, event):
         if self.partie_en_cours == 1:

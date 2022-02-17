@@ -3,7 +3,7 @@ import projectile
 
 
 class Tour:
-    prix = 200
+    prix = 400
 
     def __init__(self, x, y, rayon, demie_taille):
         self.x = x
