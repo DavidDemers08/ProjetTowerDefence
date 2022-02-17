@@ -1,6 +1,8 @@
 import random
 import time
 from tkinter import *
+
+import boss
 import monstre
 import tour
 import projectile
@@ -66,6 +68,11 @@ class Vue:
                                   tags="bg")
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
 
+        self.afficher_path()
+        self.afficher_monstres()
+        self.afficher_tours()
+
+    def afficher_path(self):
         self.canevas.create_rectangle(0, 400, 240, 475, fill="", outline="")
         self.canevas.create_rectangle(160, 160, 240, 400, fill="", outline="")
         self.canevas.create_rectangle(160, 160, 485, 250, fill="", outline="")
@@ -74,14 +81,26 @@ class Vue:
         self.canevas.create_rectangle(720, 320, 800, 560, fill="", outline="")
         self.canevas.create_rectangle(720, 320, 1200, 400, fill="", outline="")
 
+    def afficher_monstres(self):
         for i in self.modele.liste_monstres_terrain:
-            self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black", tags='monstre')
-            x1 = i.x - 10
-            x2 = x1 + 20
-            x3 = x1 + (i.vie / monstre.Monstre.vie_max * 20)
-            self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red")
-            self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green")
 
+            if isinstance(i, monstre.Monstre):
+                self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black", tags='monstre')
+                x1 = i.x - 10
+                x2 = x1 + 20
+                x3 = x1 + (i.vie / monstre.Monstre.vie_max * 20)
+                self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red")
+                self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green")
+
+            if isinstance(i, boss.Boss):
+                self.canevas.create_oval(i.x - 15, i.y - 15, i.x + 15, i.y + 15, fill="red", tags='boss')
+                x1 = i.x - 10
+                x2 = x1 + 20
+                x3 = x1 + (i.vie / boss.Boss.vie_max * 20)
+                self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red")
+                self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green")
+
+    def afficher_tours(self):
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                           i.y + i.demie_taille, fill="yellow")
@@ -113,13 +132,20 @@ class Modele:
         self.delai_creation_creep = 0
         self.delai_creation_creep_max = 100
         self.nb_creep_vague = 10
+        self.delai_creation_creep_max = 10
+        self.nb_creep_vague = 5
         self.pointage = 0
         self.argent = 600
         self.vie = 3
 
     def creer_monstre(self):
-        for i in range(self.nb_creep_vague * self.vague):
-            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450))
+        if len(self.liste_monstres_entrepot) == 0 and len(self.liste_monstres_terrain) == 0:
+            self.vague += 1
+            for i in range(self.nb_creep_vague * self.vague):
+                self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, 10, 100))
+
+            self.liste_monstres_entrepot.append(boss.Boss(-10, 450, 10, 200))
+            self.delai_creation_creep = 0
 
     def bouger_monstres(self):
         if len(self.liste_monstres_terrain) != 0:
@@ -127,12 +153,13 @@ class Modele:
                 i.avancer_monstre(self.path)
 
     def jouer_partie(self):
+        self.creer_monstre()
         self.spawn_monstre()
         self.bouger_monstres()
         self.attaque_monstres()
         self.verifier_etat_monstre()
         self.verifier_etat_joueur()
-        print(self.vie)
+
 
     def spawn_monstre(self):
         self.delai_creation_creep += 1
@@ -141,19 +168,12 @@ class Modele:
             self.liste_monstres_terrain.append(temp)
             self.delai_creation_creep = 0
 
-        if len(self.liste_monstres_entrepot) == 0 and len(self.liste_monstres_terrain) == 0:
-            self.vague += 1
-            self.creer_monstre()
-            self.delai_creation_creep = 0
-            self.delai_creation_creep_max -= 5
-
     def attaque_monstres(self):
         for tour in self.liste_tours:
             tour.attaque(self.liste_monstres_terrain)
 
     def creer_tours(self, event):
         self.argent -= tour.Tour.prix
-        print(self.argent)
         x = event.x
         y = event.y
         self.liste_tours.append(tour.Tour(x, y, 100, 10))
@@ -174,6 +194,16 @@ class Modele:
         if self.vie == 0:
             self.parent.partie_en_cours = 0
 
+    def reinitialiser(self):
+        self.liste_monstres_terrain = []
+        self.liste_monstres_entrepot = []
+        self.liste_projectiles = []
+        self.liste_tours = []
+        self.vie = 3
+        self.vague = 0
+        self.pointage = 0
+        self.argent = 1000
+
 
 class Controleur:
     def __init__(self):
@@ -187,15 +217,19 @@ class Controleur:
         if not self.partie_en_cours:
             self.partie_en_cours = 1
             self.jouer_partie()
-            self.modele.vague = 1
+            self.modele.vague += 1
 
     def jouer_partie(self):
         if self.partie_en_cours:
             self.modele.jouer_partie()
             self.vue.root.after(40, self.jouer_partie)
         else:
-            self.vue.afficher_fin_partie()
+            self.finir_partie()
         self.vue.afficher_partie()
+
+    def finir_partie(self):
+        self.vue.afficher_fin_partie()
+        self.modele.reinitialiser()
 
     def creer_tour(self, event):
         if self.partie_en_cours == 1:
