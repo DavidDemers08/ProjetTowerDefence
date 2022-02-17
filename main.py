@@ -62,6 +62,11 @@ class Vue:
                                   tags="bg")
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
 
+        self.afficher_path()
+        self.afficher_monstres()
+        self.afficher_tours()
+
+    def afficher_path(self):
         self.canevas.create_rectangle(0, 400, 240, 475, fill="", outline="")
         self.canevas.create_rectangle(160, 160, 240, 400, fill="", outline="")
         self.canevas.create_rectangle(160, 160, 485, 250, fill="", outline="")
@@ -70,6 +75,7 @@ class Vue:
         self.canevas.create_rectangle(720, 320, 800, 560, fill="", outline="")
         self.canevas.create_rectangle(720, 320, 1200, 400, fill="", outline="")
 
+    def afficher_monstres(self):
         for i in self.modele.liste_monstres_terrain:
             self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black", tags='monstre')
             x1 = i.x - 10
@@ -78,6 +84,7 @@ class Vue:
             self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red")
             self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green")
 
+    def afficher_tours(self):
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                           i.y + i.demie_taille, fill="red")
