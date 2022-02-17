@@ -1,6 +1,8 @@
 import random
 import time
 from tkinter import *
+
+import boss
 import monstre
 import tour
 import projectile
@@ -22,37 +24,36 @@ class Vue:
     def creer_interface(self):
         # cadre HUD affichant la duree
         self.bg = PhotoImage(file="Images/carte.png")
+        self.tour1 = PhotoImage(file="Images/tour1.png")
+        self.image_guerrier = PhotoImage(file="")
         self.bg.width()
 
         self.cadre_depart = Frame(self.root, bg='gray')
         bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
+        bouton_tour1 = Button(self.cadre_depart, text="tour1", image=self.tour1, height=17,width=25)
+
+
 
         self.image_vie = PhotoImage(file="Images/health_bar.png")
-        label_image_vie = Label(self.cadre_depart, image=self.image_vie, height=53, width=96)
+        label_image_vie = Label(self.cadre_depart, image=self.image_vie, height=17, width=96)
 
         self.image_argent = PhotoImage(file="Images/money.png")
-        label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=53)
+        label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=17)
 
         self.var_argent = StringVar()
-        label_argent = Label(self.cadre_depart, width=10, height=3, font=('Arial', 11),
-                             textvariable=self.var_argent)
+        label_argent = Label(self.cadre_depart, text='0,00$', width=10,
+                             textvariable=self.var_argent)  # textvariable=self.var_argent
 
-        label_image_score = Label(self.cadre_depart, text='SCORE', height=3, font=('Arial', 11, 'underline'),
-                                  fg='blue')
 
-        self.var_score = StringVar()
-        label_score = Label(self.cadre_depart, width=5, height=3, font=('Arial',11),
-                            textvariable=self.var_score)
 
         self.canevas = Canvas(self.root, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
 
         self.cadre_depart.pack(expand=True, fill=BOTH)
         bouton_depart.pack(side=LEFT)
+        bouton_tour1.pack(side=LEFT)
         label_argent.pack(side=RIGHT)
         label_image_argent.pack(side=RIGHT)
         label_image_vie.pack(side=RIGHT, padx=20)
-        label_score.pack(side=RIGHT)
-        label_image_score.pack(side=RIGHT)
         self.canevas.pack()
 
         self.afficher_partie()
@@ -62,14 +63,18 @@ class Vue:
 
     def afficher_partie(self):
         self.canevas.delete(ALL)
-        self.var_argent.set(str(self.modele.argent)+"$")
-        self.var_score.set(self.modele.score)
+        self.var_argent.set(self.modele.argent)
         demitaille = 50
 
         self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg,
                                   tags="bg")
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
 
+        self.afficher_path()
+        self.afficher_monstres()
+        self.afficher_tours()
+
+    def afficher_path(self):
         self.canevas.create_rectangle(0, 400, 240, 475, fill="", outline="")
         self.canevas.create_rectangle(160, 160, 240, 400, fill="", outline="")
         self.canevas.create_rectangle(160, 160, 485, 250, fill="", outline="")
@@ -78,17 +83,29 @@ class Vue:
         self.canevas.create_rectangle(720, 320, 800, 560, fill="", outline="")
         self.canevas.create_rectangle(720, 320, 1200, 400, fill="", outline="")
 
+    def afficher_monstres(self):
         for i in self.modele.liste_monstres_terrain:
-            self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black", tags='monstre')
-            x1 = i.x - 10
-            x2 = x1 + 20
-            x3 = x1 + (i.vie / monstre.Monstre.vie_max * 20)
-            self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red")
-            self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green")
 
+            if isinstance(i, monstre.Monstre):
+                self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black", tags='monstre')
+                x1 = i.x - 10
+                x2 = x1 + 20
+                x3 = x1 + (i.vie / monstre.Monstre.vie_max * 20)
+                self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red")
+                self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green")
+
+            if isinstance(i, boss.Boss):
+                self.canevas.create_oval(i.x - 15, i.y - 15, i.x + 15, i.y + 15, fill="red", tags='boss')
+                x1 = i.x - 10
+                x2 = x1 + 20
+                x3 = x1 + (i.vie / boss.Boss.vie_max * 20)
+                self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red")
+                self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green")
+
+    def afficher_tours(self):
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                          i.y + i.demie_taille, fill="red")
+                                          i.y + i.demie_taille, fill="yellow")
             self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                      i.y + i.demie_taille, fill="black")
 
@@ -115,11 +132,12 @@ class Modele:
         self.liste_projectiles = []
         self.liste_tours = []
         self.delai_creation_creep = 0
+        self.delai_creation_creep_max = 100
+        self.nb_creep_vague = 10
         self.delai_creation_creep_max = 10
         self.nb_creep_vague = 10000
         self.pointage = 0
         self.argent = 1000
-        self.score = 0
         self.vie = 3
 
     def creer_monstre(self):
@@ -132,6 +150,7 @@ class Modele:
                 i.avancer_monstre(self.path)
 
     def jouer_partie(self):
+        self.creer_monstre()
         self.spawn_monstre()
         self.bouger_monstres()
         self.attaque_monstres()
@@ -199,6 +218,7 @@ class Controleur:
         else:
             self.vue.afficher_fin_partie()
         self.vue.afficher_partie()
+
 
     def creer_tour(self, event):
         if self.partie_en_cours == 1:

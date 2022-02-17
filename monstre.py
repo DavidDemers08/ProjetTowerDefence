@@ -1,15 +1,18 @@
 import random
 
 
-class Monstre:
+class Monstre(object):
     vie_max = 100
+    prix = 20
+    point = 50
 
-    def __init__(self, x, y):
+    def __init__(self, x, y,vitesse,vie):
         self.x = x
         self.y = y
-        self.vitesse = 10
+        self.vitesse = 2
+        self.vitesse = vitesse
         self.index = 0
-        self.vie = 100
+        self.vie = vie
 
     def avancer_monstre(self, path):
         # cibleX va représenter le premier composant du vecteur dans le tablau du chemin

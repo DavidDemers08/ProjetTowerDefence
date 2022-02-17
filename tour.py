@@ -3,7 +3,7 @@ import projectile
 
 
 class Tour:
-    prix = 300
+    prix = 200
 
     def __init__(self, x, y, rayon, demie_taille):
         self.x = x
@@ -12,7 +12,8 @@ class Tour:
         self.demie_taille = demie_taille
         self.delai_tire = 0
         self.liste_projectiles = []
-        self.vitesse_attaque = 1
+        self.vitesse_attaque = 20
+        self.degat = 20
         # mitraillette vitesse = 2
 
     def analyse_rayon(self, monstre):
@@ -40,4 +41,4 @@ class Tour:
                 if (projectile.cibleX + 5 >= projectile.x >= projectile.cibleX - 5) and (
                         projectile.cibleY + 5 >= projectile.y >= projectile.cibleY - 5):
                     self.liste_projectiles.remove(projectile)
-                    projectile.monstre.vie -= 5
+                    projectile.monstre.vie -= self.degat
