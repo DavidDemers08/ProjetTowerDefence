@@ -16,8 +16,8 @@ class Vue:
         self.creer_interface()
 
     def creer_tour(self, event):
-
-        self.parent.creer_tour(event)
+        if (self.modele.argent - tour.Tour.prix) >= 0:
+            self.parent.creer_tour(event)
 
     def creer_interface(self):
         # cadre HUD affichant la duree
@@ -33,8 +33,11 @@ class Vue:
         self.image_argent = PhotoImage(file="Images/money.png")
         label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=17)
 
-        #self.var_argent = StringVar()
-        label_argent = Label(self.cadre_depart, text='0,00$', width=10)  #textvariable=self.var_argent
+        self.var_argent = StringVar()
+        label_argent = Label(self.cadre_depart, text='0,00$', width=10,
+                             textvariable=self.var_argent)  # textvariable=self.var_argent
+
+
 
         self.canevas = Canvas(self.root, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
 
@@ -52,7 +55,7 @@ class Vue:
 
     def afficher_partie(self):
         self.canevas.delete(ALL)
-
+        self.var_argent.set(self.modele.argent)
         demitaille = 50
 
         self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg,
@@ -91,8 +94,6 @@ class Vue:
     def afficher_fin_partie(self):
         print("fin de partie")
 
-
-
 class Modele:
     def __init__(self, parent):
         self.parent = parent
@@ -108,6 +109,7 @@ class Modele:
         self.delai_creation_creep_max = 10
         self.nb_creep_vague = 5
         self.pointage = 0
+        self.argent = 1000
         self.vie = 3
 
     def creer_monstre(self):
@@ -146,6 +148,8 @@ class Modele:
             tour.attaque(self.liste_monstres_terrain)
 
     def creer_tours(self, event):
+        self.argent -= tour.Tour.prix
+        print(self.argent)
         x = event.x
         y = event.y
         self.liste_tours.append(tour.Tour(x, y, 200, 10))
