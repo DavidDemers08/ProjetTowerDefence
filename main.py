@@ -76,7 +76,7 @@ class Vue:
         self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg,
                                   tags="bg")
 
-        self.image_portail = PhotoImage(file="Images/portal.gif")
+        self.image_portail = PhotoImage(file="Images/portal.gif", format="gif -index 2")
         self.canevas.create_image(1143, 350, image=self.image_portail, tags="portail")
 
 
