@@ -116,7 +116,7 @@ class Modele:
         if len(self.liste_monstres_entrepot) == 0 and len(self.liste_monstres_terrain) == 0:
             self.vague += 1
             for i in range(self.nb_creep_vague * self.vague):
-                self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450))
+                self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450,10,100))
             self.delai_creation_creep = 0
 
 
