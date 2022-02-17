@@ -128,20 +128,21 @@ class Modele:
         self.largeur_carte = 1200
         self.hauteur_carte = 800
         self.path = [[200, 450], [200, 200], [440, 200], [440, 520], [760, 520], [760, 370], [1250, 370]]
-        self.vague = 0
-        self.liste_monstres_terrain = []
-        self.liste_monstres_entrepot = []
-        self.liste_projectiles = []
-        self.liste_tours = []
+
         self.delai_creation_creep = 0
-        self.delai_creation_creep_max = 100
         self.nb_creep_vague = 10
-        self.delai_creation_creep_max = 100
+        self.delai_creation_creep_max = 10
+
         self.nb_creep_vague = 5
         self.pointage = 0
         self.argent = 1000
         self.score = 0
         self.vie = 3
+        self.vague = 0
+        self.liste_monstres_terrain = []
+        self.liste_monstres_entrepot = []
+        self.liste_projectiles = []
+        self.liste_tours = []
 
 
     def creer_monstre(self):
