@@ -138,20 +138,6 @@ class Modele:
         self.argent = 600
         self.vie = 3
 
-    def creer_monstre(self):
-        if len(self.liste_monstres_entrepot) == 0 and len(self.liste_monstres_terrain) == 0:
-            self.vague += 1
-            for i in range(self.nb_creep_vague * self.vague):
-                self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, 10, 100))
-
-            self.liste_monstres_entrepot.append(boss.Boss(-10, 450, 10, 200))
-            self.delai_creation_creep = 0
-
-    def bouger_monstres(self):
-        if len(self.liste_monstres_terrain) != 0:
-            for i in self.liste_monstres_terrain:
-                i.avancer_monstre(self.path)
-
     def jouer_partie(self):
         self.creer_monstre()
         self.spawn_monstre()
@@ -160,6 +146,18 @@ class Modele:
         self.verifier_etat_monstre()
         self.verifier_etat_joueur()
 
+    def creer_monstre(self):
+        if len(self.liste_monstres_entrepot) == 0 and len(self.liste_monstres_terrain) == 0:
+            self.vague += 1
+            for i in range(self.nb_creep_vague * self.vague):
+                self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, 5, 100))
+            self.delai_creation_creep = 0
+
+    def creer_tours(self, event):
+        self.argent -= tour.Tour.prix
+        x = event.x
+        y = event.y
+        self.liste_tours.append(tour.Tour(x, y, 100, 10))
 
     def spawn_monstre(self):
         self.delai_creation_creep += 1
@@ -168,15 +166,16 @@ class Modele:
             self.liste_monstres_terrain.append(temp)
             self.delai_creation_creep = 0
 
+    def bouger_monstres(self):
+        if len(self.liste_monstres_terrain) != 0:
+            for i in self.liste_monstres_terrain:
+                i.avancer_monstre(self.path)
+
+
     def attaque_monstres(self):
         for tour in self.liste_tours:
             tour.attaque(self.liste_monstres_terrain)
 
-    def creer_tours(self, event):
-        self.argent -= tour.Tour.prix
-        x = event.x
-        y = event.y
-        self.liste_tours.append(tour.Tour(x, y, 100, 10))
 
     def verifier_etat_monstre(self):
         for i in self.liste_monstres_terrain:

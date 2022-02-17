@@ -4,7 +4,7 @@
     <list default="true" id="d52ef0f7-c9bb-4dce-bd44-7f181277d4f2" name="Default Changelist" comment="argent">
       <change afterPath="$PROJECT_DIR$/Images/kisspng-portal-magic-animation-5afb37640a9617.7974051515264131560434.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Images/tour1.png" afterDir="false" />
-    <list default="true" id="d52ef0f7-c9bb-4dce-bd44-7f181277d4f2" name="Default Changelist" comment="organisation classe vue">
+    <list default="true" id="d52ef0f7-c9bb-4dce-bd44-7f181277d4f2" name="Default Changelist" comment="afficher Boss dans vue">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/boss.py" beforeDir="false" afterPath="$PROJECT_DIR$/boss.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
@@ -290,7 +290,14 @@
       <option name="project" value="LOCAL" />
       <updated>1645127534713</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="afficher Boss dans vue">
+      <created>1645128315625</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1645128315625</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -332,10 +339,11 @@
     <MESSAGE value="changer la classe monstre" />
     <MESSAGE value="classe Boss" />
     <MESSAGE value="organisation classe vue" />
-    <option name="LAST_COMMIT_MESSAGE" value="organisation classe vue" />
+    <MESSAGE value="afficher Boss dans vue" />
+    <option name="LAST_COMMIT_MESSAGE" value="afficher Boss dans vue" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ProjetTowerDefence$main.coverage" NAME="main Coverage Results" MODIFIED="1645128279677" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ProjetTowerDefence$main.coverage" NAME="main Coverage Results" MODIFIED="1645128903645" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <option name="LAST_COMMIT_MESSAGE" value="ajout de la vie pour l'utilisateur" />
   </component>
 </project>
