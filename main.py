@@ -22,10 +22,15 @@ class Vue:
     def creer_interface(self):
         # cadre HUD affichant la duree
         self.bg = PhotoImage(file="Images/carte.png")
+        self.tour1 = PhotoImage(file="Images/tour1.png")
+        self.image_guerrier = PhotoImage(file="")
         self.bg.width()
 
         self.cadre_depart = Frame(self.root, bg='gray')
         bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
+        bouton_tour1 = Button(self.cadre_depart, text="tour1", image=self.tour1, height=17,width=25)
+
+
 
         self.image_vie = PhotoImage(file="Images/health_bar.png")
         label_image_vie = Label(self.cadre_depart, image=self.image_vie, height=17, width=96)
@@ -37,12 +42,11 @@ class Vue:
         label_argent = Label(self.cadre_depart, text='0,00$', width=10,
                              textvariable=self.var_argent)  # textvariable=self.var_argent
 
-
-
         self.canevas = Canvas(self.root, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
 
         self.cadre_depart.pack(expand=True, fill=BOTH)
         bouton_depart.pack(side=LEFT)
+        bouton_tour1.pack(side=LEFT)
         label_argent.pack(side=RIGHT)
         label_image_argent.pack(side=RIGHT)
         label_image_vie.pack(side=RIGHT, padx=20)
@@ -80,7 +84,7 @@ class Vue:
 
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                          i.y + i.demie_taille, fill="red")
+                                          i.y + i.demie_taille, fill="yellow")
             self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                      i.y + i.demie_taille, fill="black")
 
@@ -94,6 +98,7 @@ class Vue:
     def afficher_fin_partie(self):
         print("fin de partie")
 
+
 class Modele:
     def __init__(self, parent):
         self.parent = parent
@@ -106,10 +111,10 @@ class Modele:
         self.liste_projectiles = []
         self.liste_tours = []
         self.delai_creation_creep = 0
-        self.delai_creation_creep_max = 10
-        self.nb_creep_vague = 10000
+        self.delai_creation_creep_max = 100
+        self.nb_creep_vague = 10
         self.pointage = 0
-        self.argent = 1000
+        self.argent = 600
         self.vie = 3
 
     def creer_monstre(self):
@@ -151,12 +156,14 @@ class Modele:
         print(self.argent)
         x = event.x
         y = event.y
-        self.liste_tours.append(tour.Tour(x, y, 200, 10))
+        self.liste_tours.append(tour.Tour(x, y, 100, 10))
 
     def verifier_etat_monstre(self):
         for i in self.liste_monstres_terrain:
             if i.vie <= 0:
                 self.pointage += 5
+                self.argent += monstre.Monstre.prix
+                self.pointage += monstre.Monstre.point
                 self.liste_monstres_terrain.remove(i)
             if i.x > 1240:
                 self.liste_monstres_terrain.remove(i)
@@ -189,7 +196,6 @@ class Controleur:
         else:
             self.vue.afficher_fin_partie()
         self.vue.afficher_partie()
-
 
     def creer_tour(self, event):
         if self.partie_en_cours == 1:

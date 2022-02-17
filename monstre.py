@@ -3,11 +3,13 @@ import random
 
 class Monstre:
     vie_max = 100
+    prix = 20
+    point = 50
 
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.vitesse = 10
+        self.vitesse = 2
         self.index = 0
         self.vie = 100
 
