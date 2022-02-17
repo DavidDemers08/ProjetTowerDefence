@@ -145,6 +145,15 @@ class Modele:
         self.liste_tours = []
 
 
+
+    def jouer_partie(self):
+        self.creer_monstre()
+        self.spawn_monstre()
+        self.bouger_monstres()
+        self.attaque_monstres()
+        self.verifier_etat_monstre()
+        self.verifier_etat_joueur()
+
     def creer_monstre(self):
         if len(self.liste_monstres_entrepot) == 0 and len(self.liste_monstres_terrain) == 0:
             self.vague += 1
@@ -158,13 +167,6 @@ class Modele:
             for i in self.liste_monstres_terrain:
                 i.avancer_monstre(self.path)
 
-    def jouer_partie(self):
-        self.creer_monstre()
-        self.spawn_monstre()
-        self.bouger_monstres()
-        self.attaque_monstres()
-        self.verifier_etat_monstre()
-        self.verifier_etat_joueur()
 
 
     def spawn_monstre(self):
