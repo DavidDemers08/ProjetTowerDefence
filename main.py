@@ -140,6 +140,7 @@ class Modele:
         self.nb_creep_vague = 5
         self.pointage = 0
         self.argent = 1000
+        self.score = 0
         self.vie = 3
 
 
