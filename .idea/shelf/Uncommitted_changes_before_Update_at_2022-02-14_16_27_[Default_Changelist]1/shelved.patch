@@ -1,0 +1,63 @@
+Index: main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import random\r\nimport time\r\nfrom tkinter import *\r\nimport monstre\r\nimport projectile\r\nimport tour\r\n\r\n\r\nclass Vue:\r\n    def __init__(self, parent):\r\n        self.parent = parent\r\n\r\n        self.modele = self.parent.modele\r\n        self.root = Tk()\r\n        self.root.title(\"TowerDefence, alpha_0.1\")\r\n        self.creer_interface()\r\n\r\n    def creer_tour(self, event):\r\n\r\n        self.parent.creer_tour(event)\r\n\r\n    def creer_interface(self):\r\n        # cadre HUD affichant la duree\r\n        self.bg = PhotoImage(file=\"Images/carte.png\")\r\n        self.bg.width()\r\n\r\n        cadre_depart = Frame(self.root, bg='gray')\r\n        bouton_depart = Button(cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)\r\n        self.canevas = Canvas(self.root, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)\r\n\r\n        cadre_depart.pack(expand=True, fill=BOTH)\r\n        bouton_depart.pack(side=TOP)\r\n        self.canevas.pack()\r\n\r\n        self.afficher_partie()\r\n        for i in self.modele.liste_tours:\r\n            self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,\r\n                                          i.y + i.demie_taille, fill=\"black\", stipple=\"gray25\")\r\n\r\n    def afficher_partie(self):\r\n        self.canevas.delete(ALL)\r\n\r\n        demitaille = 50\r\n\r\n        self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg,\r\n                                  tags=\"bg\")\r\n        self.canevas.tag_bind(\"bg\", \"<Button-1>\", self.creer_tour)\r\n\r\n        self.canevas.create_rectangle(0, 400, 240, 475, fill=\"beige\")\r\n        self.canevas.create_rectangle(160, 160, 240, 400, fill=\"beige\")\r\n        self.canevas.create_rectangle(160, 160, 485, 250, fill=\"beige\")\r\n        self.canevas.create_rectangle(400, 160, 485, 560, fill=\"beige\")\r\n        self.canevas.create_rectangle(400, 480, 800, 560, fill=\"beige\")\r\n        self.canevas.create_rectangle(720, 320, 800, 560, fill=\"beige\")\r\n        self.canevas.create_rectangle(720, 320, 1200, 400, fill=\"beige\")\r\n\r\n        for i in self.modele.liste_monstres_terrain:\r\n            self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill=\"black\")\r\n\r\n        for i in self.modele.liste_tours:\r\n            self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,\r\n                                          i.y + i.demie_taille, fill=\"red\", tags=\"none\")\r\n            self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill=\"\")\r\n\r\n        if len(self.modele.liste_projectiles) != 0:\r\n            for i in self.modele.liste_projectiles:\r\n                self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill=\"blue\")\r\n\r\n\r\nclass Modele:\r\n    def __init__(self, parent):\r\n        self.parent = parent\r\n        self.largeur_carte = 1200\r\n        self.hauteur_carte = 800\r\n        self.path = [[200, 450], [200, 200], [440, 200], [440, 520], [760, 520], [760, 370], [1250, 370]]\r\n        self.vague = 0\r\n        self.liste_monstres_terrain = []\r\n        self.liste_monstres_entrepot = []\r\n        self.liste_projectiles = []\r\n        self.liste_tours = []\r\n        self.delai_creation_creep = 0\r\n        self.delai_creation_creep_max = 50\r\n\r\n        self.nb_creep_vague = 2\r\n\r\n    def creer_monstre(self):\r\n        for i in range(self.nb_creep_vague * self.vague):\r\n            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450))\r\n\r\n    def bouger_monstres(self):\r\n\r\n        for i in self.liste_monstres_terrain:\r\n            i.avancer_monstre(self.path)\r\n\r\n        self.tuer_monstre()\r\n\r\n    def tuer_monstre(self):\r\n        for i in self.liste_monstres_terrain:\r\n            if i.x > 1240:\r\n                self.liste_monstres_terrain.remove(i)\r\n\r\n    def jouer_partie(self):\r\n        self.spawn_monstre_terrain()\r\n        self.attaque_tours()\r\n        self.lancer_projectiles()\r\n\r\n    def spawn_monstre_terrain(self):\r\n        self.delai_creation_creep += 1\r\n        if self.delai_creation_creep == self.delai_creation_creep_max and len(self.liste_monstres_entrepot) != 0:\r\n            temp = self.liste_monstres_entrepot.pop(0)\r\n            self.liste_monstres_terrain.append(temp)\r\n            self.delai_creation_creep = 0\r\n        if len(self.liste_monstres_terrain) != 0:\r\n            self.bouger_monstres()\r\n        if len(self.liste_monstres_entrepot) == 0 and len(self.liste_monstres_terrain) == 0:\r\n            self.vague += 1\r\n            self.creer_monstre()\r\n            self.delai_creation_creep = 0\r\n            self.delai_creation_creep_max -= 5\r\n\r\n    def attaque_tours(self):\r\n        for tour in self.liste_tours:\r\n            tour.delai_tire += 1\r\n            for monstre in self.liste_monstres_terrain:\r\n                if tour.analyse_rayon(monstre) and tour.delai_tire >= tour.vitesse_attaque:\r\n                    tour.delai_tire = 0\r\n                    print(\"tirer\")\r\n                    if tour.analyse_rayon(monstre) and tour.delai_tire >= tour.vitesse_attaque:\r\n                        self.liste_projectiles.append(projectile.Projectile(tour,monstre))\r\n                        tour.delai_tire = 0\r\n                    if len(self.liste_projectiles) != 0:\r\n                        for i in self.liste_projectiles:\r\n                            i.cibleX = monstre.x\r\n                            i.cibleY = monstre.y\r\n\r\n    def lancer_projectiles(self):\r\n        if len(self.liste_projectiles) != 0:\r\n            for projectile in self.liste_projectiles:\r\n                projectile.lancer_projectile()\r\n                if projectile.y == projectile.cibleY and projectile.x == projectile.cibleX:\r\n                    # LE MINION EST TOUCHÉ\r\n                    self.liste_projectiles.remove(projectile)  ##watch out\r\n                    self.liste_projectiles.remove(projectile) ##watch out\r\n\r\n    def creer_tours(self, event):\r\n        x = event.x\r\n        y = event.y\r\n        self.liste_tours.append(tour.Tour(x, y, 75, 10))\r\n\r\n\r\nclass Controleur:\r\n    def __init__(self):\r\n        self.partie_en_cours = 0\r\n\r\n        self.modele = Modele(self)\r\n        self.vue = Vue(self)\r\n        self.vue.root.mainloop()\r\n\r\n    def debuter_partie(self):\r\n        if not self.partie_en_cours:\r\n            self.partie_en_cours = 1\r\n            self.jouer_partie()\r\n            self.modele.vague = 1\r\n\r\n    def jouer_partie(self):\r\n        if self.partie_en_cours:\r\n            self.modele.jouer_partie()\r\n            self.vue.root.after(40, self.jouer_partie)\r\n        self.vue.afficher_partie()\r\n\r\n    def creer_tour(self, event):\r\n        if self.partie_en_cours == 1:\r\n            self.modele.creer_tours(event)\r\n\r\n\r\n\r\nif __name__ == '__main__':\r\n    c = Controleur()\r\n    print(\"L'application se termine\")\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/main.py b/main.py
+--- a/main.py	
++++ b/main.py	
+@@ -24,12 +24,20 @@
+         self.bg = PhotoImage(file="Images/carte.png")
+         self.bg.width()
+ 
+-        cadre_depart = Frame(self.root, bg='gray')
+-        bouton_depart = Button(cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
++        self.cadre_depart = Frame(self.root, bg='gray')
++        bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
++        self.image_argent = PhotoImage(file="Images/money.png")
++        label_dollar_bill = Label(self.cadre_depart, image=self.image_argent, height=17)
++
++        #self.var_argent = StringVar()
++        label_argent = Label(self.cadre_depart, text='0,00$', width=10)  #textvariable=self.var_argent
++
+         self.canevas = Canvas(self.root, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
+ 
+-        cadre_depart.pack(expand=True, fill=BOTH)
+-        bouton_depart.pack(side=TOP)
++        self.cadre_depart.pack(expand=True, fill=BOTH)
++        bouton_depart.pack(side=LEFT)
++        label_argent.pack(side=RIGHT)
++        label_dollar_bill.pack(side=RIGHT)
+         self.canevas.pack()
+ 
+         self.afficher_partie()
+@@ -148,6 +156,7 @@
+         self.liste_tours.append(tour.Tour(x, y, 75, 10))
+ 
+ 
++
+ class Controleur:
+     def __init__(self):
+         self.partie_en_cours = 0
+Index: .idea/ProjetTowerDefence.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<module type=\"PYTHON_MODULE\" version=\"4\">\r\n  <component name=\"NewModuleRootManager\">\r\n    <content url=\"file://$MODULE_DIR$\">\r\n      <excludeFolder url=\"file://$MODULE_DIR$/venv\" />\r\n    </content>\r\n    <orderEntry type=\"jdk\" jdkName=\"Python 3.9\" jdkType=\"Python SDK\" />\r\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\r\n  </component>\r\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/ProjetTowerDefence.iml b/.idea/ProjetTowerDefence.iml
+--- a/.idea/ProjetTowerDefence.iml	
++++ b/.idea/ProjetTowerDefence.iml	
+@@ -4,7 +4,7 @@
+     <content url="file://$MODULE_DIR$">
+       <excludeFolder url="file://$MODULE_DIR$/venv" />
+     </content>
+-    <orderEntry type="jdk" jdkName="Python 3.9" jdkType="Python SDK" />
++    <orderEntry type="inheritedJdk" />
+     <orderEntry type="sourceFolder" forTests="false" />
+   </component>
+ </module>
+\ No newline at end of file

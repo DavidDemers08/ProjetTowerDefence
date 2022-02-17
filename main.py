@@ -24,34 +24,37 @@ class Vue:
     def creer_interface(self):
         # cadre HUD affichant la duree
         self.bg = PhotoImage(file="Images/carte.png")
-        self.tour1 = PhotoImage(file="Images/tour1.png")
-        self.image_guerrier = PhotoImage(file="")
         self.bg.width()
 
         self.cadre_depart = Frame(self.root, bg='gray')
         bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
-        bouton_tour1 = Button(self.cadre_depart, text="tour1", image=self.tour1, height=17,width=25)
-
-
 
         self.image_vie = PhotoImage(file="Images/health_bar.png")
-        label_image_vie = Label(self.cadre_depart, image=self.image_vie, height=17, width=96)
+        label_image_vie = Label(self.cadre_depart, image=self.image_vie, height=53, width=96)
 
         self.image_argent = PhotoImage(file="Images/money.png")
-        label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=17)
+        label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=53)
 
         self.var_argent = StringVar()
-        label_argent = Label(self.cadre_depart, text='0,00$', width=10,
-                             textvariable=self.var_argent)  # textvariable=self.var_argent
+        label_argent = Label(self.cadre_depart, width=10, height=3, font=('Arial', 11),
+                             textvariable=self.var_argent)
+
+        label_image_score = Label(self.cadre_depart, text='SCORE', height=3, font=('Arial', 11, 'underline'),
+                                  fg='blue')
+
+        self.var_score = StringVar()
+        label_score = Label(self.cadre_depart, width=5, height=3, font=('Arial', 11),
+                            textvariable=self.var_score)
 
         self.canevas = Canvas(self.root, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
 
         self.cadre_depart.pack(expand=True, fill=BOTH)
         bouton_depart.pack(side=LEFT)
-        bouton_tour1.pack(side=LEFT)
         label_argent.pack(side=RIGHT)
         label_image_argent.pack(side=RIGHT)
         label_image_vie.pack(side=RIGHT, padx=20)
+        label_score.pack(side=RIGHT)
+        label_image_score.pack(side=RIGHT)
         self.canevas.pack()
 
         self.afficher_partie()
@@ -61,7 +64,8 @@ class Vue:
 
     def afficher_partie(self):
         self.canevas.delete(ALL)
-        self.var_argent.set(self.modele.argent)
+        self.var_argent.set(str(self.modele.argent) + "$")
+        self.var_score.set(self.modele.score)
         demitaille = 50
 
         self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg,
@@ -133,10 +137,19 @@ class Modele:
         self.delai_creation_creep_max = 100
         self.nb_creep_vague = 10
         self.delai_creation_creep_max = 10
-        self.nb_creep_vague = 5
+        self.nb_creep_vague = 10000
         self.pointage = 0
-        self.argent = 600
+        self.argent = 1000
         self.vie = 3
+
+    def creer_monstre(self):
+        for i in range(self.nb_creep_vague * self.vague):
+            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450))
+
+    def bouger_monstres(self):
+        if len(self.liste_monstres_terrain) != 0:
+            for i in self.liste_monstres_terrain:
+                i.avancer_monstre(self.path)
 
     def jouer_partie(self):
         self.creer_monstre()
@@ -145,19 +158,7 @@ class Modele:
         self.attaque_monstres()
         self.verifier_etat_monstre()
         self.verifier_etat_joueur()
-
-    def creer_monstre(self):
-        if len(self.liste_monstres_entrepot) == 0 and len(self.liste_monstres_terrain) == 0:
-            self.vague += 1
-            for i in range(self.nb_creep_vague * self.vague):
-                self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, 5, 100))
-            self.delai_creation_creep = 0
-
-    def creer_tours(self, event):
-        self.argent -= tour.Tour.prix
-        x = event.x
-        y = event.y
-        self.liste_tours.append(tour.Tour(x, y, 100, 10))
+        print(self.vie)
 
     def spawn_monstre(self):
         self.delai_creation_creep += 1
@@ -166,23 +167,27 @@ class Modele:
             self.liste_monstres_terrain.append(temp)
             self.delai_creation_creep = 0
 
-    def bouger_monstres(self):
-        if len(self.liste_monstres_terrain) != 0:
-            for i in self.liste_monstres_terrain:
-                i.avancer_monstre(self.path)
-
+        if len(self.liste_monstres_entrepot) == 0 and len(self.liste_monstres_terrain) == 0:
+            self.vague += 1
+            self.creer_monstre()
+            self.delai_creation_creep = 0
+            self.delai_creation_creep_max -= 5
 
     def attaque_monstres(self):
         for tour in self.liste_tours:
             tour.attaque(self.liste_monstres_terrain)
 
+    def creer_tours(self, event):
+        self.argent -= tour.Tour.prix
+        print(self.argent)
+        x = event.x
+        y = event.y
+        self.liste_tours.append(tour.Tour(x, y, 200, 10))
 
     def verifier_etat_monstre(self):
         for i in self.liste_monstres_terrain:
             if i.vie <= 0:
                 self.pointage += 5
-                self.argent += monstre.Monstre.prix
-                self.pointage += monstre.Monstre.point
                 self.liste_monstres_terrain.remove(i)
             if i.x > 1240:
                 self.liste_monstres_terrain.remove(i)
@@ -192,16 +197,6 @@ class Modele:
     def verifier_etat_joueur(self):
         if self.vie == 0:
             self.parent.partie_en_cours = 0
-
-    def reinitialiser(self):
-        self.liste_monstres_terrain = []
-        self.liste_monstres_entrepot = []
-        self.liste_projectiles = []
-        self.liste_tours = []
-        self.vie = 3
-        self.vague = 0
-        self.pointage = 0
-        self.argent = 1000
 
 
 class Controleur:
@@ -216,19 +211,16 @@ class Controleur:
         if not self.partie_en_cours:
             self.partie_en_cours = 1
             self.jouer_partie()
-            self.modele.vague += 1
+            self.modele.vague = 1
 
     def jouer_partie(self):
         if self.partie_en_cours:
             self.modele.jouer_partie()
             self.vue.root.after(40, self.jouer_partie)
         else:
-            self.finir_partie()
+            self.vue.afficher_fin_partie()
         self.vue.afficher_partie()
 
-    def finir_partie(self):
-        self.vue.afficher_fin_partie()
-        self.modele.reinitialiser()
 
     def creer_tour(self, event):
         if self.partie_en_cours == 1:
