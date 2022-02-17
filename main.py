@@ -186,7 +186,7 @@ class Modele:
         print(self.argent)
         x = event.x
         y = event.y
-        self.liste_tours.append(tour.Tour(x, y, 100, 10))
+        self.liste_tours.append(tour.Tour(x, y, 300, 10))
 
     def verifier_etat_monstre(self):
         for i in self.liste_monstres_terrain:

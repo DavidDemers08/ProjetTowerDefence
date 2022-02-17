@@ -26,17 +26,11 @@ class Tour:
             if self.analyse_rayon(monstre) and self.delai_tire >= self.vitesse_attaque:
                 self.liste_projectiles.append(projectile.Projectile(self, monstre))
                 self.delai_tire = 0
-
-
         self.lancer_projectiles(liste_monstre)
 
     def lancer_projectiles(self, liste_monstre):
         if len(self.liste_projectiles) != 0:
             for projectile in self.liste_projectiles:
                 projectile.lancer_projectile()
-                cibleX = projectile.monstre.x
-                cibleY = projectile.monstre.y
-                if (cibleX + 5 >= projectile.x >= cibleX - 5) and (
-                        cibleY + 5 >= projectile.y >= cibleY - 5):
+                if projectile.atteindre_cible():
                     self.liste_projectiles.remove(projectile)
-                    projectile.monstre.vie -= self.degat
