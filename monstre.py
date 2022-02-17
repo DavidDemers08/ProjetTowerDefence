@@ -6,10 +6,9 @@ class Monstre(object):
     prix = 20
     point = 50
 
-    def __init__(self, x, y,vitesse,vie):
+    def __init__(self, x, y, vitesse, vie):
         self.x = x
         self.y = y
-        self.vitesse = 2
         self.vitesse = vitesse
         self.index = 0
         self.vie = vie
