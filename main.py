@@ -65,7 +65,7 @@ class Vue:
     def afficher_partie(self):
         self.canevas.delete(ALL)
         self.var_argent.set(str(self.modele.argent) + "$")
-        self.var_score.set(self.modele.score)
+        self.var_score.set(self.modele.pointage)
         demitaille = 50
 
         self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg,
@@ -137,14 +137,15 @@ class Modele:
         self.delai_creation_creep_max = 100
         self.nb_creep_vague = 10
         self.delai_creation_creep_max = 10
-        self.nb_creep_vague = 10000
+        self.nb_creep_vague = 5
         self.pointage = 0
         self.argent = 1000
         self.vie = 3
 
+
     def creer_monstre(self):
         for i in range(self.nb_creep_vague * self.vague):
-            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450))
+            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450,10,100))
 
     def bouger_monstres(self):
         if len(self.liste_monstres_terrain) != 0:
