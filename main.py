@@ -136,7 +136,7 @@ class Modele:
         self.delai_creation_creep = 0
         self.delai_creation_creep_max = 100
         self.nb_creep_vague = 10
-        self.delai_creation_creep_max = 10
+        self.delai_creation_creep_max = 100
         self.nb_creep_vague = 5
         self.pointage = 0
         self.argent = 1000
@@ -183,12 +183,14 @@ class Modele:
         print(self.argent)
         x = event.x
         y = event.y
-        self.liste_tours.append(tour.Tour(x, y, 200, 10))
+        self.liste_tours.append(tour.Tour(x, y, 100, 10))
 
     def verifier_etat_monstre(self):
         for i in self.liste_monstres_terrain:
             if i.vie <= 0:
                 self.pointage += 5
+                self.score += 50
+                self.argent += 50
                 self.liste_monstres_terrain.remove(i)
             if i.x > 1240:
                 self.liste_monstres_terrain.remove(i)
