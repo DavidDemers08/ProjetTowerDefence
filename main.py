@@ -91,6 +91,8 @@ class Vue:
                     self.canevas.create_oval(projectile.x - 5, projectile.y - 5, projectile.x + 5, projectile.y + 5,
                                              fill="blue")
 
+    def afficher_fin_partie(self):
+        print("fin de partie")
 
 class Modele:
     def __init__(self, parent):
@@ -124,6 +126,7 @@ class Modele:
         self.bouger_monstres()
         self.attaque_monstres()
         self.verifier_etat_monstre()
+        self.verifier_etat_joueur()
         print(self.vie)
 
     def spawn_monstre(self):
@@ -160,6 +163,10 @@ class Modele:
                 if self.vie > 0:
                     self.vie -= 1
 
+    def verifier_etat_joueur(self):
+        if self.vie == 0:
+            self.parent.partie_en_cours = 0
+
 
 class Controleur:
     def __init__(self):
@@ -179,7 +186,10 @@ class Controleur:
         if self.partie_en_cours:
             self.modele.jouer_partie()
             self.vue.root.after(40, self.jouer_partie)
+        else:
+            self.vue.afficher_fin_partie()
         self.vue.afficher_partie()
+
 
     def creer_tour(self, event):
         if self.partie_en_cours == 1:
