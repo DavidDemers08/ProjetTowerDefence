@@ -29,9 +29,6 @@ class Vue:
         self.cadre_depart = Frame(self.root, bg='gray')
         bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
 
-        self.image_vie = PhotoImage(file="Images/health_bar.png")
-        label_image_vie = Label(self.cadre_depart, image=self.image_vie, height=30, width=96)
-
         self.image_argent = PhotoImage(file="Images/money.png")
         label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=30)
 
@@ -56,8 +53,7 @@ class Vue:
         bouton_depart.pack(side=LEFT)
         label_argent.pack(side=RIGHT)
         label_image_argent.pack(side=RIGHT)
-        label_image_vie.pack(side=RIGHT, padx=20)
-        label_score.pack(side=RIGHT)
+        label_score.pack(side=RIGHT, padx=20)
         label_vie_texte.pack(side=RIGHT, padx=20)
         label_vie.pack(side=RIGHT, padx=20)
         label_image_score.pack(side=RIGHT)
@@ -78,7 +74,6 @@ class Vue:
 
         self.image_portail = PhotoImage(file="Images/portal.gif", format="gif -index 2")
         self.canevas.create_image(1143, 350, image=self.image_portail, tags="portail")
-
 
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
 
@@ -187,7 +182,6 @@ class Modele:
 
     def creer_tours(self, event):
         self.argent -= tour.Tour.prix
-        print(self.argent)
         x = event.x
         y = event.y
         self.liste_tours.append(tour.Tour(x, y, 100, 10))
@@ -199,7 +193,7 @@ class Modele:
                 self.score += 50
                 self.argent += 50
                 self.liste_monstres_terrain.remove(i)
-            if i.x > 1240:
+            if i.x > 1143:
                 self.liste_monstres_terrain.remove(i)
                 if self.vie > 0:
                     self.vie -= 1
