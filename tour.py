@@ -13,7 +13,7 @@ class Tour:
         self.delai_tire = 0
         self.liste_projectiles = []
         self.vitesse_attaque = 20
-        self.degat = 20
+        self.degat = 50
         # mitraillette vitesse = 2
 
     def analyse_rayon(self, monstre):

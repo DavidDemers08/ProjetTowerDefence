@@ -59,7 +59,7 @@ class Vue:
     def afficher_partie(self):
         self.canevas.delete(ALL)
         self.var_argent.set(str(self.modele.argent) + "$")
-        self.var_score.set(self.modele.score)
+        self.var_score.set(self.modele.pointage)
         demitaille = 50
 
         self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg,
@@ -137,9 +137,16 @@ class Modele:
         self.score = 0
         self.vie = 3
 
+
     def creer_monstre(self):
         for i in range(self.nb_creep_vague * self.vague):
             self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, 2, 100))
+            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450,10,100))
+
+        if len(self.liste_monstres_entrepot) == 0 and len(self.liste_monstres_terrain) == 0:
+            self.vague += 1
+            self.delai_creation_creep = 0
+            self.delai_creation_creep_max -= 5
 
     def bouger_monstres(self):
         if len(self.liste_monstres_terrain) != 0:
@@ -153,7 +160,7 @@ class Modele:
         self.attaque_monstres()
         self.verifier_etat_monstre()
         self.verifier_etat_joueur()
-        print(self.vie)
+
 
     def spawn_monstre(self):
         self.delai_creation_creep += 1
@@ -162,11 +169,6 @@ class Modele:
             self.liste_monstres_terrain.append(temp)
             self.delai_creation_creep = 0
 
-        if len(self.liste_monstres_entrepot) == 0 and len(self.liste_monstres_terrain) == 0:
-            self.vague += 1
-            self.creer_monstre()
-            self.delai_creation_creep = 0
-            self.delai_creation_creep_max -= 5
 
     def attaque_monstres(self):
         for tour in self.liste_tours:
@@ -195,6 +197,16 @@ class Modele:
         if self.vie == 0:
             self.parent.partie_en_cours = 0
 
+    def reinitialiser(self):
+        self.liste_monstres_terrain = []
+        self.liste_monstres_entrepot = []
+        self.liste_projectiles = []
+        self.liste_tours = []
+        self.vie = 3
+        self.vague = 0
+        self.pointage = 0
+        self.argent = 1000
+
 
 class Controleur:
     def __init__(self):
@@ -216,11 +228,14 @@ class Controleur:
             self.vue.root.after(40, self.jouer_partie)
         else:
             self.vue.afficher_fin_partie()
+            self.modele.reinitialiser()
         self.vue.afficher_partie()
 
     def creer_tour(self, event):
         if self.partie_en_cours == 1:
             self.modele.creer_tours(event)
+
+
 
 
 if __name__ == '__main__':
