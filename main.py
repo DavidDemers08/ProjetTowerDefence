@@ -24,36 +24,37 @@ class Vue:
     def creer_interface(self):
         # cadre HUD affichant la duree
         self.bg = PhotoImage(file="Images/carte.png")
-        self.tour1 = PhotoImage(file="Images/tour1.png")
-        self.image_guerrier = PhotoImage(file="")
         self.bg.width()
 
         self.cadre_depart = Frame(self.root, bg='gray')
         bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
-        bouton_tour1 = Button(self.cadre_depart, text="tour1", image=self.tour1, height=17,width=25)
-
-
 
         self.image_vie = PhotoImage(file="Images/health_bar.png")
-        label_image_vie = Label(self.cadre_depart, image=self.image_vie, height=17, width=96)
+        label_image_vie = Label(self.cadre_depart, image=self.image_vie, height=53, width=96)
 
         self.image_argent = PhotoImage(file="Images/money.png")
-        label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=17)
+        label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=53)
 
         self.var_argent = StringVar()
-        label_argent = Label(self.cadre_depart, text='0,00$', width=10,
-                             textvariable=self.var_argent)  # textvariable=self.var_argent
+        label_argent = Label(self.cadre_depart, width=10, height=3, font=('Arial', 11),
+                             textvariable=self.var_argent)
 
+        label_image_score = Label(self.cadre_depart, text='SCORE', height=3, font=('Arial', 11, 'underline'),
+                                  fg='blue')
 
+        self.var_score = StringVar()
+        label_score = Label(self.cadre_depart, width=5, height=3, font=('Arial', 11),
+                            textvariable=self.var_score)
 
         self.canevas = Canvas(self.root, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
 
         self.cadre_depart.pack(expand=True, fill=BOTH)
         bouton_depart.pack(side=LEFT)
-        bouton_tour1.pack(side=LEFT)
         label_argent.pack(side=RIGHT)
         label_image_argent.pack(side=RIGHT)
         label_image_vie.pack(side=RIGHT, padx=20)
+        label_score.pack(side=RIGHT)
+        label_image_score.pack(side=RIGHT)
         self.canevas.pack()
 
         self.afficher_partie()
@@ -63,7 +64,8 @@ class Vue:
 
     def afficher_partie(self):
         self.canevas.delete(ALL)
-        self.var_argent.set(self.modele.argent)
+        self.var_argent.set(str(self.modele.argent) + "$")
+        self.var_score.set(self.modele.score)
         demitaille = 50
 
         self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg,
