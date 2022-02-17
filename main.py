@@ -91,6 +91,8 @@ class Vue:
     def afficher_fin_partie(self):
         print("fin de partie")
 
+
+
 class Modele:
     def __init__(self, parent):
         self.parent = parent
@@ -104,13 +106,18 @@ class Modele:
         self.liste_tours = []
         self.delai_creation_creep = 0
         self.delai_creation_creep_max = 10
-        self.nb_creep_vague = 10000
+        self.nb_creep_vague = 5
         self.pointage = 0
         self.vie = 3
 
     def creer_monstre(self):
-        for i in range(self.nb_creep_vague * self.vague):
-            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450))
+        if len(self.liste_monstres_entrepot) == 0 and len(self.liste_monstres_terrain) == 0:
+            self.vague += 1
+            for i in range(self.nb_creep_vague * self.vague):
+                self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450))
+            self.delai_creation_creep = 0
+
+
 
     def bouger_monstres(self):
         if len(self.liste_monstres_terrain) != 0:
@@ -118,6 +125,7 @@ class Modele:
                 i.avancer_monstre(self.path)
 
     def jouer_partie(self):
+        self.creer_monstre()
         self.spawn_monstre()
         self.bouger_monstres()
         self.attaque_monstres()
@@ -132,11 +140,6 @@ class Modele:
             self.liste_monstres_terrain.append(temp)
             self.delai_creation_creep = 0
 
-        if len(self.liste_monstres_entrepot) == 0 and len(self.liste_monstres_terrain) == 0:
-            self.vague += 1
-            self.creer_monstre()
-            self.delai_creation_creep = 0
-            self.delai_creation_creep_max -= 5
 
     def attaque_monstres(self):
         for tour in self.liste_tours:
@@ -161,6 +164,15 @@ class Modele:
         if self.vie == 0:
             self.parent.partie_en_cours = 0
 
+    def reinitialiser(self):
+        self.liste_monstres_terrain = []
+        self.liste_monstres_entrepot = []
+        self.liste_projectiles = []
+        self.liste_tours = []
+        self.vie = 3
+        self.vague = 0
+        self.creer_monstre()
+
 class Controleur:
     def __init__(self):
         self.partie_en_cours = 0
@@ -173,15 +185,19 @@ class Controleur:
         if not self.partie_en_cours:
             self.partie_en_cours = 1
             self.jouer_partie()
-            self.modele.vague = 1
+            self.modele.vague += 1
 
     def jouer_partie(self):
         if self.partie_en_cours:
             self.modele.jouer_partie()
             self.vue.root.after(40, self.jouer_partie)
         else:
-            self.vue.afficher_fin_partie()
+            self.finir_partie()
         self.vue.afficher_partie()
+
+    def finir_partie(self):
+        self.vue.afficher_fin_partie()
+        self.modele.reinitialiser()
 
 
     def creer_tour(self, event):
