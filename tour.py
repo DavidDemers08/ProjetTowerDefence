@@ -1,7 +1,10 @@
 import helper
 import projectile
 
+
 class Tour:
+    prix = 300
+
     def __init__(self, x, y, rayon, demie_taille):
         self.x = x
         self.y = y
@@ -30,10 +33,11 @@ class Tour:
 
         self.lancer_projectiles(liste_monstre)
 
-    def lancer_projectiles(self,liste_monstre):
+    def lancer_projectiles(self, liste_monstre):
         if len(self.liste_projectiles) != 0:
             for projectile in self.liste_projectiles:
                 projectile.lancer_projectile()
-                if (projectile.cibleX + 5 >= projectile.x >= projectile.cibleX - 5) and (projectile.cibleY +5 >= projectile.y >= projectile.cibleY - 5):
+                if (projectile.cibleX + 5 >= projectile.x >= projectile.cibleX - 5) and (
+                        projectile.cibleY + 5 >= projectile.y >= projectile.cibleY - 5):
                     self.liste_projectiles.remove(projectile)
                     projectile.monstre.vie -= 5
