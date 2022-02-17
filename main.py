@@ -30,21 +30,25 @@ class Vue:
         bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
 
         self.image_vie = PhotoImage(file="Images/health_bar.png")
-        label_image_vie = Label(self.cadre_depart, image=self.image_vie, height=53, width=96)
+        label_image_vie = Label(self.cadre_depart, image=self.image_vie, height=30, width=96)
 
         self.image_argent = PhotoImage(file="Images/money.png")
-        label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=53)
+        label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=30)
 
         self.var_argent = StringVar()
-        label_argent = Label(self.cadre_depart, width=10, height=3, font=('Arial', 11),
+        label_argent = Label(self.cadre_depart, width=10, height=2, font=('Arial', 11),
                              textvariable=self.var_argent)
 
-        label_image_score = Label(self.cadre_depart, text='SCORE', height=3, font=('Arial', 11, 'underline'),
-                                  fg='blue')
+        label_image_score = Label(self.cadre_depart, text='SCORE', height=1)
+
+        self.var_vie = StringVar()
+        label_vie_texte = Label(self.cadre_depart, text='VIE', height=1)
 
         self.var_score = StringVar()
-        label_score = Label(self.cadre_depart, width=5, height=3, font=('Arial', 11),
-                            textvariable=self.var_score)
+        label_score = Label(self.cadre_depart, width=5, height=1, font=('Arial', 11),
+                            textvariable=self.var_vie)
+        label_vie = Label(self.cadre_depart, width=5, height=1, font=('Arial', 11),
+                          textvariable=self.var_score)
 
         self.canevas = Canvas(self.root, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
 
@@ -54,6 +58,8 @@ class Vue:
         label_image_argent.pack(side=RIGHT)
         label_image_vie.pack(side=RIGHT, padx=20)
         label_score.pack(side=RIGHT)
+        label_vie_texte.pack(side=RIGHT, padx=20)
+        label_vie.pack(side=RIGHT, padx=20)
         label_image_score.pack(side=RIGHT)
         self.canevas.pack()
 
@@ -66,8 +72,7 @@ class Vue:
         self.canevas.delete(ALL)
         self.var_argent.set(str(self.modele.argent) + "$")
         self.var_score.set(self.modele.pointage)
-        demitaille = 50
-
+        self.var_vie.set(self.modele.vie)
         self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg,
                                   tags="bg")
 
@@ -82,13 +87,13 @@ class Vue:
         self.afficher_tours()
 
     def afficher_path(self):
-        self.canevas.create_rectangle(0, 400, 240, 475, fill="", outline="")
-        self.canevas.create_rectangle(160, 160, 240, 400, fill="", outline="")
-        self.canevas.create_rectangle(160, 160, 485, 250, fill="", outline="")
-        self.canevas.create_rectangle(400, 160, 485, 560, fill="", outline="")
-        self.canevas.create_rectangle(400, 480, 800, 560, fill="", outline="")
-        self.canevas.create_rectangle(720, 320, 800, 560, fill="", outline="")
-        self.canevas.create_rectangle(720, 320, 1200, 400, fill="", outline="")
+        self.canevas.create_rectangle(0, 400, 240, 475, fill="", outline="", tags="statique")
+        self.canevas.create_rectangle(160, 160, 240, 400, fill="", outline="", tags="statique")
+        self.canevas.create_rectangle(160, 160, 485, 250, fill="", outline="", tags="statique")
+        self.canevas.create_rectangle(400, 160, 485, 560, fill="", outline="", tags="statique")
+        self.canevas.create_rectangle(400, 480, 800, 560, fill="", outline="", tags="statique")
+        self.canevas.create_rectangle(720, 320, 800, 560, fill="", outline="", tags="statique")
+        self.canevas.create_rectangle(720, 320, 1200, 400, fill="", outline="", tags="statique")
 
     def afficher_monstres(self):
         for i in self.modele.liste_monstres_terrain:
@@ -119,8 +124,8 @@ class Vue:
             self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="")
 
             if len(i.liste_projectiles) != 0:
-                for projectile in i.liste_projectiles:
-                    self.canevas.create_oval(projectile.x - 5, projectile.y - 5, projectile.x + 5, projectile.y + 5,
+                for j in i.liste_projectiles:
+                    self.canevas.create_oval(j.x - 5, j.y - 5, j.x + 5, j.y + 5,
                                              fill="blue")
 
     def afficher_fin_partie(self):
@@ -149,8 +154,6 @@ class Modele:
         self.liste_projectiles = []
         self.liste_tours = []
 
-
-
     def jouer_partie(self):
         self.creer_monstre()
         self.spawn_monstre()
@@ -163,16 +166,13 @@ class Modele:
         if len(self.liste_monstres_entrepot) == 0 and len(self.liste_monstres_terrain) == 0:
             self.vague += 1
             for i in range(self.nb_creep_vague * self.vague):
-                self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450,10,100))
+                self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, 2, 100))
             self.delai_creation_creep = 0
-
 
     def bouger_monstres(self):
         if len(self.liste_monstres_terrain) != 0:
             for i in self.liste_monstres_terrain:
                 i.avancer_monstre(self.path)
-
-
 
     def spawn_monstre(self):
         self.delai_creation_creep += 1
@@ -181,17 +181,16 @@ class Modele:
             self.liste_monstres_terrain.append(temp)
             self.delai_creation_creep = 0
 
-
     def attaque_monstres(self):
-        for tour in self.liste_tours:
-            tour.attaque(self.liste_monstres_terrain)
+        for i in self.liste_tours:
+            i.attaque(self.liste_monstres_terrain)
 
     def creer_tours(self, event):
         self.argent -= tour.Tour.prix
         print(self.argent)
         x = event.x
         y = event.y
-        self.liste_tours.append(tour.Tour(x, y, 300, 10))
+        self.liste_tours.append(tour.Tour(x, y, 100, 10))
 
     def verifier_etat_monstre(self):
         for i in self.liste_monstres_terrain:
@@ -243,12 +242,9 @@ class Controleur:
             self.modele.reinitialiser()
         self.vue.afficher_partie()
 
-
     def creer_tour(self, event):
         if self.partie_en_cours == 1:
             self.modele.creer_tours(event)
-
-
 
 
 if __name__ == '__main__':
