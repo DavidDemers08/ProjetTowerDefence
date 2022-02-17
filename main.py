@@ -104,6 +104,7 @@ class Modele:
         self.delai_creation_creep_max = 10
         self.nb_creep_vague = 10000
         self.pointage = 0
+        self.vie = 3
 
     def creer_monstre(self):
         for i in range(self.nb_creep_vague * self.vague):
@@ -113,19 +114,13 @@ class Modele:
         if len(self.liste_monstres_terrain) != 0:
             for i in self.liste_monstres_terrain:
                 i.avancer_monstre(self.path)
-            self.tuer_monstre()
-
-    def tuer_monstre(self):
-        for i in self.liste_monstres_terrain:
-            if i.x > 1240:
-                self.liste_monstres_terrain.remove(i)
 
     def jouer_partie(self):
         self.spawn_monstre()
         self.bouger_monstres()
         self.attaque_monstres()
         self.verifier_etat_monstre()
-
+        print(self.vie)
 
     def spawn_monstre(self):
         self.delai_creation_creep += 1
@@ -154,6 +149,10 @@ class Modele:
             if i.vie <= 0:
                 self.pointage += 5
                 self.liste_monstres_terrain.remove(i)
+            if i.x > 1240:
+                self.liste_monstres_terrain.remove(i)
+                if self.vie > 0:
+                    self.vie -= 1
 
 
 
