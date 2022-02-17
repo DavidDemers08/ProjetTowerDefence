@@ -175,7 +175,8 @@ class Modele:
         self.liste_tours = []
         self.vie = 3
         self.vague = 0
-        self.creer_monstre()
+        self.pointage = 0
+        self.argent = 1000
 
 class Controleur:
     def __init__(self):
