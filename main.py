@@ -75,6 +75,7 @@ class Vue:
         self.image_portail = PhotoImage(file="Images/portal.gif", format="gif -index 2")
         self.canevas.create_image(1143, 350, image=self.image_portail, tags="portail")
 
+
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
 
         self.afficher_path()
