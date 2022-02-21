@@ -35,8 +35,10 @@ class Vue:
                              textvariable=self.var_argent)
 
         label_image_score = Label(self.cadre_depart, text='SCORE', height=1)
-
         label_vague_texte = Label(self.cadre_depart, text='VAGUE', height=1)
+        self.var_vague = StringVar()
+        label_vague = Label(self.cadre_depart, width=5, height=1, font=('Arial', 11),
+                            textvariable=self.var_vague)
 
         self.var_vie = StringVar()
         label_vie_texte = Label(self.cadre_depart, text='VIE', height=1)
@@ -57,6 +59,8 @@ class Vue:
         label_vie_texte.pack(side=RIGHT, padx=20)
         label_vie.pack(side=RIGHT, padx=20)
         label_image_score.pack(side=RIGHT)
+        label_vague.pack(side=RIGHT, padx=20)
+        label_vague_texte.pack(side=RIGHT, padx=20)
         self.canevas.pack()
 
         for i in self.modele.liste_tours:
@@ -78,6 +82,7 @@ class Vue:
         self.var_argent.set(str(self.modele.argent) + "$")
         self.var_score.set(self.modele.pointage)
         self.var_vie.set(self.modele.vie)
+        self.var_vague.set(self.modele.vague)
         self.afficher_monstres()
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
 
