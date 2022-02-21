@@ -1,11 +1,9 @@
-import random
-import time
 from tkinter import *
 
 import boss
 import monstre
 import tour
-import projectile
+from animer_gif import Animer_gif
 
 
 class Vue:
@@ -38,6 +36,8 @@ class Vue:
 
         label_image_score = Label(self.cadre_depart, text='SCORE', height=1)
 
+        label_vague_texte = Label(self.cadre_depart, text='VAGUE', height=1)
+
         self.var_vie = StringVar()
         label_vie_texte = Label(self.cadre_depart, text='VIE', height=1)
 
@@ -59,28 +59,54 @@ class Vue:
         label_image_score.pack(side=RIGHT)
         self.canevas.pack()
 
-        self.afficher_partie()
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                           i.y + i.demie_taille, fill="black", stipple="gray25")
 
+    def afficher_debut_partie(self):
+        self.canevas.delete("dynamique")
+
+        self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg,
+                                  tags=("statique", "bg"))
+        self.ouvrir_gif()
+
+        ##self.image_portail = PhotoImage(file="Images/portal.gif", format="gif -index 2")
+        ##self.canevas.create_image(1143, 350, image=self.image_portail, tags="portail")
+
     def afficher_partie(self):
-        self.canevas.delete(ALL)
+        self.canevas.delete("dynamique")
         self.var_argent.set(str(self.modele.argent) + "$")
         self.var_score.set(self.modele.pointage)
         self.var_vie.set(self.modele.vie)
-        self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg,
-                                  tags="bg")
-
-        self.image_portail = PhotoImage(file="Images/portal.gif", format="gif -index 2")
-        self.canevas.create_image(1143, 350, image=self.image_portail, tags="portail")
-
-
+        self.afficher_monstres()
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
 
         self.afficher_path()
-        self.afficher_monstres()
+
         self.afficher_tours()
+        for i in self.modele.animations:
+            i = self.modele.animations[i]
+            self.canevas.create_image(i.x, i.y, image=i.images[i.indice], tags="dynamique")
+
+    def ouvrir_gif(self):
+        rep = self.charger_gifs()
+        if rep:
+            self.parent.creer_anim(rep)
+
+    def charger_gifs(self):
+        nom_gif = "Images/portal.gif"
+        if nom_gif:
+            listeimages = []
+            testverite = 1
+            noindex = 0
+            while testverite:
+                try:
+                    img = PhotoImage(file=nom_gif, format="gif -index " + str(noindex))
+                    listeimages.append(img)
+                    noindex += 1
+                except Exception:
+                    testverite = 0
+            return [nom_gif, listeimages]
 
     def afficher_path(self):
         self.canevas.create_rectangle(0, 400, 240, 475, fill="", outline="", tags="statique")
@@ -95,34 +121,35 @@ class Vue:
         for i in self.modele.liste_monstres_terrain:
 
             if isinstance(i, monstre.Monstre):
-                self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black", tags='monstre')
+                self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black", tags=("dynamique"))
                 x1 = i.x - 10
                 x2 = x1 + 20
                 x3 = x1 + (i.vie / monstre.Monstre.vie_max * 20)
-                self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red")
-                self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green")
+                self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red", tags=("dynamique"))
+                self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green", tags=("dynamique"))
 
             if isinstance(i, boss.Boss):
-                self.canevas.create_oval(i.x - 15, i.y - 15, i.x + 15, i.y + 15, fill="red", tags='boss')
+                self.canevas.create_oval(i.x - 15, i.y - 15, i.x + 15, i.y + 15, fill="red", tags=("dynamique", "boss"))
                 x1 = i.x - 10
                 x2 = x1 + 20
                 x3 = x1 + (i.vie / boss.Boss.vie_max * 20)
-                self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red")
-                self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green")
+                self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red", tags="dynamique")
+                self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green", tags="dynamique")
 
     def afficher_tours(self):
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                          i.y + i.demie_taille, fill="yellow")
+                                          i.y + i.demie_taille, fill="yellow", tags="dynamique")
             self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                     i.y + i.demie_taille, fill="black")
+                                     i.y + i.demie_taille, fill="black", tags="dynamique")
 
-            self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="")
+            self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="",
+                                     tags="dynamique")
 
             if len(i.liste_projectiles) != 0:
                 for j in i.liste_projectiles:
                     self.canevas.create_oval(j.x - 5, j.y - 5, j.x + 5, j.y + 5,
-                                             fill="blue")
+                                             fill="blue", tags="dynamique")
 
     def afficher_fin_partie(self):
         print("fin de partie")
@@ -134,12 +161,10 @@ class Modele:
         self.largeur_carte = 1200
         self.hauteur_carte = 800
         self.path = [[200, 450], [200, 200], [440, 200], [440, 520], [760, 520], [760, 370], [1250, 370]]
-
+        self.fin_de_partie = 1
         self.delai_creation_creep = 0
         self.nb_creep_vague = 10
-        self.delai_creation_creep_max = 10
-
-        self.nb_creep_vague = 5
+        self.delai_creation_creep_max = 20
         self.pointage = 0
         self.argent = 1000
         self.score = 0
@@ -149,26 +174,34 @@ class Modele:
         self.liste_monstres_entrepot = []
         self.liste_projectiles = []
         self.liste_tours = []
+        self.animations = {}
 
     def jouer_partie(self):
-        self.creer_monstre()
-        self.spawn_monstre()
         self.bouger_monstres()
         self.attaque_monstres()
         self.verifier_etat_monstre()
         self.verifier_etat_joueur()
+        return self.fin_de_partie
 
     def creer_monstre(self):
-        if len(self.liste_monstres_entrepot) == 0 and len(self.liste_monstres_terrain) == 0:
-            self.vague += 1
-            for i in range(self.nb_creep_vague * self.vague):
-                self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, 2, 100))
-            self.delai_creation_creep = 0
+        self.vague += 1
+        vitesse = 10
+        if self.vague == 5:
+            vitesse = 5
+        elif self.vague == 10:
+            vitesse = 10
+        for i in range(self.nb_creep_vague * self.vague):
+            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, vitesse, 100))
+        self.delai_creation_creep = 0
 
     def bouger_monstres(self):
-        if len(self.liste_monstres_terrain) != 0:
-            for i in self.liste_monstres_terrain:
-                i.avancer_monstre(self.path)
+
+        self.spawn_monstre()
+
+        for i in self.liste_monstres_terrain:
+            i.avancer_monstre(self.path)
+        if not self.liste_monstres_entrepot and not self.liste_monstres_terrain:
+            self.creer_monstre()
 
     def spawn_monstre(self):
         self.delai_creation_creep += 1
@@ -202,6 +235,15 @@ class Modele:
     def verifier_etat_joueur(self):
         if self.vie == 0:
             self.parent.partie_en_cours = 0
+            self.fin_de_partie = 0
+
+    def jouer_tour(self):
+        for i in self.animations:
+            self.animations[i].jouer_tour()
+
+    def creer_anim(self, info_gif):
+        nom_gif, listeimages = info_gif
+        self.animations[nom_gif] = Animer_gif(self, listeimages)
 
     def reinitialiser(self):
         self.liste_monstres_terrain = []
@@ -220,26 +262,34 @@ class Controleur:
 
         self.modele = Modele(self)
         self.vue = Vue(self)
+        self.vue.afficher_debut_partie()
         self.vue.root.mainloop()
 
     def debuter_partie(self):
         if not self.partie_en_cours:
             self.partie_en_cours = 1
             self.jouer_partie()
-            self.modele.vague = 1
+
 
     def jouer_partie(self):
         if self.partie_en_cours:
-            self.modele.jouer_partie()
-            self.vue.root.after(40, self.jouer_partie)
-        else:
-            self.vue.afficher_fin_partie()
-            self.modele.reinitialiser()
-        self.vue.afficher_partie()
+            rep = self.modele.jouer_partie()
+            if rep:
+                self.modele.jouer_tour()
+                self.vue.afficher_partie()
+                self.vue.root.after(40, self.jouer_partie)
+            else:
+                self.vue.afficher_fin_partie()
+                self.partie_en_cours = 0
+                self.modele.reinitialiser()
+
 
     def creer_tour(self, event):
-        if self.partie_en_cours == 1:
+        if self.partie_en_cours:
             self.modele.creer_tours(event)
+
+    def creer_anim(self, info_gif):
+        self.modele.creer_anim(info_gif)
 
 
 if __name__ == '__main__':
