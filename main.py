@@ -196,10 +196,15 @@ class Modele:
 
     def creer_monstre(self):
         self.vague += 1
-        vitesse = 10
+        vitesse = 2
+        vie = 100 + self.vague * 10
+
+        if self.vague == 2:
+            vitesse = 10
         if self.vague == 5:
             vitesse = 5
         elif self.vague == 10:
+            self.liste_monstres_terrain.append(boss.Boss(-10, 450, vitesse, 1000))
             vitesse = 10
         for i in range(self.nb_creep_vague * self.vague):
             self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, vitesse, 100))
