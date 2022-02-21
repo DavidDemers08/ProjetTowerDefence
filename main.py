@@ -74,8 +74,7 @@ class Vue:
                                   tags=("statique", "bg"))
         self.ouvrir_gif()
 
-        ##self.image_portail = PhotoImage(file="Images/portal.gif", format="gif -index 2")
-        ##self.canevas.create_image(1143, 350, image=self.image_portail, tags="portail")
+
 
     def afficher_partie(self):
         self.canevas.delete("dynamique")
@@ -83,7 +82,7 @@ class Vue:
         self.var_score.set(self.modele.pointage)
         self.var_vie.set(self.modele.vie)
         self.var_vague.set(self.modele.vague)
-        self.afficher_monstres()
+
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
 
         self.afficher_path()
@@ -92,6 +91,7 @@ class Vue:
         for i in self.modele.animations:
             i = self.modele.animations[i]
             self.canevas.create_image(i.x, i.y, image=i.images[i.indice], tags="dynamique")
+        self.afficher_monstres()
 
     def ouvrir_gif(self):
         rep = self.charger_gifs()
@@ -157,6 +157,12 @@ class Vue:
                                              fill="blue", tags="dynamique")
 
     def afficher_fin_partie(self):
+        self.canevas.delete("dynamique")
+        self.var_argent.set(str(self.modele.argent) + "$")
+        self.var_score.set(self.modele.pointage)
+        self.var_vie.set(self.modele.vie)
+        self.var_vague.set(self.modele.vague)
+
         print("fin de partie")
 
 
@@ -258,6 +264,7 @@ class Modele:
         self.vie = 3
         self.vague = 0
         self.pointage = 0
+        self.fin_de_partie =1
         self.argent = 1000
 
 

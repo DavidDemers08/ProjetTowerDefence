@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d52ef0f7-c9bb-4dce-bd44-7f181277d4f2" name="Default Changelist" comment="Modification du prof">
+    <list default="true" id="d52ef0f7-c9bb-4dce-bd44-7f181277d4f2" name="Default Changelist" comment="niveau vague ajouter">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -262,7 +262,14 @@
       <option name="project" value="LOCAL" />
       <updated>1645475818759</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="niveau vague ajouter">
+      <created>1645476613187</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1645476613187</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -301,6 +308,7 @@
     <MESSAGE value="TOUR MARCHE ESTI + IMAGE TBK" />
     <MESSAGE value="ajout de la vie pour l'utilisateur" />
     <MESSAGE value="Modification du prof" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modification du prof" />
+    <MESSAGE value="niveau vague ajouter" />
+    <option name="LAST_COMMIT_MESSAGE" value="niveau vague ajouter" />
   </component>
 </project>
