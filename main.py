@@ -259,7 +259,7 @@ class Modele:
 
     def creer_anim(self, info_gif):
         nom_gif, listeimages = info_gif
-        self.animations[nom_gif] = Animer_gif(self, listeimages)
+        self.animations[nom_gif] = Animer_gif(self, listeimages, 1143, 350)
 
     def reinitialiser(self):
         self.liste_monstres_terrain = []
