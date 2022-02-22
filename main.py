@@ -133,11 +133,11 @@ class Vue:
                 self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red", tags=("dynamique"))
                 self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green", tags=("dynamique"))
 
-            if isinstance(i, boss.Boss):
+            if isinstance(i, monstre.Boss):
                 self.canevas.create_oval(i.x - 15, i.y - 15, i.x + 15, i.y + 15, fill="red", tags=("dynamique", "boss"))
                 x1 = i.x - 10
                 x2 = x1 + 20
-                x3 = x1 + (i.vie / boss.Boss.vie_max * 20)
+                x3 = x1 + (i.vie / monstre.Boss.vie_max * 20)
                 self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red", tags="dynamique")
                 self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green", tags="dynamique")
 
@@ -204,7 +204,7 @@ class Modele:
         if self.vague == 5:
             vitesse = 5
         elif self.vague == 10:
-            self.liste_monstres_terrain.append(boss.Boss(-10, 450, vitesse, 1000))
+            self.liste_monstres_terrain.append(monstre.Boss(-10, 450, vitesse, 1000))
             vitesse = 10
         for i in range(self.nb_creep_vague * self.vague):
             self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, vitesse, 100))
