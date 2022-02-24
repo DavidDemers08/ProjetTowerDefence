@@ -75,7 +75,7 @@ class Sniper(Tour):
 class Tour_Poison(Tour):
     degat = 0.15
     def __init__(self, x, y, rayon, demie_taille):
-        super().__init__(x, y, rayon, demie_taille)
+        Tour.__init__(self,x, y, rayon, demie_taille)
 
 
 
