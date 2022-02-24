@@ -38,6 +38,8 @@ class Tour(object):
 
 
 class Sniper(Tour):
+    prix = 500
+
     def __init__(self,x,y,rayon,demie_taille):
         super().__init__(x,y,rayon,demie_taille)
         self.delai_tire = 0
