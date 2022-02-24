@@ -89,8 +89,8 @@ class Vue:
         self.var_vague.set(self.modele.vague)
 
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour_jaune)
-        self.canevas.tag_bind("bg", "<Button-3>", self.creer_tour_glace)
-        self.afficher_path()
+        self.canevas.tag_bind("bg", "<Button-3>", self.compter_items)
+
 
         self.afficher_tours()
         for i in self.modele.animations:
