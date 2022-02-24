@@ -6,13 +6,13 @@ from monstre import Monstre
 class Tour(object):
     prix = 400
 
-    def __init__(self, x, y, rayon, demie_taille):
+    def __init__(self, x, y, rayon, demie_taille,vitesse_attaque = 20,degat = 50):
         self.x = x
         self.y = y
         self.rayon = rayon
         self.demie_taille = demie_taille
-        self.vitesse_attaque = 20
-        self.degat = 50
+        self.vitesse_attaque = vitesse_attaque
+        self.degat = degat
 
         self.delai_tire = 0
         self.liste_projectiles = []
@@ -41,7 +41,7 @@ class Tour(object):
 
 class Tour_Glace(Tour):
     def __init__(self, x, y, rayon, demie_taille):
-        super(Tour_Glace,self).__init__(x, y, rayon, demie_taille)
+        Tour.__init__(x, y, rayon, demie_taille)
         self.vitesse_ralentissement = 1
 
     def attaque(self, liste_monstre):
@@ -57,27 +57,19 @@ class Tour_Glace(Tour):
 class Tour_Sniper(Tour):
     prix = 500
 
-    def __init__(self,x,y,rayon,demie_taille):
-        Tour.__init__(self,x,y,rayon,demie_taille,60,100)
+    def __init__(self, x, y, rayon, demie_taille):
+        Tour.__init__(self, x, y, rayon, demie_taille, 60, 100)
         self.delai_tire = 0
         self.liste_projectiles = []
 
 
-
-
-
 class Tour_Poison(Tour):
     degat = 0.15
+
     def __init__(self, x, y, rayon, demie_taille):
-        Tour.__init__(self,x, y, rayon, demie_taille)
-
-
+        Tour.__init__(self, x, y, rayon, demie_taille)
 
     def attaque(self, liste_monstre):
         for monstre in liste_monstre:
             if self.analyse_rayon(monstre):
                 monstre.empoisonne = True
-
-
-
-
