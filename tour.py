@@ -57,7 +57,7 @@ class Tour_Glace(Tour):
 
 
 class Tour_Sniper(Tour):
-    prix = 500
+    prix = 100
 
     def __init__(self, x, y, rayon, demie_taille):
         Tour.__init__(self, x, y, rayon, demie_taille, 60, 100)
@@ -75,3 +75,12 @@ class Tour_Poison(Tour):
         for monstre in liste_monstre:
             if self.analyse_rayon(monstre):
                 monstre.empoisonne = True
+
+
+class Tour_Bombe(Tour):
+    prix = 600
+
+    def __init__(self, x, y, rayon, demie_taille):
+        Tour.__init__(self, x, y, rayon, demie_taille, 60, 100)
+        self.delai_tire = 0
+        self.liste_projectiles = []
