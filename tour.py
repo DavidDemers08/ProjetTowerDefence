@@ -37,3 +37,4 @@ class Tour(object):
 
 
 class Sniper(Tour):
+    pass
