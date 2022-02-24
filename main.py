@@ -1,5 +1,6 @@
 from tkinter import *
 
+import boss
 import monstre
 import tour
 from animer_gif import Animer_gif
@@ -20,11 +21,7 @@ class Vue:
 
     def creer_tour_jaune(self, event):
         if (self.modele.argent - tour.Tour.prix) >= 0:
-            self.parent.creer_tour_jaune(event)
-
-    def creer_tour_glace(self, event):
-        if (self.modele.argent - tour.Tour_Glace.prix) >= 0:
-            self.parent.creer_tour_glace(event)
+            self.parent.creer_tour(event)
 
     def creer_interface(self):
         # cadre HUD affichant la duree
@@ -81,6 +78,8 @@ class Vue:
                                   tags=("statique", "bg"))
         self.ouvrir_gif()
 
+
+
     def afficher_partie(self):
         self.canevas.delete("dynamique")
         self.var_argent.set(str(self.modele.argent) + "$")
@@ -88,8 +87,8 @@ class Vue:
         self.var_vie.set(self.modele.vie)
         self.var_vague.set(self.modele.vague)
 
-        self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour_jaune)
-        self.canevas.tag_bind("bg", "<Button-3>", self.creer_tour_glace)
+        self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
+
         self.afficher_path()
 
         self.afficher_tours()
@@ -148,22 +147,10 @@ class Vue:
 
     def afficher_tours(self):
         for i in self.modele.liste_tours:
-
-            if isinstance(i, tour.Tour):
-
-                self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                i.y + i.demie_taille, fill="yellow", tags="dynamique")
-                self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                i.y + i.demie_taille, fill="black", tags="dynamique")
-            if isinstance(i, tour.Tour_Glace):
-                self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                              i.y + i.demie_taille, fill="lightblue", tags="dynamique")
-                self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                         i.y + i.demie_taille, fill="blue", tags="dynamique")
-                self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="",
-                                         outline="blue",
-                                         tags="dynamique")
-
+            self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
+                                          i.y + i.demie_taille, fill="yellow", tags="dynamique")
+            self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
+                                     i.y + i.demie_taille, fill="black", tags="dynamique")
 
             self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="",
                                      tags="dynamique")
@@ -171,7 +158,7 @@ class Vue:
             if len(i.liste_projectiles) != 0:
                 for j in i.liste_projectiles:
                     self.canevas.create_oval(j.x - 5, j.y - 5, j.x + 5, j.y + 5,
-                                             fill="darkred", tags="dynamique")
+                                             fill="blue", tags="dynamique")
 
     def afficher_fin_partie(self):
         self.canevas.delete("dynamique")
@@ -213,14 +200,18 @@ class Modele:
 
     def creer_monstre(self):
         self.vague += 1
-        vitesse = 4 * self.vague
+        vitesse = 2
         vie = 100 + self.vague * 10
 
-        if self.vague == 10:
+        if self.vague == 2:
+            vitesse = 10
+        if self.vague == 5:
+            vitesse = 5
+        elif self.vague == 10:
             self.liste_monstres_terrain.append(monstre.Boss(-10, 450, vitesse, 1000))
-
+            vitesse = 10
         for i in range(self.nb_creep_vague * self.vague):
-            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, vitesse, vie))
+            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, vitesse, 100))
         self.delai_creation_creep = 0
 
     def bouger_monstres(self):
@@ -241,19 +232,13 @@ class Modele:
 
     def attaque_monstres(self):
         for i in self.liste_tours:
-            i.action(self.liste_monstres_terrain)
+            i.attaque(self.liste_monstres_terrain)
 
-    def creer_tour_jaune(self, event):
+    def creer_tours(self, event):
         self.argent -= tour.Tour.prix
         x = event.x
         y = event.y
         self.liste_tours.append(tour.Tour_Bombe(x, y, 100, 10))
-
-    def creer_tour_glace(self, event):
-        self.argent -= tour.Tour_Glace.prix
-        x = event.x
-        y = event.y
-        self.liste_tours.append(tour.Tour_Sniper(x, y, 500,10))
 
     def verifier_etat_monstre(self):
         for i in self.liste_monstres_terrain:
@@ -266,9 +251,6 @@ class Modele:
                 self.liste_monstres_terrain.remove(i)
                 if self.vie > 0:
                     self.vie -= 1
-            if i.empoisonne == True:
-                i.vie -= tour.Tour_Poison.degat
-
 
     def verifier_etat_joueur(self):
         if self.vie == 0:
@@ -291,7 +273,7 @@ class Modele:
         self.vie = 3
         self.vague = 0
         self.pointage = 0
-        self.fin_de_partie = 1
+        self.fin_de_partie =1
         self.argent = 1000
 
 
@@ -309,6 +291,7 @@ class Controleur:
             self.partie_en_cours = 1
             self.jouer_partie()
 
+
     def jouer_partie(self):
         if self.partie_en_cours:
             rep = self.modele.jouer_partie()
@@ -321,13 +304,10 @@ class Controleur:
                 self.partie_en_cours = 0
                 self.modele.reinitialiser()
 
-    def creer_tour_jaune(self, event):
-        if self.partie_en_cours:
-            self.modele.creer_tour_jaune(event)
 
-    def creer_tour_glace(self, event):
+    def creer_tour(self, event):
         if self.partie_en_cours:
-            self.modele.creer_tour_glace(event)
+            self.modele.creer_tours(event)
 
     def creer_anim(self, info_gif):
         self.modele.creer_anim(info_gif)
