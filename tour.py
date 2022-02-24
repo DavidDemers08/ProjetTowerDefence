@@ -29,7 +29,7 @@ class Tour(object):
         for monstre in liste_monstre:
             if self.analyse_rayon(monstre) and self.delai_tire >= self.vitesse_attaque:
                 if isinstance(self,Tour_Bombe):
-                    self.liste_projectiles.append(projectile.Projectile(self.x, self.y, self.degat, monstre))
+                    self.liste_projectiles.append(projectile.Projectile_Bombe(self.x, self.y, self.degat, monstre))
                 elif isinstance(self,Tour_Sniper):
                     self.liste_projectiles.append(projectile.Projectile(self.x, self.y, self.degat, monstre))
                 else:
@@ -41,7 +41,7 @@ class Tour(object):
         if len(self.liste_projectiles) != 0:
             for projectile in self.liste_projectiles:
                 projectile.lancer_projectile()
-                if projectile.atteindre_cible():
+                if projectile.atteindre_cible(liste_monstre):
                     self.liste_projectiles.remove(projectile)
 
 

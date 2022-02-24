@@ -247,7 +247,7 @@ class Modele:
         self.argent -= tour.Tour.prix
         x = event.x
         y = event.y
-        self.liste_tours.append(tour.Tour(x, y, 100, 10))
+        self.liste_tours.append(tour.Tour_Bombe(x, y, 100, 10))
 
     def creer_tour_glace(self, event):
         self.argent -= tour.Tour_Glace.prix
