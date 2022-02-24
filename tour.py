@@ -1,5 +1,6 @@
 import helper
 import projectile
+from monstre import Monstre
 
 
 class Tour(object):
@@ -35,6 +36,21 @@ class Tour(object):
                 projectile.lancer_projectile()
                 if projectile.atteindre_cible():
                     self.liste_projectiles.remove(projectile)
+
+
+class Tour_Glace(Tour):
+    def __init__(self, x, y, rayon, demie_taille):
+        super().__init__(x, y, rayon, demie_taille)
+        self.vitesse_ralentissement = 1
+
+    def attaque(self, liste_monstre):
+
+        for monstre in liste_monstre:
+
+            if self.analyse_rayon(monstre):
+                monstre.vitesse = self.vitesse_ralentissement
+            else:
+                monstre.vitesse = Monstre.vitesse
 
 
 class Sniper(Tour):

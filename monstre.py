@@ -5,6 +5,7 @@ class Monstre(object):
     vie_max = 100
     prix = 20
     point = 50
+    vitesse = 2
 
     def __init__(self, x, y, vitesse, vie):
         self.x = x
