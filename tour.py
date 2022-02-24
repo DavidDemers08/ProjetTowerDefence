@@ -72,4 +72,18 @@ class Sniper(Tour):
     def lancer_projectiles(self, liste_monstre):
         super(Sniper, self).lancer_projectiles(liste_monstre)
 
+class Tour_Poison(Tour):
+    degat = 0.15
+    def __init__(self, x, y, rayon, demie_taille):
+        super().__init__(x, y, rayon, demie_taille)
+
+
+
+    def attaque(self, liste_monstre):
+        for monstre in liste_monstre:
+            if self.analyse_rayon(monstre):
+                monstre.empoisonne = True
+
+
+
 

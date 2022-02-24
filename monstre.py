@@ -7,12 +7,14 @@ class Monstre(object):
     point = 50
     vitesse = 2
 
+
     def __init__(self, x, y, vitesse, vie):
         self.x = x
         self.y = y
         self.vitesse = vitesse
         self.index = 0
         self.vie = vie
+        self.empoisonne = False
 
     def avancer_monstre(self, path):
         if self.index != len(path):
