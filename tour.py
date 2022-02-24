@@ -40,8 +40,10 @@ class Tour(object):
 
 
 class Tour_Glace(Tour):
-    def __init__(self, x, y, rayon, demie_taille):
-        Tour.__init__(self,x, y, rayon, demie_taille)
+    prix = 500
+
+    def __init__(self, x, y, demie_taille):
+        Tour.__init__(self,x, y, 75, demie_taille)
         self.vitesse_ralentissement = 1
 
     def action(self, liste_monstre):

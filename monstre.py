@@ -28,10 +28,13 @@ class Monstre(object):
             elif self.y > cibleY:
                 self.y -= self.vitesse
 
-            if self.y == cibleY and self.x == cibleX:
+            if cibleX-2 <= self.x <= cibleX+2 and cibleY-2 <= self.y <= cibleY+2:
                 self.x = cibleX
                 self.y = cibleY
                 self.index += 1
+
+
+
 
 class Boss(Monstre):
     vie_max = 200
