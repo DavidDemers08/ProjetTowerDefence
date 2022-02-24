@@ -15,21 +15,24 @@ class Vue:
         self.root.title("TowerDefence, alpha_0.1")
         self.creer_interface()
 
-    def compter_items(self, evt):
-        print(len(self.canevas.find_all()))
-        print((self.canevas.find_all()))
-
     def creer_tour_jaune(self, event):
         if (self.modele.argent - tour.Tour.prix) >= 0:
-            self.parent.creer_tour(event)
+            self.parent.creer_tour_jaune(event)
+
+    def creer_tour_glace(self, event):
+        if (self.modele.argent - tour.Tour_Glace.prix) >= 0:
+            self.parent.creer_tour_glace(event)
 
     def creer_interface(self):
         # cadre HUD affichant la duree
+        self.canevas = Canvas(self.root, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
         self.bg = PhotoImage(file="Images/carte.png")
         self.bg.width()
 
         self.cadre_depart = Frame(self.root, bg='gray')
         bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
+        self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour_jaune)
+        self.canevas.tag_bind("bg", "<Button-3>", self.creer_tour_glace)
 
         self.image_argent = PhotoImage(file="Images/money.png")
         label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=30)
@@ -53,7 +56,8 @@ class Vue:
         label_vie = Label(self.cadre_depart, width=5, height=1, font=('Arial', 11),
                           textvariable=self.var_score)
 
-        self.canevas = Canvas(self.root, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
+
+
 
         self.cadre_depart.pack(expand=True, fill=BOTH)
         bouton_depart.pack(side=LEFT)
@@ -87,7 +91,7 @@ class Vue:
         self.var_vie.set(self.modele.vie)
         self.var_vague.set(self.modele.vague)
 
-        self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
+        self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour_jaune)
 
         self.afficher_path()
 
@@ -147,18 +151,28 @@ class Vue:
 
     def afficher_tours(self):
         for i in self.modele.liste_tours:
-            self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                          i.y + i.demie_taille, fill="yellow", tags="dynamique")
-            self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                     i.y + i.demie_taille, fill="black", tags="dynamique")
+            if isinstance(i, tour.Tour):
+                self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
+                                              i.y + i.demie_taille, fill="yellow", tags="dynamique")
+                self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
+                                         i.y + i.demie_taille, fill="black", tags="dynamique")
+            if isinstance(i, tour.Tour_Glace):
+                self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
+                                              i.y + i.demie_taille, fill="lightblue", tags="dynamique")
+                self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
+                                         i.y + i.demie_taille, fill="blue", tags="dynamique")
+                self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="",
+                                         outline="blue",
+                                         tags="dynamique")
 
             self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="",
                                      tags="dynamique")
 
             if len(i.liste_projectiles) != 0:
                 for j in i.liste_projectiles:
-                    self.canevas.create_oval(j.x - 5, j.y - 5, j.x + 5, j.y + 5,
-                                             fill="blue", tags="dynamique")
+                    if isinstance(i,tour.Tour_Bombe):
+                        self.canevas.create_oval(j.x - 10, j.y - 10, j.x + 10, j.y + 10,
+                                             fill="darkred", tags="dynamique")
 
     def afficher_fin_partie(self):
         self.canevas.delete("dynamique")
@@ -200,18 +214,15 @@ class Modele:
 
     def creer_monstre(self):
         self.vague += 1
-        vitesse = 2
+        vitesse = 4 * self.vague
         vie = 100 + self.vague * 10
 
-        if self.vague == 2:
-            vitesse = 10
-        if self.vague == 5:
-            vitesse = 5
-        elif self.vague == 10:
+
+        if self.vague == 10:
             self.liste_monstres_terrain.append(monstre.Boss(-10, 450, vitesse, 1000))
             vitesse = 10
         for i in range(self.nb_creep_vague * self.vague):
-            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, vitesse, 100))
+            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, vitesse, vie))
         self.delai_creation_creep = 0
 
     def bouger_monstres(self):
@@ -232,13 +243,20 @@ class Modele:
 
     def attaque_monstres(self):
         for i in self.liste_tours:
-            i.attaque(self.liste_monstres_terrain)
+            i.action(self.liste_monstres_terrain)
 
-    def creer_tours(self, event):
+    def creer_tour_jaune(self, event):
         self.argent -= tour.Tour.prix
         x = event.x
         y = event.y
+
         self.liste_tours.append(tour.Tour_Bombe(x, y, 100, 10))
+
+    def creer_tour_glace(self, event):
+        self.argent -= tour.Tour_Glace.prix
+        x = event.x
+        y = event.y
+        self.liste_tours.append(tour.Tour_Glace(x, y, 10))
 
     def verifier_etat_monstre(self):
         for i in self.liste_monstres_terrain:
@@ -304,10 +322,13 @@ class Controleur:
                 self.partie_en_cours = 0
                 self.modele.reinitialiser()
 
-
-    def creer_tour(self, event):
+    def creer_tour_jaune(self, event):
         if self.partie_en_cours:
-            self.modele.creer_tours(event)
+            self.modele.creer_tour_jaune(event)
+
+    def creer_tour_glace(self, event):
+        if self.partie_en_cours:
+            self.modele.creer_tour_glace(event)
 
     def creer_anim(self, info_gif):
         self.modele.creer_anim(info_gif)
