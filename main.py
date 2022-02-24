@@ -241,7 +241,7 @@ class Modele:
 
     def attaque_monstres(self):
         for i in self.liste_tours:
-            i.attaque(self.liste_monstres_terrain)
+            i.action(self.liste_monstres_terrain)
 
     def creer_tour_jaune(self, event):
         self.argent -= tour.Tour.prix
@@ -253,7 +253,7 @@ class Modele:
         self.argent -= tour.Tour_Glace.prix
         x = event.x
         y = event.y
-        self.liste_tours.append(tour.Tour_Glace(x, y, 10))
+        self.liste_tours.append(tour.Tour_Sniper(x, y, 500,10))
 
     def verifier_etat_monstre(self):
         for i in self.liste_monstres_terrain:
