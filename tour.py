@@ -6,7 +6,7 @@ from monstre import Monstre
 class Tour(object):
     prix = 400
 
-    def __init__(self, x, y, rayon, demie_taille,vitesse_attaque = 20,degat = 100):
+    def __init__(self, x, y, rayon, demie_taille):
         self.x = x
         self.y = y
         self.rayon = rayon
@@ -66,41 +66,17 @@ class Tour_Sniper(Tour):
 
 
 
+class Tour_Poison(Tour):
+    degat = 0.15
+    def __init__(self, x, y, rayon, demie_taille):
+        Tour.__init__(self,x, y, rayon, demie_taille)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def attaque(self, liste_monstre):
+        for monstre in liste_monstre:
+            if self.analyse_rayon(monstre):
+                monstre.empoisonne = True
 
 
 
