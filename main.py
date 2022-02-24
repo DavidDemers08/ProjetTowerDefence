@@ -234,7 +234,7 @@ class Modele:
         self.argent -= tour.Tour.prix
         x = event.x
         y = event.y
-        self.liste_tours.append(tour.Tour_Glace(x, y, 100, 10))
+        self.liste_tours.append(tour.Tour_Sniper(x, y, 100, 10))
 
     def verifier_etat_monstre(self):
         for i in self.liste_monstres_terrain:

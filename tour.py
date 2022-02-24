@@ -26,7 +26,7 @@ class Tour(object):
         self.delai_tire += 1
         for monstre in liste_monstre:
             if self.analyse_rayon(monstre) and self.delai_tire >= self.vitesse_attaque:
-                self.liste_projectiles.append(projectile.Projectile(self, monstre))
+                self.liste_projectiles.append(projectile.Projectile(self.x, self.y, self.degat, monstre))
                 self.delai_tire = 0
         self.lancer_projectiles(liste_monstre)
 
@@ -53,23 +53,21 @@ class Tour_Glace(Tour):
                 monstre.vitesse = Monstre.vitesse
 
 
-class Sniper(Tour):
+class Tour_Sniper(Tour):
     prix = 500
 
-    def __init__(self,x,y,rayon,demie_taille):
-        super().__init__(x,y,rayon,demie_taille)
+    def __init__(self, x, y, rayon, demie_taille):
+        super(Tour_Sniper, self).__init__(x, y, rayon, demie_taille)
         self.delai_tire = 0
         self.liste_projectiles = []
         self.vitesse_attaque = 60
         self.degat = 100
 
     def analyse_rayon(self, monstre):
-        super(Sniper, self).analyse_rayon(monstre)
+        super(Tour_Sniper, self).analyse_rayon(monstre)
 
     def attaque(self, liste_monstre):
-        super(Sniper, self).attaque(liste_monstre)
+        super(Tour_Sniper, self).attaque(liste_monstre)
 
     def lancer_projectiles(self, liste_monstre):
-        super(Sniper, self).lancer_projectiles(liste_monstre)
-
-
+        super(Tour_Sniper, self).lancer_projectiles(liste_monstre)
