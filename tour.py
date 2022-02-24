@@ -17,6 +17,7 @@ class Tour(object):
         self.delai_tire = 0
         self.liste_projectiles = []
 
+
         # mitraillette vitesse = 2
 
     def analyse_rayon(self, monstre):
@@ -27,7 +28,12 @@ class Tour(object):
         self.delai_tire += 1
         for monstre in liste_monstre:
             if self.analyse_rayon(monstre) and self.delai_tire >= self.vitesse_attaque:
-                self.liste_projectiles.append(projectile.Projectile(self.x, self.y, self.degat, monstre))
+                if isinstance(self,Tour_Bombe):
+                    self.liste_projectiles.append(projectile.Projectile(self.x, self.y, self.degat, monstre))
+                elif isinstance(self,Tour_Sniper):
+                    self.liste_projectiles.append(projectile.Projectile(self.x, self.y, self.degat, monstre))
+                else:
+                    self.liste_projectiles.append(projectile.Projectile(self.x, self.y, self.degat, monstre))
                 self.delai_tire = 0
         self.lancer_projectiles(liste_monstre)
 
