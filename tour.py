@@ -73,6 +73,7 @@ class Tour_Sniper(Tour):
 
 class Tour_Poison(Tour):
     degat = 0.15
+    prix = 300
 
     def __init__(self, x, y, rayon, demie_taille):
         Tour.__init__(self, x, y, rayon, demie_taille)

@@ -1,6 +1,5 @@
 from tkinter import *
 
-
 import monstre
 import tour
 from animer_gif import Animer_gif
@@ -15,13 +14,20 @@ class Vue:
         self.root.title("TowerDefence, alpha_0.1")
         self.creer_interface()
 
-    def creer_tour_jaune(self, event):
-        if (self.modele.argent - tour.Tour.prix) >= 0:
-            self.parent.creer_tour_jaune(event)
+    def creer_tour(self, event):
+        self.parent.creer_tour(event)
 
-    def creer_tour_glace(self, event):
+    def creer_tour_glace(self):
         if (self.modele.argent - tour.Tour_Glace.prix) >= 0:
-            self.parent.creer_tour_glace(event)
+            self.parent.creer_tour_glace()
+
+    def creer_tour_poison(self):
+        if (self.modele.argent - tour.Tour_Poison.prix) >= 0:
+            self.parent.creer_tour_poison()
+
+    def creer_tour_sniper(self):
+        if (self.modele.argent - tour.Tour_Sniper.prix) >= 0:
+            self.parent.creer_tour_sniper()
 
     def creer_interface(self):
         # cadre HUD affichant la duree
@@ -30,9 +36,16 @@ class Vue:
         self.bg.width()
 
         self.cadre_depart = Frame(self.root, bg='gray')
+
         bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
-        self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour_jaune)
-        self.canevas.tag_bind("bg", "<Button-3>", self.creer_tour_glace)
+        bouton_tour_glace = Button(self.cadre_depart, text='TOUR GLACE', width=15, height=1,
+                                   command=self.creer_tour_glace)
+        bouton_tour_poison = Button(self.cadre_depart, text='TOUR POISON', width=15, height=1,
+                                    command=self.creer_tour_poison)
+        bouton_tour_sniper = Button(self.cadre_depart, text='TOUR SNIPER', width=15, height=1,
+                                    command=self.creer_tour_sniper)
+
+        self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
 
         self.image_argent = PhotoImage(file="Images/money.png")
         label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=30)
@@ -56,16 +69,9 @@ class Vue:
         label_vie = Label(self.cadre_depart, width=5, height=1, font=('Arial', 11),
                           textvariable=self.var_score)
         ##self.image_tour_glace = PhotoImage(file="Images/")
-        bouton_tour_glace = Button(self.cadre_depart, text='TOUR GLACE', width=15, height=1)
-        ##self.image_tour_poison = PhotoImage(file="Images/")
-        bouton_tour_poison = Button(self.cadre_depart, text='TOUR POISON', width=15, height=1)
-        ##self.image_tour_sniper = PhotoImage(file="Images/")
-        bouton_tour_sniper = Button(self.cadre_depart, text='TOUR SNIPER', width=15, height=1)
-
-
 
         self.cadre_depart.pack(expand=True, fill=BOTH)
-        bouton_depart.pack(side=LEFT,padx=20)
+        bouton_depart.pack(side=LEFT, padx=20)
         bouton_tour_glace.pack(side=LEFT)
         bouton_tour_poison.pack(side=LEFT)
         bouton_tour_sniper.pack(side=LEFT)
@@ -90,8 +96,6 @@ class Vue:
                                   tags=("statique", "bg"))
         self.ouvrir_gif()
 
-
-
     def afficher_partie(self):
         self.canevas.delete("dynamique")
         self.var_argent.set(str(self.modele.argent) + "$")
@@ -99,7 +103,7 @@ class Vue:
         self.var_vie.set(self.modele.vie)
         self.var_vague.set(self.modele.vague)
 
-        self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour_jaune)
+        self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
 
         self.afficher_path()
 
@@ -159,18 +163,28 @@ class Vue:
 
     def afficher_tours(self):
         for i in self.modele.liste_tours:
-            if isinstance(i, tour.Tour_Bombe):
+            if isinstance(i, tour.Tour_Sniper):
                 self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                              i.y + i.demie_taille, fill="yellow", tags="dynamique")
+                                              i.y + i.demie_taille, fill="black", tags="dynamique")
                 self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                         i.y + i.demie_taille, fill="black", tags="dynamique")
+                                         i.y + i.demie_taille, fill="grey", tags="dynamique")
+            if isinstance(i, tour.Tour_Poison):
+                self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
+                                              i.y + i.demie_taille, fill="Purple", tags="dynamique")
+                self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
+                                         i.y + i.demie_taille, fill="green", tags="dynamique")
+            if isinstance(i, tour.Tour_Glace):
+                self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
+                                              i.y + i.demie_taille, fill="blue", tags="dynamique")
+                self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
+                                         i.y + i.demie_taille, fill="lightblue", tags="dynamique")
             if isinstance(i, tour.Tour_Mitraillette):
                 self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                               i.y + i.demie_taille, fill="lightblue", tags="dynamique")
                 self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                          i.y + i.demie_taille, fill="blue", tags="dynamique")
                 self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="",
-                                         outline="blue",
+                                         outline="",
                                          tags="dynamique")
 
             self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="",
@@ -178,12 +192,16 @@ class Vue:
 
             if len(i.liste_projectiles) != 0:
                 for j in i.liste_projectiles:
-                    if isinstance(i,tour.Tour_Bombe):
+                    if isinstance(i, tour.Tour_Bombe):
                         self.canevas.create_oval(j.x - 10, j.y - 10, j.x + 10, j.y + 10,
-                                             fill="darkred", tags="dynamique")
+                                                 fill="darkred", tags="dynamique")
                     elif isinstance(i,tour.Tour_Mitraillette):
                         self.canevas.create_oval(j.x - 5, j.y - 5, j.x + 5, j.y + 5,
                                              fill="blue", tags="dynamique")
+                    elif isinstance(i,tour.Tour_Sniper):
+                        self.canevas.create_rectangle(j.x - 10, j.y - 10, j.x + 10, j.y + 10,
+                                             fill="darkred", tags="dynamique")
+
 
     def afficher_fin_partie(self):
         self.canevas.delete("dynamique")
@@ -197,6 +215,7 @@ class Vue:
 
 class Modele:
     def __init__(self, parent):
+        self.tour_en_cours = ''
         self.parent = parent
         self.largeur_carte = 1200
         self.hauteur_carte = 800
@@ -228,7 +247,6 @@ class Modele:
         vitesse = 4 * self.vague
         vie = 100 + self.vague * 10
 
-
         if self.vague == 10:
             self.liste_monstres_terrain.append(monstre.Boss(-10, 450, vitesse, 1000))
             vitesse = 10
@@ -256,18 +274,27 @@ class Modele:
         for i in self.liste_tours:
             i.action(self.liste_monstres_terrain)
 
-    def creer_tour_jaune(self, event):
-        self.argent -= tour.Tour.prix
+    def creer_tour(self, event):
+
         x = event.x
         y = event.y
 
-        self.liste_tours.append(tour.Tour_Bombe(x, y, 100, 10))
-
-    def creer_tour_glace(self, event):
-        self.argent -= tour.Tour_Glace.prix
-        x = event.x
-        y = event.y
-        self.liste_tours.append(tour.Tour_Mitraillette(x, y, 100,10))
+        if self.tour_en_cours == 'S':
+            self.argent -= tour.Tour_Sniper.prix
+            self.liste_tours.append(tour.Tour_Sniper(x, y, 100, 10))
+            self.tour_en_cours = None
+        elif self.tour_en_cours == 'P':
+            self.argent -= tour.Tour_Poison.prix
+            self.liste_tours.append(tour.Tour_Poison(x, y, 100, 10))
+            self.tour_en_cours = None
+        elif self.tour_en_cours == 'G':
+            self.argent -= tour.Tour_Glace.prix
+            self.liste_tours.append(tour.Tour_Glace(x, y, 10))
+            self.tour_en_cours = None
+        elif self.tour_en_cours == 'B':
+            self.argent -= tour.Tour_Bombe.prix
+            self.liste_tours.append(tour.Tour_Bombe(x, y, 100, 10))
+            self.tour_en_cours = None
 
     def verifier_etat_monstre(self):
         for i in self.liste_monstres_terrain:
@@ -280,6 +307,11 @@ class Modele:
                 self.liste_monstres_terrain.remove(i)
                 if self.vie > 0:
                     self.vie -= 1
+            if i.empoisonne:
+                i.vie -= .15
+
+
+
 
     def verifier_etat_joueur(self):
         if self.vie == 0:
@@ -302,8 +334,20 @@ class Modele:
         self.vie = 3
         self.vague = 0
         self.pointage = 0
-        self.fin_de_partie =1
+        self.fin_de_partie = 1
         self.argent = 1000
+
+    def creer_sniper(self):
+        self.tour_en_cours = 'S'
+
+    def creer_poison(self):
+        self.tour_en_cours = 'P'
+
+    def creer_bombe(self):
+        self.tour_en_cours = 'B'
+
+    def creer_glace(self):
+        self.tour_en_cours = 'G'
 
 
 class Controleur:
@@ -320,11 +364,11 @@ class Controleur:
             self.partie_en_cours = 1
             self.jouer_partie()
 
-
     def jouer_partie(self):
         if self.partie_en_cours:
             rep = self.modele.jouer_partie()
             if rep:
+
                 self.modele.jouer_tour()
                 self.vue.afficher_partie()
                 self.vue.root.after(40, self.jouer_partie)
@@ -333,13 +377,21 @@ class Controleur:
                 self.partie_en_cours = 0
                 self.modele.reinitialiser()
 
-    def creer_tour_jaune(self, event):
+    def creer_tour(self, event):
         if self.partie_en_cours:
-            self.modele.creer_tour_jaune(event)
+            self.modele.creer_tour(event)
 
-    def creer_tour_glace(self, event):
+    def creer_tour_glace(self):
         if self.partie_en_cours:
-            self.modele.creer_tour_glace(event)
+            self.modele.creer_glace()
+
+    def creer_tour_sniper(self):
+        if self.partie_en_cours:
+            self.modele.creer_sniper()
+
+    def creer_tour_poison(self):
+        if self.partie_en_cours:
+            self.modele.creer_poison()
 
     def creer_anim(self, info_gif):
         self.modele.creer_anim(info_gif)
