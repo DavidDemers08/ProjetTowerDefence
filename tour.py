@@ -2,7 +2,7 @@ import helper
 import projectile
 
 
-class Tour:
+class Tour(object):
     prix = 400
 
     def __init__(self, x, y, rayon, demie_taille):
@@ -34,3 +34,6 @@ class Tour:
                 projectile.lancer_projectile()
                 if projectile.atteindre_cible():
                     self.liste_projectiles.remove(projectile)
+
+
+class Sniper(Tour):
