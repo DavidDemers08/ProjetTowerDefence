@@ -1,6 +1,6 @@
 from tkinter import *
 
-import boss
+
 import monstre
 import tour
 from animer_gif import Animer_gif
