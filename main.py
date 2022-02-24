@@ -15,6 +15,7 @@ class Vue:
         self.creer_interface()
     def compter_items(self,evt):
         print(len(self.canevas.find_all()))
+        print((self.canevas.find_all()))
     def creer_tour(self, event):
         if (self.modele.argent - tour.Tour.prix) >= 0:
             self.parent.creer_tour(event)
@@ -234,7 +235,7 @@ class Modele:
         self.argent -= tour.Tour.prix
         x = event.x
         y = event.y
-        self.liste_tours.append(tour.Tour_Sniper(x, y, 100, 10))
+        self.liste_tours.append(tour.Tour_Glace(x, y, 100, 10))
 
     def verifier_etat_monstre(self):
         for i in self.liste_monstres_terrain:
@@ -247,6 +248,9 @@ class Modele:
                 self.liste_monstres_terrain.remove(i)
                 if self.vie > 0:
                     self.vie -= 1
+            if i.empoisonne == True:
+                i.vie -= tour.Tour_Poison.degat
+
 
     def verifier_etat_joueur(self):
         if self.vie == 0:
