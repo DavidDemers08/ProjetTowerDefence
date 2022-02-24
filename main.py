@@ -1,6 +1,5 @@
 from tkinter import *
 
-import boss
 import monstre
 import tour
 from animer_gif import Animer_gif
@@ -14,7 +13,8 @@ class Vue:
         self.root = Tk()
         self.root.title("TowerDefence, alpha_0.1")
         self.creer_interface()
-
+    def compter_items(self,evt):
+        print(len(self.canevas.find_all()))
     def creer_tour(self, event):
         if (self.modele.argent - tour.Tour.prix) >= 0:
             self.parent.creer_tour(event)
@@ -84,7 +84,7 @@ class Vue:
         self.var_vague.set(self.modele.vague)
 
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
-
+        self.canevas.tag_bind("bg", "<Button-3>", self.compter_items)
         self.afficher_path()
 
         self.afficher_tours()
