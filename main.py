@@ -1,5 +1,6 @@
 from tkinter import *
 
+import boss
 import monstre
 import tour
 from animer_gif import Animer_gif
@@ -8,13 +9,17 @@ from animer_gif import Animer_gif
 class Vue:
     def __init__(self, parent):
         self.parent = parent
-        self.is_toggle_active: bool = False
+
         self.modele = self.parent.modele
         self.root = Tk()
         self.root.title("TowerDefence, alpha_0.1")
         self.creer_interface()
 
-    def creer_tour(self, event):
+    def compter_items(self, evt):
+        print(len(self.canevas.find_all()))
+        print((self.canevas.find_all()))
+
+    def creer_tour_jaune(self, event):
         if (self.modele.argent - tour.Tour.prix) >= 0:
             self.parent.creer_tour(event)
 
@@ -50,33 +55,21 @@ class Vue:
 
         self.canevas = Canvas(self.root, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
 
-        ##self.image_tour_glace = PhotoImage(file="Images/")
-        bouton_tour_glace  = Button(self.cadre_depart, text='TOUR GLACE', width=15, height=1)
-        ##self.image_tour_poison = PhotoImage(file="Images/")
-        bouton_tour_poison = Button(self.cadre_depart, text='TOUR POISON', width=15, height=1)
-        ##self.image_tour_sniper = PhotoImage(file="Images/")
-        bouton_tour_sniper = Button(self.cadre_depart, text='TOUR SNIPER', width=15, height=1)
-
-
         self.cadre_depart.pack(expand=True, fill=BOTH)
         bouton_depart.pack(side=LEFT)
-        bouton_tour_glace.pack(side=LEFT)
-        bouton_tour_poison.pack(side=LEFT)
-        bouton_tour_sniper.pack(side=LEFT)
         label_argent.pack(side=RIGHT)
         label_image_argent.pack(side=RIGHT)
-        label_score.pack(side=RIGHT)
-        label_vie_texte.pack(side=RIGHT)
-        label_vie.pack(side=RIGHT)
+        label_score.pack(side=RIGHT, padx=20)
+        label_vie_texte.pack(side=RIGHT, padx=20)
+        label_vie.pack(side=RIGHT, padx=20)
         label_image_score.pack(side=RIGHT)
-        label_vague.pack(side=RIGHT)
-        label_vague_texte.pack(side=RIGHT)
+        label_vague.pack(side=RIGHT, padx=20)
+        label_vague_texte.pack(side=RIGHT, padx=20)
         self.canevas.pack()
 
         for i in self.modele.liste_tours:
             self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                           i.y + i.demie_taille, fill="black", stipple="gray25")
-
 
     def afficher_debut_partie(self):
         self.canevas.delete("dynamique")
@@ -84,6 +77,8 @@ class Vue:
         self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg,
                                   tags=("statique", "bg"))
         self.ouvrir_gif()
+
+
 
     def afficher_partie(self):
         self.canevas.delete("dynamique")
@@ -278,7 +273,7 @@ class Modele:
         self.vie = 3
         self.vague = 0
         self.pointage = 0
-        self.fin_de_partie = 1
+        self.fin_de_partie =1
         self.argent = 1000
 
 
@@ -296,6 +291,7 @@ class Controleur:
             self.partie_en_cours = 1
             self.jouer_partie()
 
+
     def jouer_partie(self):
         if self.partie_en_cours:
             rep = self.modele.jouer_partie()
@@ -307,6 +303,7 @@ class Controleur:
                 self.vue.afficher_fin_partie()
                 self.partie_en_cours = 0
                 self.modele.reinitialiser()
+
 
     def creer_tour(self, event):
         if self.partie_en_cours:

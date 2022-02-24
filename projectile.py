@@ -1,10 +1,10 @@
 import helper
 class Projectile:
-    def __init__(self,tour,monstre):
-        self.x = tour.x
-        self.y = tour.y
+    def __init__(self,x,y,degat,monstre):
+        self.x = x
+        self.y = y
+        self.degat= degat
         self.vitesse = 20
-        self.tour = tour
         self.monstre = monstre
         self.delai = 0
 
@@ -24,8 +24,8 @@ class Projectile:
 
         cibleX = self.monstre.x
         cibleY = self.monstre.y
-        if (cibleX + 12 >= self.x >= cibleX -12) and (cibleY + 12 >= self.y >= cibleY - 12):
+        if (cibleX + 12 >= self.x >= cibleX - 12) and (cibleY + 12 >= self.y >= cibleY - 12):
             isDead = True
-            self.monstre.vie -= self.tour.degat
+            self.monstre.vie -= self.degat
 
         return isDead
