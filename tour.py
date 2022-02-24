@@ -90,3 +90,12 @@ class Tour_Bombe(Tour):
         Tour.__init__(self, x, y, rayon, demie_taille, 60, 100)
         self.delai_tire = 0
         self.liste_projectiles = []
+
+
+class Tour_Mitraillette(Tour):
+    prix = 200
+
+    def __init__(self, x, y, rayon, demie_taille):
+        Tour.__init__(self, x, y, rayon, demie_taille, 20, 50)
+        self.delai_tire = 0
+        self.liste_projectiles = []
