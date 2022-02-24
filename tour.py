@@ -23,7 +23,7 @@ class Tour(object):
         if helper.Helper().calcDistance(self.x, self.y, monstre.x, monstre.y) <= self.rayon:
             return True
 
-    def attaque(self, liste_monstre):
+    def action(self, liste_monstre):
         self.delai_tire += 1
         for monstre in liste_monstre:
             if self.analyse_rayon(monstre) and self.delai_tire >= self.vitesse_attaque:
@@ -41,10 +41,10 @@ class Tour(object):
 
 class Tour_Glace(Tour):
     def __init__(self, x, y, rayon, demie_taille):
-        Tour.__init__(x, y, rayon, demie_taille)
+        Tour.__init__(self,x, y, rayon, demie_taille)
         self.vitesse_ralentissement = 1
 
-    def attaque(self, liste_monstre):
+    def action(self, liste_monstre):
 
         for monstre in liste_monstre:
 
@@ -69,7 +69,7 @@ class Tour_Poison(Tour):
     def __init__(self, x, y, rayon, demie_taille):
         Tour.__init__(self, x, y, rayon, demie_taille)
 
-    def attaque(self, liste_monstre):
+    def action(self, liste_monstre):
         for monstre in liste_monstre:
             if self.analyse_rayon(monstre):
                 monstre.empoisonne = True
