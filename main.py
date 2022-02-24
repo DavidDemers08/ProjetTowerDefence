@@ -171,7 +171,7 @@ class Vue:
             if len(i.liste_projectiles) != 0:
                 for j in i.liste_projectiles:
                     self.canevas.create_oval(j.x - 5, j.y - 5, j.x + 5, j.y + 5,
-                                             fill="blue", tags="dynamique")
+                                             fill="darkred", tags="dynamique")
 
     def afficher_fin_partie(self):
         self.canevas.delete("dynamique")

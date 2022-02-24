@@ -9,7 +9,6 @@ class Projectile:
         self.delai = 0
 
     def lancer_projectile(self):
-        print("allo")
         self.delai += 1
         distance = helper.Helper.calcDistance(self.x, self.y, self.monstre.x,self.monstre.y)
         if distance > 0:
