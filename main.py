@@ -55,12 +55,20 @@ class Vue:
                             textvariable=self.var_vie)
         label_vie = Label(self.cadre_depart, width=5, height=1, font=('Arial', 11),
                           textvariable=self.var_score)
-
+        ##self.image_tour_glace = PhotoImage(file="Images/")
+        bouton_tour_glace = Button(self.cadre_depart, text='TOUR GLACE', width=15, height=1)
+        ##self.image_tour_poison = PhotoImage(file="Images/")
+        bouton_tour_poison = Button(self.cadre_depart, text='TOUR POISON', width=15, height=1)
+        ##self.image_tour_sniper = PhotoImage(file="Images/")
+        bouton_tour_sniper = Button(self.cadre_depart, text='TOUR SNIPER', width=15, height=1)
 
 
 
         self.cadre_depart.pack(expand=True, fill=BOTH)
-        bouton_depart.pack(side=LEFT)
+        bouton_depart.pack(side=LEFT,padx=20)
+        bouton_tour_glace.pack(side=LEFT)
+        bouton_tour_poison.pack(side=LEFT)
+        bouton_tour_sniper.pack(side=LEFT)
         label_argent.pack(side=RIGHT)
         label_image_argent.pack(side=RIGHT)
         label_score.pack(side=RIGHT, padx=20)
