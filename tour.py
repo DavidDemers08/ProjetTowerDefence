@@ -10,6 +10,7 @@ class Tour(object):
         self.y = y
         self.rayon = rayon
         self.demie_taille = demie_taille
+
         self.delai_tire = 0
         self.liste_projectiles = []
         self.vitesse_attaque = 20
@@ -37,4 +38,20 @@ class Tour(object):
 
 
 class Sniper(Tour):
-    pass
+    def __init__(self,x,y,rayon,demie_taille):
+        super().__init__(x,y,rayon,demie_taille)
+        self.delai_tire = 0
+        self.liste_projectiles = []
+        self.vitesse_attaque = 60
+        self.degat = 100
+
+    def analyse_rayon(self, monstre):
+        super(Sniper, self).analyse_rayon(monstre)
+
+    def attaque(self, liste_monstre):
+        super(Sniper, self).attaque(liste_monstre)
+
+    def lancer_projectiles(self, liste_monstre):
+        super(Sniper, self).lancer_projectiles(liste_monstre)
+
+
