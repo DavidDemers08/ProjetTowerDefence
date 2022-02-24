@@ -159,12 +159,12 @@ class Vue:
 
     def afficher_tours(self):
         for i in self.modele.liste_tours:
-            if isinstance(i, tour.Tour):
+            if isinstance(i, tour.Tour_Bombe):
                 self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                               i.y + i.demie_taille, fill="yellow", tags="dynamique")
                 self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                          i.y + i.demie_taille, fill="black", tags="dynamique")
-            if isinstance(i, tour.Tour_Glace):
+            if isinstance(i, tour.Tour_Mitraillette):
                 self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                               i.y + i.demie_taille, fill="lightblue", tags="dynamique")
                 self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
@@ -181,6 +181,9 @@ class Vue:
                     if isinstance(i,tour.Tour_Bombe):
                         self.canevas.create_oval(j.x - 10, j.y - 10, j.x + 10, j.y + 10,
                                              fill="darkred", tags="dynamique")
+                    elif isinstance(i,tour.Tour_Mitraillette):
+                        self.canevas.create_oval(j.x - 5, j.y - 5, j.x + 5, j.y + 5,
+                                             fill="blue", tags="dynamique")
 
     def afficher_fin_partie(self):
         self.canevas.delete("dynamique")
@@ -264,7 +267,7 @@ class Modele:
         self.argent -= tour.Tour_Glace.prix
         x = event.x
         y = event.y
-        self.liste_tours.append(tour.Tour_Glace(x, y, 10))
+        self.liste_tours.append(tour.Tour_Mitraillette(x, y, 100,10))
 
     def verifier_etat_monstre(self):
         for i in self.liste_monstres_terrain:
