@@ -35,46 +35,43 @@ class Vue:
         self.bg = PhotoImage(file="Images/carte.png")
         self.bg.width()
 
+        self.var_vie = StringVar()
+        self.var_score = StringVar()
+        self.var_vague = StringVar()
+        self.var_argent = StringVar()
+
+        self.image_argent = PhotoImage(file="Images/money.png")
+
         self.cadre_depart = Frame(self.root, bg='gray')
 
         bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
-        bouton_tour_glace = Button(self.cadre_depart, text='TOUR GLACE', width=15, height=1,
+        bouton_tour_glace = Button(self.cadre_depart, text='TOUR GLACE', width=15, height=1, font=('Arial', 6),
                                    command=self.creer_tour_glace)
-        bouton_tour_poison = Button(self.cadre_depart, text='TOUR POISON', width=15, height=1,
+        bouton_tour_poison = Button(self.cadre_depart, text='TOUR POISON', font=('Arial', 6), width=15, height=1,
                                     command=self.creer_tour_poison)
-        bouton_tour_sniper = Button(self.cadre_depart, text='TOUR SNIPER', width=15, height=1,
+        bouton_tour_sniper = Button(self.cadre_depart, text='TOUR SNIPER', font=('Arial', 6), width=10, height=1,
                                     command=self.creer_tour_sniper)
 
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
 
-        self.image_argent = PhotoImage(file="Images/money.png")
         label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=30)
-
-        self.var_argent = StringVar()
         label_argent = Label(self.cadre_depart, width=10, height=2, font=('Arial', 11),
                              textvariable=self.var_argent)
-
         label_image_score = Label(self.cadre_depart, text='SCORE', height=1)
         label_vague_texte = Label(self.cadre_depart, text='VAGUE', height=1)
-        self.var_vague = StringVar()
         label_vague = Label(self.cadre_depart, width=5, height=1, font=('Arial', 11),
                             textvariable=self.var_vague)
-
-        self.var_vie = StringVar()
         label_vie_texte = Label(self.cadre_depart, text='VIE', height=1)
-
-        self.var_score = StringVar()
         label_score = Label(self.cadre_depart, width=5, height=1, font=('Arial', 11),
                             textvariable=self.var_vie)
         label_vie = Label(self.cadre_depart, width=5, height=1, font=('Arial', 11),
                           textvariable=self.var_score)
-        ##self.image_tour_glace = PhotoImage(file="Images/")
 
         self.cadre_depart.pack(expand=True, fill=BOTH)
         bouton_depart.pack(side=LEFT, padx=20)
-        bouton_tour_glace.pack(side=LEFT)
-        bouton_tour_poison.pack(side=LEFT)
-        bouton_tour_sniper.pack(side=LEFT)
+        bouton_tour_glace.pack(side=LEFT, padx=5)
+        bouton_tour_poison.pack(side=LEFT, padx=5)
+        bouton_tour_sniper.pack(side=LEFT, padx=5)
         label_argent.pack(side=RIGHT)
         label_image_argent.pack(side=RIGHT)
         label_score.pack(side=RIGHT, padx=20)
@@ -84,10 +81,6 @@ class Vue:
         label_vague.pack(side=RIGHT, padx=20)
         label_vague_texte.pack(side=RIGHT, padx=20)
         self.canevas.pack()
-
-        for i in self.modele.liste_tours:
-            self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                          i.y + i.demie_taille, fill="black", stipple="gray25")
 
     def afficher_debut_partie(self):
         self.canevas.delete("dynamique")
@@ -195,13 +188,12 @@ class Vue:
                     if isinstance(i, tour.Tour_Bombe):
                         self.canevas.create_oval(j.x - 10, j.y - 10, j.x + 10, j.y + 10,
                                                  fill="darkred", tags="dynamique")
-                    elif isinstance(i,tour.Tour_Mitraillette):
+                    elif isinstance(i, tour.Tour_Mitraillette):
                         self.canevas.create_oval(j.x - 5, j.y - 5, j.x + 5, j.y + 5,
-                                             fill="blue", tags="dynamique")
-                    elif isinstance(i,tour.Tour_Sniper):
-                        self.canevas.create_rectangle(j.x - 10, j.y - 10, j.x + 10, j.y + 10,
-                                             fill="darkred", tags="dynamique")
-
+                                                 fill="blue", tags="dynamique")
+                    elif isinstance(i, tour.Tour_Sniper):
+                        self.canevas.create_rectangle(j.x - 5, j.y - 5, j.x + 5, j.y + 5,
+                                                      fill="darkred", tags="dynamique")
 
     def afficher_fin_partie(self):
         self.canevas.delete("dynamique")
@@ -245,11 +237,10 @@ class Modele:
     def creer_monstre(self):
         self.vague += 1
         vitesse = 4 * self.vague
-        vie = 100 + self.vague * 10
+        vie = 100 + self.vague * 20
 
         if self.vague == 10:
             self.liste_monstres_terrain.append(monstre.Boss(-10, 450, vitesse, 1000))
-            vitesse = 10
         for i in range(self.nb_creep_vague * self.vague):
             self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, vitesse, vie))
         self.delai_creation_creep = 0
@@ -260,6 +251,7 @@ class Modele:
 
         for i in self.liste_monstres_terrain:
             i.avancer_monstre(self.path)
+
         if not self.liste_monstres_entrepot and not self.liste_monstres_terrain:
             self.creer_monstre()
 
@@ -309,9 +301,6 @@ class Modele:
                     self.vie -= 1
             if i.empoisonne:
                 i.vie -= .15
-
-
-
 
     def verifier_etat_joueur(self):
         if self.vie == 0:
