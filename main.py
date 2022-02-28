@@ -1,9 +1,15 @@
 from tkinter import *
+
 import monstre
 import tour
 from animer_gif import Animer_gif
 
+mon_id = 0
 
+def creer_id():
+    global mon_id
+    mon_id += 1
+    return mon_id
 
 class Vue:
     def __init__(self, parent):
@@ -169,8 +175,8 @@ class Vue:
                     self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="purple", tags=("dynamique"))
                     self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green", tags=("dynamique"))
                 if i.frozen:
-                    #self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="blue", tags=("dynamique"))
-                    self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="blue", tags=("dynamique"))
+
+                    self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="lightblue", tags=("dynamique"))
 
 
             if isinstance(i, monstre.Boss):
@@ -264,7 +270,7 @@ class Modele:
         self.liste_monstres_terrain = []
         self.liste_monstres_entrepot = []
         self.liste_projectiles = []
-        self.liste_tours = []
+        self.dictionnaire_tours={}
         self.animations = {}
 
     def jouer_partie(self):
@@ -276,7 +282,7 @@ class Modele:
 
     def creer_monstre(self):
         self.vague += 1
-        vitesse = 4 * self.vague
+        vitesse = 2 * self.vague
         vie = 100 + self.vague * 20
 
         if self.vague == 10:
@@ -303,34 +309,33 @@ class Modele:
             self.delai_creation_creep = 0
 
     def attaque_monstres(self):
-        for i in self.liste_tours:
+        for i in self.dictionnaire_tours:
+            i = self.dictionnaire_tours[i]
             i.action(self.liste_monstres_terrain)
 
     def creer_tour(self, event):
 
         x = event.x
         y = event.y
-
+        id = creer_id()
+        t =None
         if self.tour_en_cours == 'S':
             self.argent -= tour.Tour_Sniper.prix
-            self.liste_tours.append(tour.Tour_Sniper(x, y, 250, 10))
-            self.tour_en_cours = None
+            t = tour.Tour_Sniper(x, y, 250, 10,id)
         elif self.tour_en_cours == 'P':
             self.argent -= tour.Tour_Poison.prix
-            self.liste_tours.append(tour.Tour_Poison(x, y, 100, 10))
-            self.tour_en_cours = None
+            t = tour.Tour_Poison(x, y, 100, 10, id)
         elif self.tour_en_cours == 'G':
             self.argent -= tour.Tour_Glace.prix
-            self.liste_tours.append(tour.Tour_Glace(x, y, 10))
-            self.tour_en_cours = None
+            t = tour.Tour_Glace(x, y, 10, id)
         elif self.tour_en_cours == 'B':
             self.argent -= tour.Tour_Bombe.prix
-            self.liste_tours.append(tour.Tour_Bombe(x, y, 100, 10))
-            self.tour_en_cours = None
+            t = tour.Tour_Bombe(x, y, 100, 10, id)
         elif self.tour_en_cours == 'M':
             self.argent -= tour.Tour_Mitraillette.prix
-            self.liste_tours.append(tour.Tour_Mitraillette(x, y, 100, 10))
-            self.tour_en_cours = None
+            t = tour.Tour_Mitraillette(x, y, 100, 10, id)
+        self.dictionnaire_tours[id] = t
+        self.tour_en_cours = None
 
     def verifier_etat_monstre(self):
         for i in self.liste_monstres_terrain:
@@ -344,7 +349,8 @@ class Modele:
                 if self.vie > 0:
                     self.vie -= 1
             if i.empoisonne:
-                i.vie -= tour.Tour_Poison.degat
+                i.vie -= tour.Tour_Poison.degat + i.stack_poison/1000
+
 
     def verifier_etat_joueur(self):
         if self.vie == 0:
