@@ -216,25 +216,23 @@ class Vue:
         self.image_tour_bombe2 = PhotoImage(file="Images/towers/tower_bombe2.png")
         self.image_tour_bombe3 = PhotoImage(file="Images/towers/tower_bombe3.png")
 
-        for i in self.modele.liste_tours:
+        for i in self.modele.dictionnaire_tours:
+            i = self.modele.dictionnaire_tours[i]
             if isinstance(i, tour.Tour_Sniper):
                 self.canevas.create_image(i.x, i.y, image=self.image_tour_sniper1,
-                                          tags=("dynamique", "sniper_tower"))
+                                          tags=("dynamique",i.id, tour))
             if isinstance(i, tour.Tour_Poison):
                 self.canevas.create_image(i.x, i.y, image=self.image_tour_feu1,
-                                          tags=("dynamique", "fire_tower"))
+                                          tags=("dynamique",i.id, tour))
             if isinstance(i, tour.Tour_Glace):
                 self.canevas.create_image(i.x, i.y, image=self.image_tour_glace1,
-                                          tags=("dynamique", "ice_tower"))
+                                          tags=("dynamique",i.id, tour))
             if isinstance(i, tour.Tour_Bombe):
                 self.canevas.create_image(i.x, i.y, image=self.image_tour_bombe1,
-                                          tags=("dynamique", "bomb_tower"))
+                                          tags=("dynamique",i.id, tour))
             if isinstance(i, tour.Tour_Mitraillette):
                 self.canevas.create_image(i.x, i.y, image=self.image_tour_mitraillette1,
-                                          tags=("dynamique", "sniper_tower"))
-
-            self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="",
-                                     tags="dynamique")
+                                          tags=("dynamique",i.id, tour))
 
             if len(i.liste_projectiles) != 0:
                 for j in i.liste_projectiles:
