@@ -17,7 +17,6 @@ class Tour(object):
         self.delai_tire = 0
         self.liste_projectiles = []
 
-
     def analyse_rayon(self, monstre):
         if helper.Helper().calcDistance(self.x, self.y, monstre.x, monstre.y) <= self.rayon:
             return True
@@ -42,16 +41,16 @@ class Tour(object):
                 if projectile.atteindre_cible(liste_monstre):
                     self.liste_projectiles.remove(projectile)
 
-
     def upgrade(self):
         self.niveau += 1
+
 
 class Tour_Glace(Tour):
     prix = 500
 
     def __init__(self, x, y, demie_taille):
         Tour.__init__(self, x, y, 75, demie_taille)
-        self.vitesse_ralentissement = 3
+        self.vitesse_ralentissement = 1
 
     def action(self, liste_monstre):
 
@@ -59,7 +58,7 @@ class Tour_Glace(Tour):
 
             if self.analyse_rayon(monstre):
                 monstre.vitesse = self.vitesse_ralentissement
-                monstre.frozen=True
+                monstre.frozen = True
             else:
                 monstre.vitesse = Monstre.vitesse
                 monstre.frozen = False
@@ -72,7 +71,6 @@ class Tour_Glace(Tour):
             self.rayon += 25
         elif self.niveau == 3:
             self.vitesse_ralentissement -= 1
-
 
 
 class Tour_Sniper(Tour):
@@ -98,14 +96,18 @@ class Tour_Sniper(Tour):
 class Tour_Poison(Tour):
     degat = 0.15
     prix = 300
+    stack_poison = 0
 
     def __init__(self, x, y, rayon, demie_taille):
         Tour.__init__(self, x, y, rayon, demie_taille)
+        self.stack_poison = 0
 
     def action(self, liste_monstre):
         for monstre in liste_monstre:
             if self.analyse_rayon(monstre):
+                monstre.stack_poison += 1
                 monstre.empoisonne = True
+
 
     def upgrade(self):
         self.niveau += 1
@@ -158,8 +160,6 @@ class Tour_Mitraillette(Tour):
             self.degat += 5
 
 
-
-
 class Projectile(object):
     def __init__(self, x, y, degat, monstre):
         self.x = x
@@ -178,7 +178,7 @@ class Projectile(object):
             self.x = cible[0]
             self.y = cible[1]
 
-    def atteindre_cible(self,liste_monstre = []):
+    def atteindre_cible(self, liste_monstre=[]):
         isDead = False
         if self.monstre is None:
             isDead = True
@@ -197,7 +197,7 @@ class Projectile_Bombe(Projectile):
         Projectile.__init__(self, x, y, degat, monstre)
         self.rayon = 100
 
-    def atteindre_cible(self,liste_monstre):
+    def atteindre_cible(self, liste_monstre):
         isDead = False
 
         if self.monstre is None:
@@ -213,7 +213,7 @@ class Projectile_Bombe(Projectile):
 
         return isDead
 
-    def explosion(self,monstre_list):
+    def explosion(self, monstre_list):
         explosion_list = []
         for monstre in monstre_list:
             if helper.Helper().calcDistance(self.x, self.y, monstre.x, monstre.y) <= self.rayon:

@@ -268,7 +268,7 @@ class Modele:
 
     def creer_monstre(self):
         self.vague += 1
-        vitesse = 4 * self.vague
+        vitesse = 2 * self.vague
         vie = 100 + self.vague * 20
 
         if self.vague == 10:
@@ -336,7 +336,8 @@ class Modele:
                 if self.vie > 0:
                     self.vie -= 1
             if i.empoisonne:
-                i.vie -= tour.Tour_Poison.degat
+                i.vie -= tour.Tour_Poison.degat + i.stack_poison/75
+                print(i.stack_poison)
 
     def verifier_etat_joueur(self):
         if self.vie == 0:
@@ -399,6 +400,7 @@ class Controleur:
 
                 self.modele.jouer_tour()
                 self.vue.afficher_partie()
+                print()
                 self.vue.root.after(40, self.jouer_partie)
             else:
                 self.vue.afficher_fin_partie()
