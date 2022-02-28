@@ -6,10 +6,12 @@ from animer_gif import Animer_gif
 
 mon_id = 0
 
+
 def creer_id():
     global mon_id
     mon_id += 1
     return mon_id
+
 
 class Vue:
     def __init__(self, parent):
@@ -60,15 +62,21 @@ class Vue:
         self.cadre_fin = Frame(self.root, bg='gray')
 
         bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
-        bouton_tour_glace = Button(self.cadre_fin, text='TOUR GLACE - '+ str(tour.Tour_Glace.prix)+ '$', width=20, height=1, font=('Arial', 8),
+        bouton_tour_glace = Button(self.cadre_fin, text='TOUR GLACE - ' + str(tour.Tour_Glace.prix) + '$', width=20,
+                                   height=1, font=('Arial', 8),
                                    command=self.creer_tour_glace)
-        bouton_tour_poison = Button(self.cadre_fin, text='TOUR POISON - '+str(tour.Tour_Poison.prix)+ '$', font=('Arial', 8), width=20, height=1,
+        bouton_tour_poison = Button(self.cadre_fin, text='TOUR POISON - ' + str(tour.Tour_Poison.prix) + '$',
+                                    font=('Arial', 8), width=20, height=1,
                                     command=self.creer_tour_poison)
-        bouton_tour_mitraillette = Button(self.cadre_fin, text='TOUR MITRAILETTE - '+str(tour.Tour_Mitraillette.prix)+ '$', font=('Arial', 8), width=22, height=1,
-                                    command=self.creer_tour_mitraillette)
-        bouton_tour_bombe = Button(self.cadre_fin, text='TOUR BOMBE - '+str(tour.Tour_Bombe.prix)+ '$', font=('Arial', 8), width=20, height=1,
-                                     command=self.creer_tour_bombe)
-        bouton_tour_sniper = Button(self.cadre_fin, text='TOUR SNIPER - '+str(tour.Tour_Sniper.prix )+ '$', font=('Arial', 8), width=20, height=1,
+        bouton_tour_mitraillette = Button(self.cadre_fin,
+                                          text='TOUR MITRAILETTE - ' + str(tour.Tour_Mitraillette.prix) + '$',
+                                          font=('Arial', 8), width=22, height=1,
+                                          command=self.creer_tour_mitraillette)
+        bouton_tour_bombe = Button(self.cadre_fin, text='TOUR BOMBE - ' + str(tour.Tour_Bombe.prix) + '$',
+                                   font=('Arial', 8), width=20, height=1,
+                                   command=self.creer_tour_bombe)
+        bouton_tour_sniper = Button(self.cadre_fin, text='TOUR SNIPER - ' + str(tour.Tour_Sniper.prix) + '$',
+                                    font=('Arial', 8), width=20, height=1,
                                     command=self.creer_tour_sniper)
 
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
@@ -94,7 +102,7 @@ class Vue:
         bouton_tour_poison.pack(side=LEFT, padx=5)
         bouton_tour_sniper.pack(side=LEFT, padx=5)
         bouton_tour_mitraillette.pack(side=LEFT, padx=5)
-        bouton_tour_bombe.pack(side=LEFT,padx=5)
+        bouton_tour_bombe.pack(side=LEFT, padx=5)
         label_argent.pack(side=RIGHT)
         label_image_argent.pack(side=RIGHT)
         label_score.pack(side=RIGHT, padx=20)
@@ -121,6 +129,7 @@ class Vue:
         self.var_vague.set(self.modele.vague)
 
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
+        self.canevas.tag_bind("tour", "<Button-3>", self.trouver_tour)
 
         self.afficher_path()
 
@@ -175,9 +184,7 @@ class Vue:
                     self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="purple", tags=("dynamique"))
                     self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green", tags=("dynamique"))
                 if i.frozen:
-
                     self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="lightblue", tags=("dynamique"))
-
 
             if isinstance(i, monstre.Boss):
                 self.canevas.create_oval(i.x - 15, i.y - 15, i.x + 15, i.y + 15, fill="red", tags=("dynamique", "boss"))
@@ -194,30 +201,27 @@ class Vue:
                 self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                               i.y + i.demie_taille, fill="black", tags="dynamique")
                 self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                         i.y + i.demie_taille, fill="grey", tags="dynamique")
+                                         i.y + i.demie_taille, fill="grey", tags=("dynamique", i.id, "tour"))
             if isinstance(i, tour.Tour_Poison):
                 self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                               i.y + i.demie_taille, fill="Purple", tags="dynamique")
                 self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                         i.y + i.demie_taille, fill="green", tags="dynamique")
+                                         i.y + i.demie_taille, fill="green", tags=("dynamique", i.id, "tour"))
             if isinstance(i, tour.Tour_Glace):
                 self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                               i.y + i.demie_taille, fill="blue", tags="dynamique")
                 self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                         i.y + i.demie_taille, fill="lightblue", tags="dynamique")
+                                         i.y + i.demie_taille, fill="lightblue", tags=("dynamique", i.id, "tour"))
             if isinstance(i, tour.Tour_Bombe):
                 self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                               i.y + i.demie_taille, fill="black", tags="dynamique")
                 self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                         i.y + i.demie_taille, fill="lightgray", tags="dynamique")
+                                         i.y + i.demie_taille, fill="lightgray", tags=("dynamique", i.id, "tour"))
             if isinstance(i, tour.Tour_Mitraillette):
                 self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                               i.y + i.demie_taille, fill="lightyellow", tags="dynamique")
                 self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                         i.y + i.demie_taille, fill="brown", tags="dynamique")
-                self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="",
-                                         outline="",
-                                         tags="dynamique")
+                                         i.y + i.demie_taille, fill="brown", tags=("dynamique", i.id, "tour"))
 
             self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="",
                                      tags="dynamique")
@@ -243,6 +247,12 @@ class Vue:
 
         print("fin de partie")
 
+    def trouver_tour(self, evt):
+        val = self.canevas.gettags(CURRENT)
+        print(val)
+        # self.parent.trouver_tour(val[1])
+        # print(self.parent.trouver_tour(val[1]))
+
 
 class Modele:
     def __init__(self, parent):
@@ -263,12 +273,13 @@ class Modele:
         self.liste_monstres_terrain = []
         self.liste_monstres_entrepot = []
         self.liste_projectiles = []
-        self.dictionnaire_tours={}
+        self.dictionnaire_tours = {}
         self.animations = {}
 
     def jouer_partie(self):
         self.bouger_monstres()
-        self.attaque_monstres()
+        if len(self.dictionnaire_tours) > 0:
+            self.attaque_monstres()
         self.verifier_etat_monstre()
         self.verifier_etat_joueur()
         return self.fin_de_partie
@@ -311,10 +322,10 @@ class Modele:
         x = event.x
         y = event.y
         id = creer_id()
-        t =None
+        t = None
         if self.tour_en_cours == 'S':
             self.argent -= tour.Tour_Sniper.prix
-            t = tour.Tour_Sniper(x, y, 250, 10,id)
+            t = tour.Tour_Sniper(x, y, 250, 10, id)
         elif self.tour_en_cours == 'P':
             self.argent -= tour.Tour_Poison.prix
             t = tour.Tour_Poison(x, y, 100, 10, id)
@@ -327,7 +338,8 @@ class Modele:
         elif self.tour_en_cours == 'M':
             self.argent -= tour.Tour_Mitraillette.prix
             t = tour.Tour_Mitraillette(x, y, 100, 10, id)
-        self.dictionnaire_tours[id] = t
+        if t != None:
+            self.dictionnaire_tours[id] = t
         self.tour_en_cours = None
 
     def verifier_etat_monstre(self):
@@ -342,8 +354,7 @@ class Modele:
                 if self.vie > 0:
                     self.vie -= 1
             if i.empoisonne:
-                i.vie -= tour.Tour_Poison.degat + i.stack_poison/1000
-
+                i.vie -= tour.Tour_Poison.degat + i.stack_poison / 1000
 
     def verifier_etat_joueur(self):
         if self.vie == 0:
@@ -383,6 +394,10 @@ class Modele:
 
     def creer_mitraillette(self):
         self.tour_en_cours = 'M'
+
+    def trouver_tour(self, id):
+        objet = self.dictionnaire_tours[id]
+        return objet.x
 
 
 class Controleur:
@@ -438,6 +453,9 @@ class Controleur:
 
     def creer_anim(self, info_gif):
         self.modele.creer_anim(info_gif)
+
+    def trouver_tour(self, id):
+        self.modele.trouver_tour(id)
 
 
 if __name__ == '__main__':
