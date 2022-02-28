@@ -51,7 +51,7 @@ class Tour_Glace(Tour):
 
     def __init__(self, x, y, demie_taille):
         Tour.__init__(self, x, y, 75, demie_taille)
-        self.vitesse_ralentissement = 1
+        self.vitesse_ralentissement = 3
 
     def action(self, liste_monstre):
 
@@ -67,11 +67,11 @@ class Tour_Glace(Tour):
     def upgrade(self):
         self.niveau += 1
         if self.niveau == 1:
-            self.rayon += 10
+            self.vitesse_ralentissement -= 1
         elif self.niveau == 2:
-            pass
+            self.rayon += 25
         elif self.niveau == 3:
-            pass
+            self.vitesse_ralentissement -= 1
 
 
 
