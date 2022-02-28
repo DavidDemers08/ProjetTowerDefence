@@ -15,6 +15,7 @@ class Monstre(object):
         self.index = 0
         self.vie = vie
         self.empoisonne = False
+        self.frozen = False
 
     def avancer_monstre(self, path):
         if self.index != len(path):
