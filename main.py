@@ -273,7 +273,7 @@ class Modele:
 
         if self.tour_en_cours == 'S':
             self.argent -= tour.Tour_Sniper.prix
-            self.liste_tours.append(tour.Tour_Sniper(x, y, 100, 10))
+            self.liste_tours.append(tour.Tour_Sniper(x, y, 250, 10))
             self.tour_en_cours = None
         elif self.tour_en_cours == 'P':
             self.argent -= tour.Tour_Poison.prix
@@ -300,7 +300,7 @@ class Modele:
                 if self.vie > 0:
                     self.vie -= 1
             if i.empoisonne:
-                i.vie -= .15
+                i.vie -= tour.Tour_Poison.degat
 
     def verifier_etat_joueur(self):
         if self.vie == 0:
