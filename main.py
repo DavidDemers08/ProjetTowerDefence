@@ -12,7 +12,6 @@ class Vue:
         self.modele = self.parent.modele
         self.root = Tk()
         self.root.title("TowerDefence, alpha_0.1")
-        self.test = PhotoImage(file="Images/towers/ice_tower1.png")
         self.creer_interface()
 
     def creer_tour(self, event):
@@ -183,6 +182,15 @@ class Vue:
                 self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green", tags="dynamique")
 
     def afficher_tours(self):
+        self.image_tour_glace1 = PhotoImage(file="Images/towers/ice_tower1.png")
+        self.image_tour_glace2 = PhotoImage(file="Images/towers/ice_tower2.png")
+        self.image_tour_glace3 = PhotoImage(file="Images/towers/ice_tower3.png")
+
+        self.image_tour_sniper1 = PhotoImage(file="Images/towers/ice_tower3.png")
+        self.image_tour_sniper2 = PhotoImage(file="Images/towers/ice_tower3.png")
+        self.image_tour_sniper3 = PhotoImage(file="Images/towers/ice_tower3.png")
+
+
         for i in self.modele.liste_tours:
             if isinstance(i, tour.Tour_Sniper):
                 self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
@@ -195,9 +203,7 @@ class Vue:
                 self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                          i.y + i.demie_taille, fill="green", tags="dynamique")
             if isinstance(i, tour.Tour_Glace):
-
-
-                self.canevas.create_image(i.x,i.y , image= self.test,
+                self.canevas.create_image(i.x,i.y, image= self.image_tour_glace1,
                                           tags=("dynamique", "ice_tower"))
 
             if isinstance(i, tour.Tour_Bombe):
