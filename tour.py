@@ -13,12 +13,10 @@ class Tour(object):
         self.demie_taille = demie_taille
         self.vitesse_attaque = vitesse_attaque
         self.degat = degat
-
+        self.niveau = 0
         self.delai_tire = 0
         self.liste_projectiles = []
 
-
-        # mitraillette vitesse = 2
 
     def analyse_rayon(self, monstre):
         if helper.Helper().calcDistance(self.x, self.y, monstre.x, monstre.y) <= self.rayon:
@@ -45,6 +43,9 @@ class Tour(object):
                     self.liste_projectiles.remove(projectile)
 
 
+    def upgrade(self):
+        self.niveau += 1
+
 class Tour_Glace(Tour):
     prix = 500
 
@@ -70,6 +71,14 @@ class Tour_Sniper(Tour):
         self.delai_tire = 0
         self.liste_projectiles = []
 
+    def upgrade(self):
+        self.niveau += 1
+        if self.niveau == 1:
+            pass
+        elif self.niveau == 2:
+            pass
+        elif self.niveau == 3:
+            pass
 
 class Tour_Poison(Tour):
     degat = 0.15
@@ -83,6 +92,15 @@ class Tour_Poison(Tour):
             if self.analyse_rayon(monstre):
                 monstre.empoisonne = True
 
+    def upgrade(self):
+        self.niveau += 1
+        if self.niveau == 1:
+            pass
+        elif self.niveau == 2:
+            pass
+        elif self.niveau == 3:
+            pass
+
 
 class Tour_Bombe(Tour):
     prix = 600
@@ -92,6 +110,14 @@ class Tour_Bombe(Tour):
         self.delai_tire = 0
         self.liste_projectiles = []
 
+    def upgrade(self):
+        self.niveau += 1
+        if self.niveau == 1:
+            pass
+        elif self.niveau == 2:
+            pass
+        elif self.niveau == 3:
+            pass
 
 class Tour_Mitraillette(Tour):
     prix = 200
@@ -100,3 +126,12 @@ class Tour_Mitraillette(Tour):
         Tour.__init__(self, x, y, rayon, demie_taille, 2, 5)
         self.delai_tire = 0
         self.liste_projectiles = []
+
+    def upgrade(self):
+        self.niveau += 1
+        if self.niveau == 1:
+            pass
+        elif self.niveau == 2:
+            pass
+        elif self.niveau == 3:
+            pass
