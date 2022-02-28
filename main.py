@@ -1,8 +1,8 @@
 from tkinter import *
-
 import monstre
 import tour
 from animer_gif import Animer_gif
+
 
 
 class Vue:
@@ -12,6 +12,7 @@ class Vue:
         self.modele = self.parent.modele
         self.root = Tk()
         self.root.title("TowerDefence, alpha_0.1")
+        self.test = PhotoImage(file="Images/towers/ice_tower1.png")
         self.creer_interface()
 
     def creer_tour(self, event):
@@ -194,10 +195,11 @@ class Vue:
                 self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                          i.y + i.demie_taille, fill="green", tags="dynamique")
             if isinstance(i, tour.Tour_Glace):
-                self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                              i.y + i.demie_taille, fill="blue", tags="dynamique")
-                self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                         i.y + i.demie_taille, fill="lightblue", tags="dynamique")
+
+
+                self.canevas.create_image(i.x,i.y , image= self.test,
+                                          tags=("dynamique", "ice_tower"))
+
             if isinstance(i, tour.Tour_Bombe):
                 self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                               i.y + i.demie_taille, fill="black", tags="dynamique")
