@@ -54,15 +54,15 @@ class Vue:
         self.cadre_fin = Frame(self.root, bg='gray')
 
         bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
-        bouton_tour_glace = Button(self.cadre_fin, text='TOUR GLACE', width=15, height=1, font=('Arial', 6),
+        bouton_tour_glace = Button(self.cadre_fin, text='TOUR GLACE - '+ str(tour.Tour_Glace.prix)+ '$', width=20, height=1, font=('Arial', 8),
                                    command=self.creer_tour_glace)
-        bouton_tour_poison = Button(self.cadre_fin, text='TOUR POISON', font=('Arial', 6), width=15, height=1,
+        bouton_tour_poison = Button(self.cadre_fin, text='TOUR POISON - '+str(tour.Tour_Poison.prix)+ '$', font=('Arial', 8), width=20, height=1,
                                     command=self.creer_tour_poison)
-        bouton_tour_mitraillette = Button(self.cadre_fin, text='TOUR MITRAILETTE', font=('Arial', 6), width=15, height=1,
+        bouton_tour_mitraillette = Button(self.cadre_fin, text='TOUR MITRAILETTE - '+str(tour.Tour_Mitraillette.prix)+ '$', font=('Arial', 8), width=22, height=1,
                                     command=self.creer_tour_mitraillette)
-        bouton_tour_bombe = Button(self.cadre_fin, text='TOUR BOMBE', font=('Arial', 6), width=15, height=1,
+        bouton_tour_bombe = Button(self.cadre_fin, text='TOUR BOMBE - '+str(tour.Tour_Bombe.prix)+ '$', font=('Arial', 8), width=20, height=1,
                                      command=self.creer_tour_bombe)
-        bouton_tour_sniper = Button(self.cadre_fin, text='TOUR SNIPER', font=('Arial', 6), width=15, height=1,
+        bouton_tour_sniper = Button(self.cadre_fin, text='TOUR SNIPER - '+str(tour.Tour_Sniper.prix )+ '$', font=('Arial', 8), width=20, height=1,
                                     command=self.creer_tour_sniper)
 
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
