@@ -29,6 +29,14 @@ class Vue:
         if (self.modele.argent - tour.Tour_Sniper.prix) >= 0:
             self.parent.creer_tour_sniper()
 
+    def creer_tour_mitraillette(self):
+        if (self.modele.argent - tour.Tour_Mitraillette.prix) >= 0:
+            self.parent.creer_tour_mitraillette()
+
+    def creer_tour_bombe(self):
+        if (self.modele.argent - tour.Tour_Bombe.prix) >= 0:
+            self.parent.creer_tour_bombe()
+
     def creer_interface(self):
         # cadre HUD affichant la duree
         self.canevas = Canvas(self.root, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
@@ -43,25 +51,32 @@ class Vue:
         self.image_argent = PhotoImage(file="Images/money.png")
 
         self.cadre_depart = Frame(self.root, bg='gray')
+        self.cadre_fin = Frame(self.root, bg='gray')
 
         bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
-        bouton_tour_glace = Button(self.cadre_depart, text='TOUR GLACE', width=15, height=1, font=('Arial', 6),
+        bouton_tour_glace = Button(self.cadre_fin, text='TOUR GLACE', width=15, height=1, font=('Arial', 6),
                                    command=self.creer_tour_glace)
-        bouton_tour_poison = Button(self.cadre_depart, text='TOUR POISON', font=('Arial', 6), width=15, height=1,
+        bouton_tour_poison = Button(self.cadre_fin, text='TOUR POISON', font=('Arial', 6), width=15, height=1,
                                     command=self.creer_tour_poison)
-        bouton_tour_sniper = Button(self.cadre_depart, text='TOUR SNIPER', font=('Arial', 6), width=10, height=1,
+        bouton_tour_mitraillette = Button(self.cadre_fin, text='TOUR MITRAILETTE', font=('Arial', 6), width=15, height=1,
+                                    command=self.creer_tour_mitraillette)
+        bouton_tour_bombe = Button(self.cadre_fin, text='TOUR BOMBE', font=('Arial', 6), width=15, height=1,
+                                     command=self.creer_tour_bombe)
+        bouton_tour_sniper = Button(self.cadre_fin, text='TOUR SNIPER', font=('Arial', 6), width=15, height=1,
                                     command=self.creer_tour_sniper)
 
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
 
+        label_image_score = Label(self.cadre_depart, text='SCORE', height=1)
+        label_vague_texte = Label(self.cadre_depart, text='VAGUE', height=1)
+        label_vie_texte = Label(self.cadre_depart, text='VIE', height=1)
+
         label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=30)
         label_argent = Label(self.cadre_depart, width=10, height=2, font=('Arial', 11),
                              textvariable=self.var_argent)
-        label_image_score = Label(self.cadre_depart, text='SCORE', height=1)
-        label_vague_texte = Label(self.cadre_depart, text='VAGUE', height=1)
         label_vague = Label(self.cadre_depart, width=5, height=1, font=('Arial', 11),
                             textvariable=self.var_vague)
-        label_vie_texte = Label(self.cadre_depart, text='VIE', height=1)
+
         label_score = Label(self.cadre_depart, width=5, height=1, font=('Arial', 11),
                             textvariable=self.var_vie)
         label_vie = Label(self.cadre_depart, width=5, height=1, font=('Arial', 11),
@@ -72,6 +87,8 @@ class Vue:
         bouton_tour_glace.pack(side=LEFT, padx=5)
         bouton_tour_poison.pack(side=LEFT, padx=5)
         bouton_tour_sniper.pack(side=LEFT, padx=5)
+        bouton_tour_mitraillette.pack(side=LEFT, padx=5)
+        bouton_tour_bombe.pack(side=LEFT,padx=5)
         label_argent.pack(side=RIGHT)
         label_image_argent.pack(side=RIGHT)
         label_score.pack(side=RIGHT, padx=20)
@@ -81,6 +98,7 @@ class Vue:
         label_vague.pack(side=RIGHT, padx=20)
         label_vague_texte.pack(side=RIGHT, padx=20)
         self.canevas.pack()
+        self.cadre_fin.pack(expand=True, fill=BOTH)
 
     def afficher_debut_partie(self):
         self.canevas.delete("dynamique")
@@ -180,11 +198,16 @@ class Vue:
                                               i.y + i.demie_taille, fill="blue", tags="dynamique")
                 self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
                                          i.y + i.demie_taille, fill="lightblue", tags="dynamique")
+            if isinstance(i, tour.Tour_Bombe):
+                self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
+                                              i.y + i.demie_taille, fill="black", tags="dynamique")
+                self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
+                                         i.y + i.demie_taille, fill="lightgray", tags="dynamique")
             if isinstance(i, tour.Tour_Mitraillette):
                 self.canevas.create_rectangle(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                              i.y + i.demie_taille, fill="lightblue", tags="dynamique")
+                                              i.y + i.demie_taille, fill="lightyellow", tags="dynamique")
                 self.canevas.create_oval(i.x - i.demie_taille, i.y - i.demie_taille, i.x + i.demie_taille,
-                                         i.y + i.demie_taille, fill="blue", tags="dynamique")
+                                         i.y + i.demie_taille, fill="brown", tags="dynamique")
                 self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="",
                                          outline="",
                                          tags="dynamique")
@@ -199,7 +222,7 @@ class Vue:
                                                  fill="darkred", tags="dynamique")
                     elif isinstance(i, tour.Tour_Mitraillette):
                         self.canevas.create_oval(j.x - 5, j.y - 5, j.x + 5, j.y + 5,
-                                                 fill="blue", tags="dynamique")
+                                                 fill="yellow", tags="dynamique")
                     elif isinstance(i, tour.Tour_Sniper):
                         self.canevas.create_rectangle(j.x - 5, j.y - 5, j.x + 5, j.y + 5,
                                                       fill="darkred", tags="dynamique")
@@ -296,6 +319,10 @@ class Modele:
             self.argent -= tour.Tour_Bombe.prix
             self.liste_tours.append(tour.Tour_Bombe(x, y, 100, 10))
             self.tour_en_cours = None
+        elif self.tour_en_cours == 'M':
+            self.argent -= tour.Tour_Mitraillette.prix
+            self.liste_tours.append(tour.Tour_Mitraillette(x, y, 100, 10))
+            self.tour_en_cours = None
 
     def verifier_etat_monstre(self):
         for i in self.liste_monstres_terrain:
@@ -347,6 +374,9 @@ class Modele:
     def creer_glace(self):
         self.tour_en_cours = 'G'
 
+    def creer_mitraillette(self):
+        self.tour_en_cours = 'M'
+
 
 class Controleur:
     def __init__(self):
@@ -390,6 +420,14 @@ class Controleur:
     def creer_tour_poison(self):
         if self.partie_en_cours:
             self.modele.creer_poison()
+
+    def creer_tour_mitraillette(self):
+        if self.partie_en_cours:
+            self.modele.creer_mitraillette()
+
+    def creer_tour_bombe(self):
+        if self.partie_en_cours:
+            self.modele.creer_bombe()
 
     def creer_anim(self, info_gif):
         self.modele.creer_anim(info_gif)

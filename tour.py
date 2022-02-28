@@ -1,5 +1,5 @@
 import helper
-
+import projectile
 from monstre import Monstre
 
 
@@ -16,6 +16,7 @@ class Tour(object):
         self.niveau = 0
         self.delai_tire = 0
         self.liste_projectiles = []
+
 
     def analyse_rayon(self, monstre):
         if helper.Helper().calcDistance(self.x, self.y, monstre.x, monstre.y) <= self.rayon:
@@ -41,9 +42,9 @@ class Tour(object):
                 if projectile.atteindre_cible(liste_monstre):
                     self.liste_projectiles.remove(projectile)
 
+
     def upgrade(self):
         self.niveau += 1
-
 
 class Tour_Glace(Tour):
     prix = 500
