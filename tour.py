@@ -58,8 +58,10 @@ class Tour_Glace(Tour):
 
             if self.analyse_rayon(monstre):
                 monstre.vitesse = self.vitesse_ralentissement
+                monstre.frozen=True
             else:
                 monstre.vitesse = Monstre.vitesse
+                monstre.frozen = False
 
     def upgrade(self):
         self.niveau += 1

@@ -143,8 +143,17 @@ class Vue:
                 x1 = i.x - 10
                 x2 = x1 + 20
                 x3 = x1 + (i.vie / monstre.Monstre.vie_max * 20)
+
                 self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red", tags=("dynamique"))
                 self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green", tags=("dynamique"))
+
+                if i.empoisonne:
+                    self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="purple", tags=("dynamique"))
+                    self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green", tags=("dynamique"))
+                if i.frozen:
+                    #self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="blue", tags=("dynamique"))
+                    self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="blue", tags=("dynamique"))
+
 
             if isinstance(i, monstre.Boss):
                 self.canevas.create_oval(i.x - 15, i.y - 15, i.x + 15, i.y + 15, fill="red", tags=("dynamique", "boss"))
