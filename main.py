@@ -6,12 +6,10 @@ from animer_gif import Animer_gif
 
 mon_id = 0
 
-
 def creer_id():
     global mon_id
     mon_id += 1
     return mon_id
-
 
 class Vue:
     def __init__(self, parent):
@@ -130,6 +128,7 @@ class Vue:
         self.var_vague.set(self.modele.vague)
 
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
+        self.canevas.tag_bind("tour", "<Button-3>", self.trouver_tour)
 
         self.afficher_path()
 
@@ -184,7 +183,9 @@ class Vue:
                     self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="purple", tags=("dynamique"))
                     self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green", tags=("dynamique"))
                 if i.frozen:
+
                     self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="lightblue", tags=("dynamique"))
+
 
             if isinstance(i, monstre.Boss):
                 self.canevas.create_oval(i.x - 15, i.y - 15, i.x + 15, i.y + 15, fill="red", tags=("dynamique", "boss"))
@@ -232,6 +233,8 @@ class Vue:
                 self.canevas.create_image(i.x, i.y, image=self.image_tour_mitraillette1,
                                           tags=("dynamique", "sniper_tower"))
 
+            self.canevas.create_oval(i.x - i.rayon, i.y - i.rayon, i.x + i.rayon, i.y + i.rayon, fill="",
+                                     tags="dynamique")
 
             if len(i.liste_projectiles) != 0:
                 for j in i.liste_projectiles:
@@ -253,6 +256,12 @@ class Vue:
         self.var_vague.set(self.modele.vague)
 
         print("fin de partie")
+
+    def trouver_tour(self, evt):
+        val = self.canevas.gettags(CURRENT)
+        print(val)
+        # self.parent.trouver_tour(val[1])
+        # print(self.parent.trouver_tour(val[1]))
 
 
 class Modele:
@@ -279,7 +288,8 @@ class Modele:
 
     def jouer_partie(self):
         self.bouger_monstres()
-        self.attaque_monstres()
+        if len(self.dictionnaire_tours) > 0:
+            self.attaque_monstres()
         self.verifier_etat_monstre()
         self.verifier_etat_joueur()
         return self.fin_de_partie
@@ -338,7 +348,8 @@ class Modele:
         elif self.tour_en_cours == 'M':
             self.argent -= tour.Tour_Mitraillette.prix
             t = tour.Tour_Mitraillette(x, y, 100, 10, id)
-        self.dictionnaire_tours[id] = t
+        if t != None:
+            self.dictionnaire_tours[id] = t
         self.tour_en_cours = None
 
     def verifier_etat_monstre(self):
@@ -354,6 +365,7 @@ class Modele:
                     self.vie -= 1
             if i.empoisonne:
                 i.vie -= tour.Tour_Poison.degat + i.stack_poison / 1000
+
 
     def verifier_etat_joueur(self):
         if self.vie == 0:
@@ -393,6 +405,10 @@ class Modele:
 
     def creer_mitraillette(self):
         self.tour_en_cours = 'M'
+
+    def trouver_tour(self, id):
+        objet = self.dictionnaire_tours[id]
+        return objet.x
 
 
 class Controleur:
@@ -448,6 +464,9 @@ class Controleur:
 
     def creer_anim(self, info_gif):
         self.modele.creer_anim(info_gif)
+
+    def trouver_tour(self, id):
+        self.modele.trouver_tour(id)
 
 
 if __name__ == '__main__':
