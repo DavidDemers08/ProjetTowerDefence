@@ -89,6 +89,9 @@ class Vue:
                                   tags=("statique", "bg"))
         self.ouvrir_gif()
 
+        # monsters
+        self.m = self.charger_gifs("Images/monstress.gif")
+
     def afficher_partie(self):
         self.canevas.delete("dynamique")
         self.var_argent.set(str(self.modele.argent) + "$")
@@ -107,12 +110,12 @@ class Vue:
         self.afficher_monstres()
 
     def ouvrir_gif(self):
-        rep = self.charger_gifs()
+        rep = self.charger_gifs("Images/portal.gif")
         if rep:
             self.parent.creer_anim(rep)
 
-    def charger_gifs(self):
-        nom_gif = "Images/portal.gif"
+    def charger_gifs(self, nom_gif):
+        self.nom_gif = nom_gif
         if nom_gif:
             listeimages = []
             testverite = 1
@@ -139,7 +142,14 @@ class Vue:
         for i in self.modele.liste_monstres_terrain:
 
             if isinstance(i, monstre.Monstre):
-                self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black", tags=("dynamique"))
+                nom_gif, listeimages = self.m
+                nom_gif = nom_gif + str(i)
+                self.modele.animations[nom_gif] = Animer_gif(self, listeimages, i.x, i.y)
+
+                #self.image_monstre = PhotoImage(file="Images/monstre.gif")
+                #self.canevas.create_image(i.x, i.y, image=self.image_monstre,
+                                          #tags=("dynamique"))
+                #self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black", tags=("dynamique"))
                 x1 = i.x - 10
                 x2 = x1 + 20
                 x3 = x1 + (i.vie / monstre.Monstre.vie_max * 20)
