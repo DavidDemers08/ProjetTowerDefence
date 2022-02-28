@@ -6,10 +6,12 @@ from animer_gif import Animer_gif
 
 mon_id = 0
 
+
 def creer_id():
     global mon_id
     mon_id += 1
     return mon_id
+
 
 class Vue:
     def __init__(self, parent):
@@ -56,6 +58,25 @@ class Vue:
         self.var_argent = StringVar()
 
         self.image_argent = PhotoImage(file="Images/money.png")
+        self.image_tour_glace1 = PhotoImage(file="Images/towers/ice_tower1.png")
+        self.image_tour_glace2 = PhotoImage(file="Images/towers/ice_tower2.png")
+        self.image_tour_glace3 = PhotoImage(file="Images/towers/ice_tower3.png")
+
+        self.image_tour_sniper1 = PhotoImage(file="Images/towers/tour_sniper1.png")
+        self.image_tour_sniper2 = PhotoImage(file="Images/towers/tour_sniper2.png")
+        self.image_tour_sniper3 = PhotoImage(file="Images/towers/tour_sniper3.png")
+
+        self.image_tour_feu1 = PhotoImage(file="Images/towers/tour_feu1.png")
+        self.image_tour_feu2 = PhotoImage(file="Images/towers/tour_feu2.png")
+        self.image_tour_feu3 = PhotoImage(file="Images/towers/tour_feu3.png")
+
+        self.image_tour_mitraillette1 = PhotoImage(file="Images/towers/tour_mitraillette1.png")
+        self.image_tour_mitraillette2 = PhotoImage(file="Images/towers/tour_mitraillette2.png")
+        self.image_tour_mitraillette3 = PhotoImage(file="Images/towers/tour_mitraillette3.png")
+
+        self.image_tour_bombe1 = PhotoImage(file="Images/towers/tower_bombe.png")
+        self.image_tour_bombe2 = PhotoImage(file="Images/towers/tower_bombe2.png")
+        self.image_tour_bombe3 = PhotoImage(file="Images/towers/tower_bombe3.png")
 
         self.cadre_depart = Frame(self.root, bg='gray')
         self.cadre_fin = Frame(self.root, bg='gray')
@@ -115,6 +136,7 @@ class Vue:
 
     def afficher_debut_partie(self):
         self.canevas.delete("dynamique")
+        self.afficher_path()
 
         self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg,
                                   tags=("statique", "bg"))
@@ -129,8 +151,6 @@ class Vue:
 
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
         self.canevas.tag_bind("tour", "<Button-3>", self.trouver_tour)
-
-        self.afficher_path()
 
         self.afficher_tours()
         for i in self.modele.animations:
@@ -183,9 +203,7 @@ class Vue:
                     self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="purple", tags=("dynamique"))
                     self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green", tags=("dynamique"))
                 if i.frozen:
-
                     self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="lightblue", tags=("dynamique"))
-
 
             if isinstance(i, monstre.Boss):
                 self.canevas.create_oval(i.x - 15, i.y - 15, i.x + 15, i.y + 15, fill="red", tags=("dynamique", "boss"))
@@ -196,43 +214,23 @@ class Vue:
                 self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green", tags="dynamique")
 
     def afficher_tours(self):
-        self.image_tour_glace1 = PhotoImage(file="Images/towers/ice_tower1.png")
-        self.image_tour_glace2 = PhotoImage(file="Images/towers/ice_tower2.png")
-        self.image_tour_glace3 = PhotoImage(file="Images/towers/ice_tower3.png")
-
-        self.image_tour_sniper1 = PhotoImage(file="Images/towers/tour_sniper1.png")
-        self.image_tour_sniper2 = PhotoImage(file="Images/towers/tour_sniper2.png")
-        self.image_tour_sniper3 = PhotoImage(file="Images/towers/tour_sniper3.png")
-
-        self.image_tour_feu1 = PhotoImage(file="Images/towers/tour_feu1.png")
-        self.image_tour_feu2 = PhotoImage(file="Images/towers/tour_feu2.png")
-        self.image_tour_feu3 = PhotoImage(file="Images/towers/tour_feu3.png")
-
-        self.image_tour_mitraillette1 = PhotoImage(file="Images/towers/tour_mitraillette1.png")
-        self.image_tour_mitraillette2 = PhotoImage(file="Images/towers/tour_mitraillette2.png")
-        self.image_tour_mitraillette3 = PhotoImage(file="Images/towers/tour_mitraillette3.png")
-
-        self.image_tour_bombe1 = PhotoImage(file="Images/towers/tower_bombe.png")
-        self.image_tour_bombe2 = PhotoImage(file="Images/towers/tower_bombe2.png")
-        self.image_tour_bombe3 = PhotoImage(file="Images/towers/tower_bombe3.png")
-
         for i in self.modele.dictionnaire_tours:
             i = self.modele.dictionnaire_tours[i]
             if isinstance(i, tour.Tour_Sniper):
                 self.canevas.create_image(i.x, i.y, image=self.image_tour_sniper1,
-                                          tags=("dynamique",i.id, tour))
+                                          tags=("statique", i.id, tour))
             if isinstance(i, tour.Tour_Poison):
                 self.canevas.create_image(i.x, i.y, image=self.image_tour_feu1,
-                                          tags=("dynamique",i.id, tour))
+                                          tags=("statique", i.id, tour))
             if isinstance(i, tour.Tour_Glace):
                 self.canevas.create_image(i.x, i.y, image=self.image_tour_glace1,
-                                          tags=("dynamique",i.id, tour))
+                                          tags=("statique", i.id, tour))
             if isinstance(i, tour.Tour_Bombe):
                 self.canevas.create_image(i.x, i.y, image=self.image_tour_bombe1,
-                                          tags=("dynamique",i.id, tour))
+                                          tags=("statique", i.id, tour))
             if isinstance(i, tour.Tour_Mitraillette):
                 self.canevas.create_image(i.x, i.y, image=self.image_tour_mitraillette1,
-                                          tags=("dynamique",i.id, tour))
+                                          tags=("statique", i.id, tour))
 
             if len(i.liste_projectiles) != 0:
                 for j in i.liste_projectiles:
@@ -364,7 +362,6 @@ class Modele:
             if i.empoisonne:
                 i.vie -= tour.Tour_Poison.degat + i.stack_poison / 1000
 
-
     def verifier_etat_joueur(self):
         if self.vie == 0:
             self.parent.partie_en_cours = 0
@@ -427,7 +424,7 @@ class Controleur:
         if self.partie_en_cours:
             rep = self.modele.jouer_partie()
             if rep:
-
+                print(self.vue.canevas.find_all())
                 self.modele.jouer_tour()
                 self.vue.afficher_partie()
                 self.vue.root.after(40, self.jouer_partie)

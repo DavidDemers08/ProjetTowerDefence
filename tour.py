@@ -150,7 +150,7 @@ class Tour_Mitraillette(Tour):
     prix = 200
 
     def __init__(self, x, y, rayon, demie_taille,id):
-        Tour.__init__(self, x, y, rayon, demie_taille,10, 5)
+        Tour.__init__(self, x, y, rayon, demie_taille,10, 10)
         self.delai_tire = 0
         self.liste_projectiles = []
         self.id = id
