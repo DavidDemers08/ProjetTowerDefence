@@ -61,6 +61,16 @@ class Tour_Glace(Tour):
             else:
                 monstre.vitesse = Monstre.vitesse
 
+    def upgrade(self):
+        self.niveau += 1
+        if self.niveau == 1:
+            self.rayon += 10
+        elif self.niveau == 2:
+            pass
+        elif self.niveau == 3:
+            pass
+
+
 
 class Tour_Sniper(Tour):
     prix = 100
@@ -73,11 +83,13 @@ class Tour_Sniper(Tour):
     def upgrade(self):
         self.niveau += 1
         if self.niveau == 1:
-            pass
+            self.vitesse_attaque -= 20
         elif self.niveau == 2:
-            pass
+            self.degat += 50
         elif self.niveau == 3:
-            pass
+            self.rayon += 50
+            self.degat += 50
+            self.vitesse_attaque -= 20
 
 
 class Tour_Poison(Tour):
@@ -95,14 +107,12 @@ class Tour_Poison(Tour):
     def upgrade(self):
         self.niveau += 1
         if self.niveau == 1:
-            pass
+            self.rayon += 10
         elif self.niveau == 2:
             pass
         elif self.niveau == 3:
             pass
 
-    def getDegat(self):
-        return self.degat
 
 class Tour_Bombe(Tour):
     prix = 600
@@ -115,29 +125,34 @@ class Tour_Bombe(Tour):
     def upgrade(self):
         self.niveau += 1
         if self.niveau == 1:
-            pass
+            self.degat += 10
         elif self.niveau == 2:
-            pass
+            self.vitesse_attaque -= 20
         elif self.niveau == 3:
-            pass
+            self.rayon += 10
+            self.degat += 15
+            self.vitesse_attaque -= 10
 
 
 class Tour_Mitraillette(Tour):
     prix = 200
 
     def __init__(self, x, y, rayon, demie_taille):
-        Tour.__init__(self, x, y, rayon, demie_taille, 2, 5)
+        Tour.__init__(self, x, y, rayon, demie_taille, 10, 5)
         self.delai_tire = 0
         self.liste_projectiles = []
 
     def upgrade(self):
         self.niveau += 1
         if self.niveau == 1:
-            pass
+            self.vitesse_attaque -= 2
+            self.degat += 3
         elif self.niveau == 2:
-            pass
+            self.vitesse_attaque -= 3
+            self.degat += 4
         elif self.niveau == 3:
-            pass
+            self.vitesse_attaque -= 4
+            self.degat += 5
 
 
 
