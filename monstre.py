@@ -7,6 +7,7 @@ class Monstre(object):
     point = 50
     vitesse = 2
 
+
     def __init__(self, x, y, vitesse, vie):
         self.x = x
         self.y = y
@@ -33,7 +34,6 @@ class Monstre(object):
                 self.x = cibleX
                 self.y = cibleY
                 self.index += 1
-
 
 
 

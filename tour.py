@@ -17,6 +17,7 @@ class Tour(object):
         self.delai_tire = 0
         self.liste_projectiles = []
 
+
     def analyse_rayon(self, monstre):
         if helper.Helper().calcDistance(self.x, self.y, monstre.x, monstre.y) <= self.rayon:
             return True
@@ -48,9 +49,10 @@ class Tour(object):
 class Tour_Glace(Tour):
     prix = 500
 
-    def __init__(self, x, y, demie_taille):
+    def __init__(self, x, y, demie_taille,id):
         Tour.__init__(self, x, y, 75, demie_taille)
         self.vitesse_ralentissement = 1
+        self.id = id
 
     def action(self, liste_monstre):
 
@@ -74,12 +76,13 @@ class Tour_Glace(Tour):
 
 
 class Tour_Sniper(Tour):
-    prix = 100
+    prix = 300
 
-    def __init__(self, x, y, rayon, demie_taille):
+    def __init__(self, x, y, rayon, demie_taille,id):
         Tour.__init__(self, x, y, rayon, demie_taille, 60, 100)
         self.delai_tire = 0
         self.liste_projectiles = []
+        self.id = id
 
     def upgrade(self):
         self.niveau += 1
@@ -98,16 +101,15 @@ class Tour_Poison(Tour):
     prix = 300
     stack_poison = 0
 
-    def __init__(self, x, y, rayon, demie_taille):
+    def __init__(self, x, y, rayon, demie_taille,id):
         Tour.__init__(self, x, y, rayon, demie_taille)
         self.stack_poison = 0
-
+        self.id = id
     def action(self, liste_monstre):
         for monstre in liste_monstre:
             if self.analyse_rayon(monstre):
                 monstre.stack_poison += 1
                 monstre.empoisonne = True
-
 
     def upgrade(self):
         self.niveau += 1
@@ -122,10 +124,11 @@ class Tour_Poison(Tour):
 class Tour_Bombe(Tour):
     prix = 600
 
-    def __init__(self, x, y, rayon, demie_taille):
+    def __init__(self, x, y, rayon, demie_taille,id):
         Tour.__init__(self, x, y, rayon, demie_taille, 60, 100)
         self.delai_tire = 0
         self.liste_projectiles = []
+        self.id = id
 
     def upgrade(self):
         self.niveau += 1
@@ -142,10 +145,11 @@ class Tour_Bombe(Tour):
 class Tour_Mitraillette(Tour):
     prix = 200
 
-    def __init__(self, x, y, rayon, demie_taille):
-        Tour.__init__(self, x, y, rayon, demie_taille, 10, 5)
+    def __init__(self, x, y, rayon, demie_taille,id):
+        Tour.__init__(self, x, y, rayon, demie_taille,10, 5)
         self.delai_tire = 0
         self.liste_projectiles = []
+        self.id = id
 
     def upgrade(self):
         self.niveau += 1
