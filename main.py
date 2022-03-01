@@ -148,10 +148,11 @@ class Vue:
 
     def afficher_debut_partie(self):
         self.canevas.delete("dynamique")
-        self.afficher_path()
-
         self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg,
                                   tags=("statique", "bg"))
+        self.afficher_path()
+
+
         self.ouvrir_gif()
 
     def afficher_partie(self):
