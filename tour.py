@@ -13,7 +13,7 @@ class Tour(object):
         self.demie_taille = demie_taille
         self.vitesse_attaque = vitesse_attaque
         self.degat = degat
-        self.niveau = 0
+        self.niveau = 1
         self.delai_tire = 0
         self.liste_projectiles = []
 
@@ -66,7 +66,7 @@ class Tour_Glace(Tour):
                 monstre.frozen = False
 
     def upgrade(self):
-        if self.niveau >= 3:
+        if self.niveau <= 3:
             self.niveau += 1
             if self.niveau == 1:
                 self.vitesse_ralentissement -= 1
@@ -86,7 +86,7 @@ class Tour_Sniper(Tour):
         self.id = id
 
     def upgrade(self):
-        if self.niveau >= 3:
+        if self.niveau <= 3:
             self.niveau += 1
             if self.niveau == 1:
                 self.vitesse_attaque -= 20
@@ -114,7 +114,7 @@ class Tour_Poison(Tour):
                 monstre.empoisonne = True
 
     def upgrade(self):
-        if self.niveau >= 3:
+        if self.niveau <= 3:
             self.niveau += 1
             if self.niveau == 1:
                 self.rayon += 10
@@ -132,9 +132,10 @@ class Tour_Bombe(Tour):
         self.delai_tire = 0
         self.liste_projectiles = []
         self.id = id
+        self.niveau = 1
 
     def upgrade(self):
-        if self.niveau >= 3:
+        if self.niveau <= 3:
             self.niveau += 1
             if self.niveau == 1:
                 self.degat += 10
@@ -156,7 +157,7 @@ class Tour_Mitraillette(Tour):
         self.id = id
 
     def upgrade(self):
-        if self.niveau >= 3:
+        if self.niveau <= 3:
             self.niveau += 1
             if self.niveau == 1:
                 self.vitesse_attaque -= 2
@@ -187,7 +188,9 @@ class Projectile(object):
             self.x = cible[0]
             self.y = cible[1]
 
-    def atteindre_cible(self, liste_monstre=[]):
+    def atteindre_cible(self, liste_monstre=None):
+        if liste_monstre is None:
+            liste_monstre = []
         isDead = False
         if self.monstre is None:
             isDead = True
@@ -219,6 +222,7 @@ class Projectile_Bombe(Projectile):
             explosion_list = self.explosion(liste_monstre)
             for monstre_bombe in explosion_list:
                 monstre_bombe.vie -= self.degat
+
 
         return isDead
 
