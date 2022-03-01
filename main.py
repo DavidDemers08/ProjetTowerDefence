@@ -13,6 +13,22 @@ def creer_id():
     return mon_id
 
 
+def charger_gifs():
+    nom_gif = "Images/portal.gif"
+    if nom_gif:
+        listeimages = []
+        testverite = 1
+        noindex = 0
+        while testverite:
+            try:
+                img = PhotoImage(file=nom_gif, format="gif -index " + str(noindex))
+                listeimages.append(img)
+                noindex += 1
+            except Exception:
+                testverite = 0
+        return [nom_gif, listeimages]
+
+
 class Vue:
     def __init__(self, parent):
         self.parent = parent
@@ -95,6 +111,7 @@ class Vue:
                                     command=self.creer_tour_sniper)
 
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
+        self.canevas.tag_bind("tour", "<Button-3>", self.trouver_tour)
 
         label_image_score = Label(self.cadre_depart, text='SCORE', height=1)
         label_vague_texte = Label(self.cadre_depart, text='VAGUE', height=1)
@@ -144,8 +161,6 @@ class Vue:
         self.var_vie.set(self.modele.vie)
         self.var_vague.set(self.modele.vague)
 
-        self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
-        self.canevas.tag_bind("tour", "<Button-3>", self.trouver_tour)
         for i in self.modele.dictionnaire_tours:
             i = self.modele.dictionnaire_tours[i]
             if len(i.liste_projectiles) != 0:
@@ -158,7 +173,7 @@ class Vue:
                                                  fill="yellow", tags="dynamique")
                     elif isinstance(i, tour.Tour_Sniper):
                         self.canevas.create_rectangle(j.x - 5, j.y - 5, j.x + 5, j.y + 5,
-                                                      fill="darkred", tags="dynamique")
+                                                      fill="#6b83a6", tags="dynamique")
 
         for i in self.modele.animations:
             i = self.modele.animations[i]
@@ -184,24 +199,9 @@ class Vue:
                                       tags=("statique", tour_a_afficher.id, "tour"))
 
     def ouvrir_gif(self):
-        rep = self.charger_gifs()
+        rep = charger_gifs()
         if rep:
             self.parent.creer_anim(rep)
-
-    def charger_gifs(self):
-        nom_gif = "Images/portal.gif"
-        if nom_gif:
-            listeimages = []
-            testverite = 1
-            noindex = 0
-            while testverite:
-                try:
-                    img = PhotoImage(file=nom_gif, format="gif -index " + str(noindex))
-                    listeimages.append(img)
-                    noindex += 1
-                except Exception:
-                    testverite = 0
-            return [nom_gif, listeimages]
 
     def afficher_path(self):
         self.canevas.create_rectangle(0, 400, 240, 475, fill="", outline="", tags="statique")
@@ -221,12 +221,12 @@ class Vue:
                 x2 = x1 + 20
                 x3 = x1 + (i.vie / monstre.Monstre.vie_max * 20)
 
-                self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red", tags=("dynamique"))
-                self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green", tags=("dynamique"))
+                self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="#7a0004", tags=("dynamique"))
+                self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="#33673b", tags=("dynamique"))
 
                 if i.empoisonne:
-                    self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="purple", tags=("dynamique"))
-                    self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green", tags=("dynamique"))
+                    self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="#e09f3e", tags=("dynamique"))
+                    self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="darkgreen", tags=("dynamique"))
                 if i.frozen:
                     self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="lightblue", tags=("dynamique"))
 
@@ -249,8 +249,8 @@ class Vue:
 
     def trouver_tour(self, evt):
         val = self.canevas.gettags(CURRENT)
-        print(self.parent.trouver_tour(val[1]))
-
+        print(val[1])
+        return val
 
 
 class Modele:
@@ -325,20 +325,20 @@ class Modele:
         if self.tour_en_cours == 'S':
             self.argent -= tour.Tour_Sniper.prix
             t = tour.Tour_Sniper(x, y, 250, 10, id)
-
-        elif self.tour_en_cours == 'P':
+        if self.tour_en_cours == 'P':
             self.argent -= tour.Tour_Poison.prix
             t = tour.Tour_Poison(x, y, 100, 10, id)
-        elif self.tour_en_cours == 'G':
+        if self.tour_en_cours == 'G':
             self.argent -= tour.Tour_Glace.prix
             t = tour.Tour_Glace(x, y, 10, id)
-        elif self.tour_en_cours == 'B':
+        if self.tour_en_cours == 'B':
             self.argent -= tour.Tour_Bombe.prix
             t = tour.Tour_Bombe(x, y, 100, 10, id)
-        elif self.tour_en_cours == 'M':
+        if self.tour_en_cours == 'M':
             self.argent -= tour.Tour_Mitraillette.prix
             t = tour.Tour_Mitraillette(x, y, 100, 10, id)
         if t is not None:
+            print(self.tour_en_cours)
             self.dictionnaire_tours[id] = t
             self.parent.afficher_tour(t)
         self.tour_en_cours = None
@@ -386,7 +386,7 @@ class Modele:
             self.tour_en_cours = 'S'
 
     def creer_poison(self):
-        if (self.argent - tour.Tour_Bombe.prix) >= 0:
+        if (self.argent - tour.Tour_Poison.prix) >= 0:
             self.tour_en_cours = 'P'
 
     def creer_bombe(self):
@@ -424,6 +424,7 @@ class Controleur:
         if self.partie_en_cours:
             rep = self.modele.jouer_partie()
             if rep:
+                print(self.modele.tour_en_cours)
                 self.modele.jouer_tour()
                 self.vue.afficher_partie()
                 self.vue.root.after(40, self.jouer_partie)
