@@ -17,7 +17,6 @@ class Tour(object):
         self.delai_tire = 0
         self.liste_projectiles = []
 
-
     def analyse_rayon(self, monstre):
         if helper.Helper().calcDistance(self.x, self.y, monstre.x, monstre.y) <= self.rayon:
             return True
@@ -49,7 +48,7 @@ class Tour(object):
 class Tour_Glace(Tour):
     prix = 500
 
-    def __init__(self, x, y, demie_taille,id):
+    def __init__(self, x, y, demie_taille, id):
         Tour.__init__(self, x, y, 75, demie_taille)
         self.vitesse_ralentissement = 1
         self.id = id
@@ -66,7 +65,7 @@ class Tour_Glace(Tour):
                 monstre.frozen = False
 
     def upgrade(self):
-        if self.niveau <= 3:
+        if self.niveau < 3:
             self.niveau += 1
             if self.niveau == 1:
                 self.vitesse_ralentissement -= 1
@@ -79,14 +78,14 @@ class Tour_Glace(Tour):
 class Tour_Sniper(Tour):
     prix = 300
 
-    def __init__(self, x, y, rayon, demie_taille,id):
+    def __init__(self, x, y, rayon, demie_taille, id):
         Tour.__init__(self, x, y, rayon, demie_taille, 60, 100)
         self.delai_tire = 0
         self.liste_projectiles = []
         self.id = id
 
     def upgrade(self):
-        if self.niveau <= 3:
+        if self.niveau < 3:
             self.niveau += 1
             if self.niveau == 1:
                 self.vitesse_attaque -= 20
@@ -103,10 +102,11 @@ class Tour_Poison(Tour):
     prix = 300
     stack_poison = 0
 
-    def __init__(self, x, y, rayon, demie_taille,id):
+    def __init__(self, x, y, rayon, demie_taille, id):
         Tour.__init__(self, x, y, rayon, demie_taille)
         self.stack_poison = 0
         self.id = id
+
     def action(self, liste_monstre):
         for monstre in liste_monstre:
             if self.analyse_rayon(monstre):
@@ -114,7 +114,7 @@ class Tour_Poison(Tour):
                 monstre.empoisonne = True
 
     def upgrade(self):
-        if self.niveau <= 3:
+        if self.niveau < 3:
             self.niveau += 1
             if self.niveau == 1:
                 self.rayon += 10
@@ -127,7 +127,7 @@ class Tour_Poison(Tour):
 class Tour_Bombe(Tour):
     prix = 600
 
-    def __init__(self, x, y, rayon, demie_taille,id):
+    def __init__(self, x, y, rayon, demie_taille, id):
         Tour.__init__(self, x, y, rayon, demie_taille, 60, 100)
         self.delai_tire = 0
         self.liste_projectiles = []
@@ -135,7 +135,7 @@ class Tour_Bombe(Tour):
         self.niveau = 1
 
     def upgrade(self):
-        if self.niveau <= 3:
+        if self.niveau < 3:
             self.niveau += 1
             if self.niveau == 1:
                 self.degat += 10
@@ -150,14 +150,14 @@ class Tour_Bombe(Tour):
 class Tour_Mitraillette(Tour):
     prix = 200
 
-    def __init__(self, x, y, rayon, demie_taille,id):
-        Tour.__init__(self, x, y, rayon, demie_taille,10, 10)
+    def __init__(self, x, y, rayon, demie_taille, id):
+        Tour.__init__(self, x, y, rayon, demie_taille, 10, 10)
         self.delai_tire = 0
         self.liste_projectiles = []
         self.id = id
 
     def upgrade(self):
-        if self.niveau <= 3:
+        if self.niveau < 3:
             self.niveau += 1
             if self.niveau == 1:
                 self.vitesse_attaque -= 2
@@ -222,7 +222,6 @@ class Projectile_Bombe(Projectile):
             explosion_list = self.explosion(liste_monstre)
             for monstre_bombe in explosion_list:
                 monstre_bombe.vie -= self.degat
-
 
         return isDead
 
