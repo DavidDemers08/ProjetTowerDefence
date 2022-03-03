@@ -10,7 +10,8 @@ mon_id = 0
 def creer_id():
     global mon_id
     mon_id += 1
-    return mon_id
+    id = "id_"+str(mon_id)
+    return id
 
 
 def charger_gifs():
@@ -185,6 +186,7 @@ class Vue:
         self.afficher_monstres()
 
     def afficher_tour(self, tour_a_afficher):
+        self.canevas.delete(tour_a_afficher.id)
         print(tour_a_afficher.niveau)
         tag = None
 
@@ -249,7 +251,6 @@ class Vue:
                                           tags=("statique", tour_a_afficher.id, "tour", "mn3"))
                 tag = "mn2"
 
-        self.canevas.delete(tag)
 
     def ouvrir_gif(self):
         rep = charger_gifs()
@@ -273,7 +274,7 @@ class Vue:
                 x1 = i.x - 10
                 x2 = x1 + 20
                 longueur = 30
-                x3 = x1 + (i.vie / monstre.Monstre.vie_max * 20)
+                x3 = x1 + (i.vie / monstre.Monstre.vie_max* 20)
 
                 self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="#7a0004", tags=("dynamique"))
                 self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="#33673b", tags=("dynamique"))
@@ -303,7 +304,7 @@ class Vue:
 
     def trouver_tour(self, evt):
         val = self.canevas.gettags(CURRENT)
-        tour = self.modele.dictionnaire_tours[int(val[1])]
+        tour = self.modele.dictionnaire_tours[(val[1])]
         tour.upgrade()
         self.afficher_tour(tour)
         return val
@@ -347,12 +348,13 @@ class Modele:
     def creer_monstre(self):
         self.vague += 1
         vitesse = 2 * self.vague
-        vie = 100 + self.vague * 20
+        monstre.Monstre.vie_max = 100 + self.vague * 20
+
 
         if self.vague == 10:
             self.liste_monstres_terrain.append(monstre.Boss(-10, 450, vitesse, 1000))
-        for i in range(self.nb_creep_vague * self.vague):
-            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, vitesse, vie))
+        for i in range(self.nb_creep_vague ):
+            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, vitesse, monstre.Monstre.vie_max))
         self.delai_creation_creep = 0
 
     def bouger_monstres(self):
