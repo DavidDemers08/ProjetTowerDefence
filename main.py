@@ -10,7 +10,8 @@ mon_id = 0
 def creer_id():
     global mon_id
     mon_id += 1
-    return mon_id
+    id = "id_" + str(mon_id)
+    return id
 
 
 def charger_gifs():
@@ -538,11 +539,13 @@ class Modele:
 class Controleur:
     def __init__(self):
         self.partie_en_cours = 0
+        self.pause = False
 
         self.modele = Modele(self)
         self.vue = Vue(self)
         self.vue.afficher_debut_partie()
         self.vue.root.mainloop()
+
 
     def debuter_partie(self):
         if not self.partie_en_cours:
