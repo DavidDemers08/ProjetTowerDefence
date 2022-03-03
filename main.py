@@ -61,6 +61,11 @@ class Vue:
     def creer_tour_bombe(self):
         self.parent.creer_tour_bombe()
 
+    def update_upgrade(self):
+        self.message = "niveau : " + str(self.tour_selectionne.niveau) + " - prix de l'amélioration : " + str(
+            self.tour_selectionne.prix_niveau)
+        self.var_upgrade.set(self.message)
+
     def creer_interface(self):
         # cadre HUD affichant la duree
         self.canevas = Canvas(self.root, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
@@ -184,7 +189,7 @@ class Vue:
                     i = self.tour_selectionne
                     rayon = self.tour_selectionne.rayon
                     self.canevas.create_oval(i.x - rayon, i.y - rayon, i.x + rayon, i.y + rayon, outline="red",
-                                             tags=("rayon","bg"))
+                                             tags=("rayon", "bg"))
 
         for i in self.modele.dictionnaire_tours:
             i = self.modele.dictionnaire_tours[i]
@@ -217,11 +222,9 @@ class Vue:
             if tour_a_afficher.niveau == 2:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_sniper2,
                                           tags=("statique", tour_a_afficher.id, "tour", "sn2"))
-                tag = "sn1"
             if tour_a_afficher.niveau == 3:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_sniper3,
                                           tags=("statique", tour_a_afficher.id, "tour", "sn3"))
-                tag = "sn2"
         elif isinstance(tour_a_afficher, tour.Tour_Poison):
             if tour_a_afficher.niveau == 1:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_feu1,
@@ -229,11 +232,9 @@ class Vue:
             if tour_a_afficher.niveau == 2:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_feu2,
                                           tags=("statique", tour_a_afficher.id, "tour", "pn2"))
-                tag = "pn1"
             if tour_a_afficher.niveau == 3:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_feu3,
                                           tags=("statique", tour_a_afficher.id, "tour", "pn3"))
-                tag = "pn2"
         elif isinstance(tour_a_afficher, tour.Tour_Glace):
             if tour_a_afficher.niveau == 1:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_glace1,
@@ -241,11 +242,9 @@ class Vue:
             if tour_a_afficher.niveau == 2:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_glace2,
                                           tags=("statique", tour_a_afficher.id, "tour", "gn2"))
-                tag = "gn1"
             if tour_a_afficher.niveau == 3:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_glace3,
                                           tags=("statique", tour_a_afficher.id, "tour", "gn3"))
-                tag = "gn2"
         elif isinstance(tour_a_afficher, tour.Tour_Bombe):
             if tour_a_afficher.niveau == 1:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_bombe1,
@@ -253,11 +252,9 @@ class Vue:
             if tour_a_afficher.niveau == 2:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_bombe2,
                                           tags=("statique", tour_a_afficher.id, "tour", "bn2"))
-                tag = "bn1"
             if tour_a_afficher.niveau == 3:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_bombe3,
                                           tags=("statique", tour_a_afficher.id, "tour", "bn3"))
-                tag = "bn2"
         elif isinstance(tour_a_afficher, tour.Tour_Mitraillette):
             if tour_a_afficher.niveau == 1:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_mitraillette1,
@@ -265,11 +262,9 @@ class Vue:
             if tour_a_afficher.niveau == 2:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_mitraillette2,
                                           tags=("statique", tour_a_afficher.id, "tour", "mn2"))
-                tag = "mn1"
             if tour_a_afficher.niveau == 3:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_mitraillette3,
                                           tags=("statique", tour_a_afficher.id, "tour", "mn3"))
-                tag = "mn2"
 
     def ouvrir_gif(self):
         rep = charger_gifs()
@@ -322,8 +317,6 @@ class Vue:
 
         print("fin de partie")
 
-
-
     def reinitialiser_vue(self):
         self.canevas.delete(ALL)
         self.afficher_debut_partie()
@@ -334,14 +327,15 @@ class Vue:
         self.canevas.delete("rayon")
         self.tour_selectionne = self.modele.dictionnaire_tours[(val[1])]
         self.tour_selectionne.rayon_visible()
-        self.message = "niveau : " + str(self.tour_selectionne.niveau) + " - prix de l'amélioration : 500$"
+        self.message = "niveau : " + str(self.tour_selectionne.niveau) + " - prix de l'amélioration : " + str(
+            self.tour_selectionne.prix_niveau) + " $"
+        self.update_upgrade()
 
     def upgrade(self):
-        self.tour_selectionne.upgrade()
+        self.parent.upgrade(self.tour_selectionne)
+
         self.canevas.delete("rayon")
         self.afficher_tour(self.tour_selectionne)
-
-
 
 
 class Modele:
@@ -498,6 +492,12 @@ class Modele:
         objet = self.dictionnaire_tours[id]
         return objet
 
+    def upgrade(self, tour):
+        if tour.prix_niveau <= self.argent:
+            self.argent -= tour.prix_niveau
+            tour.upgrade()
+            self.parent.update_upgrade()
+
 
 class Controleur:
     def __init__(self):
@@ -568,6 +568,11 @@ class Controleur:
             return self.pause
         self.pause = True
         return self.pause
+
+    def upgrade(self, tour):
+        self.modele.upgrade(tour)
+    def update_upgrade(self):
+        self.vue.update_upgrade()
 
 
 if __name__ == '__main__':

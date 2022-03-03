@@ -56,6 +56,7 @@ class Tour_Glace(Tour):
         Tour.__init__(self, x, y, 75, demie_taille)
         self.vitesse_ralentissement = 1
         self.id = id
+        self.prix_niveau = Tour_Glace.prix + 100
 
     def action(self, liste_monstre):
 
@@ -69,13 +70,16 @@ class Tour_Glace(Tour):
                 monstre.frozen = False
 
     def upgrade(self):
+
         if self.niveau < 3:
             self.niveau += 1
             if self.niveau == 1:
                 self.vitesse_ralentissement -= 1
             elif self.niveau == 2:
+                self.prix_niveau += 200
                 self.rayon += 25
             elif self.niveau == 3:
+                self.prix_niveau = "max"
                 self.vitesse_ralentissement -= 1
 
 
@@ -87,6 +91,7 @@ class Tour_Sniper(Tour):
         self.delai_tire = 0
         self.liste_projectiles = []
         self.id = id
+        self.prix_niveau = Tour_Sniper.prix+100
 
     def upgrade(self):
         if self.niveau < 3:
@@ -94,8 +99,10 @@ class Tour_Sniper(Tour):
             if self.niveau == 1:
                 self.vitesse_attaque -= 20
             elif self.niveau == 2:
+                self.prix_niveau += 200
                 self.degat += 50
             elif self.niveau == 3:
+                self.prix_niveau = "max"
                 self.rayon += 50
                 self.degat += 50
                 self.vitesse_attaque -= 20
@@ -110,6 +117,7 @@ class Tour_Poison(Tour):
         Tour.__init__(self, x, y, rayon, demie_taille)
         self.stack_poison = 0
         self.id = id
+        self.prix_niveau = Tour_Poison.prix + 100
 
     def action(self, liste_monstre):
         for monstre in liste_monstre:
@@ -123,8 +131,10 @@ class Tour_Poison(Tour):
             if self.niveau == 1:
                 self.rayon += 10
             elif self.niveau == 2:
+                self.prix_niveau += 200
                 pass
             elif self.niveau == 3:
+                self.prix_niveau = "max"
                 pass
 
 
@@ -137,6 +147,7 @@ class Tour_Bombe(Tour):
         self.liste_projectiles = []
         self.id = id
         self.niveau = 1
+        self.prix_niveau = Tour_Bombe.prix + 100
 
     def upgrade(self):
         if self.niveau < 3:
@@ -144,8 +155,10 @@ class Tour_Bombe(Tour):
             if self.niveau == 1:
                 self.degat += 10
             elif self.niveau == 2:
+                self.prix_niveau += 200
                 self.vitesse_attaque -= 20
             elif self.niveau == 3:
+                self.prix_niveau = "max"
                 self.rayon += 10
                 self.degat += 15
                 self.vitesse_attaque -= 10
@@ -159,6 +172,7 @@ class Tour_Mitraillette(Tour):
         self.delai_tire = 0
         self.liste_projectiles = []
         self.id = id
+        self.prix_niveau = Tour_Mitraillette.prix + 100
 
     def upgrade(self):
         if self.niveau < 3:
@@ -167,9 +181,11 @@ class Tour_Mitraillette(Tour):
                 self.vitesse_attaque -= 2
                 self.degat += 3
             elif self.niveau == 2:
+                self.prix_niveau += 200
                 self.vitesse_attaque -= 3
                 self.degat += 4
             elif self.niveau == 3:
+                self.prix_niveau = "max"
                 self.vitesse_attaque -= 4
                 self.degat += 5
 
