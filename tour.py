@@ -7,6 +7,7 @@ class Tour(object):
     prix = 400
 
     def __init__(self, x, y, rayon, demie_taille, vitesse_attaque=20, degat=50):
+        self.voir_rayon = False
         self.x = x
         self.y = y
         self.rayon = rayon
@@ -43,6 +44,9 @@ class Tour(object):
 
     def upgrade(self):
         self.niveau += 1
+
+    def rayon_visible(self):
+        self.voir_rayon = not self.voir_rayon
 
 
 class Tour_Glace(Tour):
