@@ -31,6 +31,7 @@ def charger_gifs():
 
 class Vue:
     def __init__(self, parent):
+        self.tour_selectionne = None
         self.parent = parent
 
         self.modele = self.parent.modele
@@ -105,10 +106,12 @@ class Vue:
         self.bg = PhotoImage(file="Images/carte.png")
         self.bg.width()
 
+        self.message = ""
         self.var_vie = StringVar()
         self.var_score = StringVar()
         self.var_vague = StringVar()
         self.var_argent = StringVar()
+        self.var_upgrade = StringVar()
 
         self.image_argent = PhotoImage(file="Images/money.png")
         self.image_tour_glace1 = PhotoImage(file="Images/towers/ice_tower1.png")
@@ -135,6 +138,7 @@ class Vue:
         self.cadre_fin = Frame(self.cadre_jeu, bg='gray')
 
         bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
+        bouton_pause = Button(self.cadre_depart, text='Pause', command=self.parent.partie_pause)
         bouton_tour_glace = Button(self.cadre_fin, text='TOUR GLACE - ' + str(tour.Tour_Glace.prix) + '$', width=20,
                                    height=1, font=('Arial', 8),
                                    command=self.creer_tour_glace)
@@ -152,8 +156,11 @@ class Vue:
                                     font=('Arial', 8), width=20, height=1,
                                     command=self.creer_tour_sniper)
 
+        bouton_upgrade = Button(self.cadre_fin, text="Amélioration de la tour", command=self.upgrade)
+        label_information_amelioration = Label(self.cadre_fin, height=1, textvariable=self.var_upgrade)
+
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
-        self.canevas.tag_bind("tour", "<Button-3>", self.trouver_tour)
+        self.canevas.tag_bind("tour", "<Button-1>", self.update_information)
 
         label_image_score = Label(self.cadre_depart, text='SCORE', height=1)
         label_vague_texte = Label(self.cadre_depart, text='VAGUE', height=1)
@@ -172,11 +179,16 @@ class Vue:
 
         self.cadre_depart.pack(expand=True, fill=BOTH)
         bouton_depart.pack(side=LEFT, padx=20)
+        bouton_pause.pack(side=LEFT, padx=5)
         bouton_tour_glace.pack(side=LEFT, padx=5)
         bouton_tour_poison.pack(side=LEFT, padx=5)
         bouton_tour_sniper.pack(side=LEFT, padx=5)
         bouton_tour_mitraillette.pack(side=LEFT, padx=5)
         bouton_tour_bombe.pack(side=LEFT, padx=5)
+
+        bouton_upgrade.pack(side=RIGHT, padx=5)
+        label_information_amelioration.pack(side=RIGHT, padx=5)
+
         label_argent.pack(side=RIGHT)
         label_image_argent.pack(side=RIGHT)
         label_score.pack(side=RIGHT, padx=20)
@@ -185,6 +197,7 @@ class Vue:
         label_image_score.pack(side=RIGHT)
         label_vague.pack(side=RIGHT, padx=20)
         label_vague_texte.pack(side=RIGHT, padx=20)
+
         self.canevas.pack()
         self.cadre_fin.pack(expand=True, fill=BOTH)
         return self.cadre_jeu
@@ -204,6 +217,15 @@ class Vue:
         self.var_score.set(self.modele.pointage)
         self.var_vie.set(self.modele.vie)
         self.var_vague.set(self.modele.vague)
+
+        self.var_upgrade.set(self.message)
+        if len(self.modele.dictionnaire_tours) > 0:
+            if self.tour_selectionne is not None:
+                if self.tour_selectionne.voir_rayon:
+                    i = self.tour_selectionne
+                    rayon = self.tour_selectionne.rayon
+                    self.canevas.create_oval(i.x - rayon, i.y - rayon, i.x + rayon, i.y + rayon, outline="red",
+                                             tags=("rayon", "bg"))
 
         for i in self.modele.dictionnaire_tours:
             i = self.modele.dictionnaire_tours[i]
@@ -225,7 +247,8 @@ class Vue:
         self.afficher_monstres()
 
     def afficher_tour(self, tour_a_afficher):
-        print(tour_a_afficher.niveau)
+        self.canevas.delete(tour_a_afficher.id)
+
         tag = None
 
         if isinstance(tour_a_afficher, tour.Tour_Sniper):
@@ -235,11 +258,9 @@ class Vue:
             if tour_a_afficher.niveau == 2:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_sniper2,
                                           tags=("statique", tour_a_afficher.id, "tour", "sn2"))
-                tag = "sn1"
             if tour_a_afficher.niveau == 3:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_sniper3,
                                           tags=("statique", tour_a_afficher.id, "tour", "sn3"))
-                tag = "sn2"
         elif isinstance(tour_a_afficher, tour.Tour_Poison):
             if tour_a_afficher.niveau == 1:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_feu1,
@@ -247,11 +268,9 @@ class Vue:
             if tour_a_afficher.niveau == 2:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_feu2,
                                           tags=("statique", tour_a_afficher.id, "tour", "pn2"))
-                tag = "pn1"
             if tour_a_afficher.niveau == 3:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_feu3,
                                           tags=("statique", tour_a_afficher.id, "tour", "pn3"))
-                tag = "pn2"
         elif isinstance(tour_a_afficher, tour.Tour_Glace):
             if tour_a_afficher.niveau == 1:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_glace1,
@@ -259,11 +278,9 @@ class Vue:
             if tour_a_afficher.niveau == 2:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_glace2,
                                           tags=("statique", tour_a_afficher.id, "tour", "gn2"))
-                tag = "gn1"
             if tour_a_afficher.niveau == 3:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_glace3,
                                           tags=("statique", tour_a_afficher.id, "tour", "gn3"))
-                tag = "gn2"
         elif isinstance(tour_a_afficher, tour.Tour_Bombe):
             if tour_a_afficher.niveau == 1:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_bombe1,
@@ -271,11 +288,9 @@ class Vue:
             if tour_a_afficher.niveau == 2:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_bombe2,
                                           tags=("statique", tour_a_afficher.id, "tour", "bn2"))
-                tag = "bn1"
             if tour_a_afficher.niveau == 3:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_bombe3,
                                           tags=("statique", tour_a_afficher.id, "tour", "bn3"))
-                tag = "bn2"
         elif isinstance(tour_a_afficher, tour.Tour_Mitraillette):
             if tour_a_afficher.niveau == 1:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_mitraillette1,
@@ -283,13 +298,9 @@ class Vue:
             if tour_a_afficher.niveau == 2:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_mitraillette2,
                                           tags=("statique", tour_a_afficher.id, "tour", "mn2"))
-                tag = "mn1"
             if tour_a_afficher.niveau == 3:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_mitraillette3,
                                           tags=("statique", tour_a_afficher.id, "tour", "mn3"))
-                tag = "mn2"
-
-        self.canevas.delete(tag)
 
     def ouvrir_gif(self):
         rep = charger_gifs()
@@ -297,13 +308,13 @@ class Vue:
             self.parent.creer_anim(rep)
 
     def afficher_path(self):
-        self.canevas.create_rectangle(0, 400, 240, 475, fill="", outline="", tags="statique")
-        self.canevas.create_rectangle(160, 160, 240, 400, fill="", outline="", tags="statique")
-        self.canevas.create_rectangle(160, 160, 485, 250, fill="", outline="", tags="statique")
-        self.canevas.create_rectangle(400, 160, 485, 560, fill="", outline="", tags="statique")
-        self.canevas.create_rectangle(400, 480, 800, 560, fill="", outline="", tags="statique")
-        self.canevas.create_rectangle(720, 320, 800, 560, fill="", outline="", tags="statique")
-        self.canevas.create_rectangle(720, 320, 1200, 400, fill="", outline="", tags="statique")
+        self.canevas.create_rectangle(0, 355, 240, 475, fill="", outline="red", tags="statique")
+        self.canevas.create_rectangle(160, 140, 240, 400, fill="", outline="red", tags="statique")
+        self.canevas.create_rectangle(160, 140, 485, 250, fill="", outline="red", tags="statique")
+        self.canevas.create_rectangle(400, 140, 485, 560, fill="", outline="red", tags="statique")
+        self.canevas.create_rectangle(400, 460, 800, 560, fill="", outline="red", tags="statique")
+        self.canevas.create_rectangle(720, 320, 800, 560, fill="", outline="red", tags="statique")
+        self.canevas.create_rectangle(720, 300, 1200, 400, fill="", outline="red", tags="statique")
 
     def afficher_monstres(self):
         for i in self.modele.liste_monstres_terrain:
@@ -323,6 +334,7 @@ class Vue:
                     self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="darkgreen", tags=("dynamique"))
                 if i.frozen:
                     self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="lightblue", tags=("dynamique"))
+                    self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="darkblue", tags=("dynamique"))
 
             if isinstance(i, monstre.Boss):
                 self.canevas.create_oval(i.x - 15, i.y - 15, i.x + 15, i.y + 15, fill="red", tags=("dynamique", "boss"))
@@ -341,14 +353,25 @@ class Vue:
 
         print("fin de partie")
 
-    def trouver_tour(self, evt):
+    def reinitialiser_vue(self):
+        self.canevas.delete(ALL)
+        self.afficher_debut_partie()
+
+
+    def update_information(self, event):
         val = self.canevas.gettags(CURRENT)
-        tour = self.modele.dictionnaire_tours[int(val[1])]
-        tour.upgrade()
-        self.afficher_tour(tour)
-        return val
+        self.canevas.delete("rayon")
+        self.tour_selectionne = self.modele.dictionnaire_tours[(val[1])]
+        self.tour_selectionne.rayon_visible()
+        self.message = "niveau : " + str(self.tour_selectionne.niveau) + " - prix de l'amélioration : " + str(
+            self.tour_selectionne.prix_niveau) + " $"
+        self.update_upgrade()
 
+    def upgrade(self):
+        self.parent.upgrade(self.tour_selectionne)
 
+        self.canevas.delete("rayon")
+        self.afficher_tour(self.tour_selectionne)
 
 
 class Modele:
@@ -374,22 +397,24 @@ class Modele:
         self.animations = {}
 
     def jouer_partie(self):
-        self.bouger_monstres()
-        if len(self.dictionnaire_tours) > 0:
-            self.attaque_monstres()
-        self.verifier_etat_monstre()
-        self.verifier_etat_joueur()
+        if not self.parent.pause:
+            self.bouger_monstres()
+            if len(self.dictionnaire_tours) > 0:
+                self.attaque_monstres()
+            self.verifier_etat_monstre()
+            self.verifier_etat_joueur()
         return self.fin_de_partie
 
     def creer_monstre(self):
         self.vague += 1
-        vitesse = 2 * self.vague
-        vie = 100 + self.vague * 20
+        vitesse = 2 + self.vague
+        monstre.Monstre.vie_max = 100 + self.vague * 20
+        self.nb_creep_vague = self.vague*10
 
         if self.vague == 10:
             self.liste_monstres_terrain.append(monstre.Boss(-10, 450, vitesse, 1000))
-        for i in range(self.nb_creep_vague * self.vague):
-            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, vitesse, vie))
+        for i in range(self.nb_creep_vague):
+            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, vitesse, monstre.Monstre.vie_max))
         self.delai_creation_creep = 0
 
     def bouger_monstres(self):
@@ -436,7 +461,6 @@ class Modele:
             self.argent -= tour.Tour_Mitraillette.prix
             t = tour.Tour_Mitraillette(x, y, 100, 10, id)
         if t is not None:
-            print(self.tour_en_cours)
             self.dictionnaire_tours[id] = t
             self.parent.afficher_tour(t)
         self.tour_en_cours = None
@@ -446,7 +470,7 @@ class Modele:
             if i.vie <= 0:
                 self.pointage += 5
                 self.score += 50
-                self.argent += 50
+                self.argent += 20
                 self.liste_monstres_terrain.remove(i)
             if i.x > 1143:
                 self.liste_monstres_terrain.remove(i)
@@ -472,12 +496,13 @@ class Modele:
         self.liste_monstres_terrain = []
         self.liste_monstres_entrepot = []
         self.liste_projectiles = []
-        self.liste_tours = []
+        self.dictionnaire_tours = {}
         self.vie = 3
         self.vague = 0
         self.pointage = 0
         self.fin_de_partie = 1
         self.argent = 1000
+        self.parent.reinitialiser_vue()
 
     def creer_sniper(self):
         if (self.argent - tour.Tour_Sniper.prix) >= 0:
@@ -503,25 +528,21 @@ class Modele:
         objet = self.dictionnaire_tours[id]
         return objet
 
+    def upgrade(self, tour):
+        if tour.prix_niveau <= self.argent:
+            self.argent -= tour.prix_niveau
+            tour.upgrade()
+            self.parent.update_upgrade()
+
 
 class Controleur:
     def __init__(self):
         self.partie_en_cours = 0
+
         self.modele = Modele(self)
         self.vue = Vue(self)
-        self.ouverture_jeu = 0
         self.vue.afficher_debut_partie()
-        #self.menu_ouverture()
         self.vue.root.mainloop()
-
-    def ouvrir_jeu(self):
-        self.ouverture_jeu = 1
-
-    def menu_ouverture(self):
-        if self.ouverture_jeu == 1:
-            self.vue.afficher_debut_partie()
-        else:
-            self.vue.menu_ouverture_jeu()
 
     def debuter_partie(self):
         if not self.partie_en_cours:
@@ -532,7 +553,8 @@ class Controleur:
         if self.partie_en_cours:
             rep = self.modele.jouer_partie()
             if rep:
-                self.modele.jouer_tour()
+                if not self.pause:
+                    self.modele.jouer_tour()
                 self.vue.afficher_partie()
                 self.vue.root.after(40, self.jouer_partie)
             else:
@@ -572,6 +594,21 @@ class Controleur:
 
     def afficher_tour(self, tour):
         self.vue.afficher_tour(tour)
+
+    def reinitialiser_vue(self):
+        self.vue.reinitialiser_vue()
+
+    def partie_pause(self):
+        if self.pause:
+            self.pause = False
+            return self.pause
+        self.pause = True
+        return self.pause
+
+    def upgrade(self, tour):
+        self.modele.upgrade(tour)
+    def update_upgrade(self):
+        self.vue.update_upgrade()
 
 
 if __name__ == '__main__':
