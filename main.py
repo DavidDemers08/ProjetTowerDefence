@@ -305,6 +305,10 @@ class Vue:
         self.afficher_tour(tour)
         return val
 
+    def reinitialiser_vue(self):
+        self.canevas.delete(ALL)
+        self.afficher_debut_partie()
+
 
 class Modele:
     def __init__(self, parent):
@@ -427,12 +431,13 @@ class Modele:
         self.liste_monstres_terrain = []
         self.liste_monstres_entrepot = []
         self.liste_projectiles = []
-        self.liste_tours = []
+        self.dictionnaire_tours = {}
         self.vie = 3
         self.vague = 0
         self.pointage = 0
         self.fin_de_partie = 1
         self.argent = 1000
+        self.parent.reinitialiser_vue()
 
     def creer_sniper(self):
         if (self.argent - tour.Tour_Sniper.prix) >= 0:
@@ -517,6 +522,9 @@ class Controleur:
 
     def afficher_tour(self, tour):
         self.vue.afficher_tour(tour)
+
+    def reinitialiser_vue(self):
+        self.vue.reinitialiser_vue()
 
 
 if __name__ == '__main__':
