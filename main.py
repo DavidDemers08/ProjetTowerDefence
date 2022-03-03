@@ -254,13 +254,13 @@ class Vue:
             self.parent.creer_anim(rep)
 
     def afficher_path(self):
-        self.canevas.create_rectangle(0, 400, 240, 475, fill="", outline="", tags="statique")
-        self.canevas.create_rectangle(160, 160, 240, 400, fill="", outline="", tags="statique")
-        self.canevas.create_rectangle(160, 160, 485, 250, fill="", outline="", tags="statique")
-        self.canevas.create_rectangle(400, 160, 485, 560, fill="", outline="", tags="statique")
-        self.canevas.create_rectangle(400, 480, 800, 560, fill="", outline="", tags="statique")
+        self.canevas.create_rectangle(0, 355, 240, 475, fill="", outline="", tags="statique")
+        self.canevas.create_rectangle(160, 140, 240, 400, fill="", outline="", tags="statique")
+        self.canevas.create_rectangle(160, 140, 485, 250, fill="", outline="", tags="statique")
+        self.canevas.create_rectangle(400, 140, 485, 560, fill="", outline="", tags="statique")
+        self.canevas.create_rectangle(400, 440, 800, 560, fill="", outline="", tags="statique")
         self.canevas.create_rectangle(720, 320, 800, 560, fill="", outline="", tags="statique")
-        self.canevas.create_rectangle(720, 320, 1200, 400, fill="", outline="", tags="statique")
+        self.canevas.create_rectangle(720, 300, 1200, 400, fill="", outline="", tags="statique")
 
     def afficher_monstres(self):
         for i in self.modele.liste_monstres_terrain:
