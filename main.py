@@ -117,12 +117,11 @@ class Vue:
                                     font=('Arial', 8), width=20, height=1,
                                     command=self.creer_tour_sniper)
 
-        bouton_upgrade = Button(self.cadre_fin, text="Amélioration de la tour")
+        bouton_upgrade = Button(self.cadre_fin, text="Amélioration de la tour", command=self.upgrade)
         label_information_amelioration = Label(self.cadre_fin, height=1, textvariable=self.var_upgrade)
 
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
         self.canevas.tag_bind("tour", "<Button-1>", self.update_information)
-        self.canevas.tag_bind("tour", "<Button-3>", self.trouver_tour)
 
         label_image_score = Label(self.cadre_depart, text='SCORE', height=1)
         label_vague_texte = Label(self.cadre_depart, text='VAGUE', height=1)
@@ -185,7 +184,7 @@ class Vue:
                     i = self.tour_selectionne
                     rayon = self.tour_selectionne.rayon
                     self.canevas.create_oval(i.x - rayon, i.y - rayon, i.x + rayon, i.y + rayon, outline="red",
-                                             tags="rayon")
+                                             tags=("rayon","bg"))
 
         for i in self.modele.dictionnaire_tours:
             i = self.modele.dictionnaire_tours[i]
@@ -322,13 +321,7 @@ class Vue:
 
         print("fin de partie")
 
-    def trouver_tour(self, evt):
-        val = self.canevas.gettags(CURRENT)
-        self.tour_selectionne = self.modele.dictionnaire_tours[(val[1])]
 
-        self.tour_selectionne.upgrade()
-        self.afficher_tour(self.tour_selectionne)
-        return val
 
     def reinitialiser_vue(self):
         self.canevas.delete(ALL)
@@ -340,6 +333,13 @@ class Vue:
         self.tour_selectionne = self.modele.dictionnaire_tours[(val[1])]
         self.tour_selectionne.rayon_visible()
         self.message = "niveau : " + str(self.tour_selectionne.niveau) + " - prix de l'amélioration : 500$"
+
+    def upgrade(self):
+        self.tour_selectionne.upgrade()
+        self.canevas.delete("rayon")
+        self.afficher_tour(self.tour_selectionne)
+
+
 
 
 class Modele:
