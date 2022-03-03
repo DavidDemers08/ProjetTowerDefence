@@ -93,6 +93,7 @@ class Vue:
         self.cadre_fin = Frame(self.root, bg='gray')
 
         bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
+        bouton_pause = Button(self.cadre_depart, text='Pause', command=self.parent.partie_pause)
         bouton_tour_glace = Button(self.cadre_fin, text='TOUR GLACE - ' + str(tour.Tour_Glace.prix) + '$', width=20,
                                    height=1, font=('Arial', 8),
                                    command=self.creer_tour_glace)
@@ -130,6 +131,7 @@ class Vue:
 
         self.cadre_depart.pack(expand=True, fill=BOTH)
         bouton_depart.pack(side=LEFT, padx=20)
+        bouton_pause.pack(side=LEFT,padx=5)
         bouton_tour_glace.pack(side=LEFT, padx=5)
         bouton_tour_poison.pack(side=LEFT, padx=5)
         bouton_tour_sniper.pack(side=LEFT, padx=5)
@@ -145,6 +147,7 @@ class Vue:
         label_vague_texte.pack(side=RIGHT, padx=20)
         self.canevas.pack()
         self.cadre_fin.pack(expand=True, fill=BOTH)
+
 
     def afficher_debut_partie(self):
         self.canevas.delete("dynamique")
@@ -333,11 +336,12 @@ class Modele:
         self.animations = {}
 
     def jouer_partie(self):
-        self.bouger_monstres()
-        if len(self.dictionnaire_tours) > 0:
-            self.attaque_monstres()
-        self.verifier_etat_monstre()
-        self.verifier_etat_joueur()
+        if not self.parent.pause:
+            self.bouger_monstres()
+            if len(self.dictionnaire_tours) > 0:
+                self.attaque_monstres()
+            self.verifier_etat_monstre()
+            self.verifier_etat_joueur()
         return self.fin_de_partie
 
     def creer_monstre(self):
@@ -467,28 +471,33 @@ class Modele:
 class Controleur:
     def __init__(self):
         self.partie_en_cours = 0
-
+        self.pause = False
         self.modele = Modele(self)
         self.vue = Vue(self)
         self.vue.afficher_debut_partie()
         self.vue.root.mainloop()
+
 
     def debuter_partie(self):
         if not self.partie_en_cours:
             self.partie_en_cours = 1
             self.jouer_partie()
 
+
+
     def jouer_partie(self):
         if self.partie_en_cours:
-            rep = self.modele.jouer_partie()
-            if rep:
-                self.modele.jouer_tour()
-                self.vue.afficher_partie()
-                self.vue.root.after(40, self.jouer_partie)
-            else:
-                self.vue.afficher_fin_partie()
-                self.partie_en_cours = 0
-                self.modele.reinitialiser()
+                rep = self.modele.jouer_partie()
+                if rep:
+                    if not self.pause:
+                        self.modele.jouer_tour()
+                    self.vue.afficher_partie()
+                    self.vue.root.after(40, self.jouer_partie)
+                else:
+                    self.vue.afficher_fin_partie()
+                    self.partie_en_cours = 0
+                    self.modele.reinitialiser()
+
 
     def creer_tour(self, event):
         if self.partie_en_cours:
@@ -525,6 +534,12 @@ class Controleur:
 
     def reinitialiser_vue(self):
         self.vue.reinitialiser_vue()
+    def partie_pause(self):
+        if self.pause:
+            self.pause= False
+            return self.pause
+        self.pause = True
+        return self.pause
 
 
 if __name__ == '__main__':
