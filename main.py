@@ -207,7 +207,7 @@ class Vue:
 
     def afficher_tour(self, tour_a_afficher):
         self.canevas.delete(tour_a_afficher.id)
-        print(tour_a_afficher.niveau)
+
         tag = None
 
         if isinstance(tour_a_afficher, tour.Tour_Sniper):
@@ -277,13 +277,13 @@ class Vue:
             self.parent.creer_anim(rep)
 
     def afficher_path(self):
-        self.canevas.create_rectangle(0, 355, 240, 475, fill="", outline="", tags="statique")
-        self.canevas.create_rectangle(160, 140, 240, 400, fill="", outline="", tags="statique")
-        self.canevas.create_rectangle(160, 140, 485, 250, fill="", outline="", tags="statique")
-        self.canevas.create_rectangle(400, 140, 485, 560, fill="", outline="", tags="statique")
-        self.canevas.create_rectangle(400, 440, 800, 560, fill="", outline="", tags="statique")
-        self.canevas.create_rectangle(720, 320, 800, 560, fill="", outline="", tags="statique")
-        self.canevas.create_rectangle(720, 300, 1200, 400, fill="", outline="", tags="statique")
+        self.canevas.create_rectangle(0, 355, 240, 475, fill="", outline="red", tags="statique")
+        self.canevas.create_rectangle(160, 140, 240, 400, fill="", outline="red", tags="statique")
+        self.canevas.create_rectangle(160, 140, 485, 250, fill="", outline="red", tags="statique")
+        self.canevas.create_rectangle(400, 140, 485, 560, fill="", outline="red", tags="statique")
+        self.canevas.create_rectangle(400, 460, 800, 560, fill="", outline="red", tags="statique")
+        self.canevas.create_rectangle(720, 320, 800, 560, fill="", outline="red", tags="statique")
+        self.canevas.create_rectangle(720, 300, 1200, 400, fill="", outline="red", tags="statique")
 
     def afficher_monstres(self):
         for i in self.modele.liste_monstres_terrain:
@@ -303,6 +303,7 @@ class Vue:
                     self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="darkgreen", tags=("dynamique"))
                 if i.frozen:
                     self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="lightblue", tags=("dynamique"))
+                    self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="darkblue", tags=("dynamique"))
 
             if isinstance(i, monstre.Boss):
                 self.canevas.create_oval(i.x - 15, i.y - 15, i.x + 15, i.y + 15, fill="red", tags=("dynamique", "boss"))
@@ -326,6 +327,7 @@ class Vue:
     def reinitialiser_vue(self):
         self.canevas.delete(ALL)
         self.afficher_debut_partie()
+
 
     def update_information(self, event):
         val = self.canevas.gettags(CURRENT)
@@ -375,8 +377,9 @@ class Modele:
 
     def creer_monstre(self):
         self.vague += 1
-        vitesse = 2 * self.vague
+        vitesse = 2 + self.vague
         monstre.Monstre.vie_max = 100 + self.vague * 20
+        self.nb_creep_vague = self.vague*10
 
         if self.vague == 10:
             self.liste_monstres_terrain.append(monstre.Boss(-10, 450, vitesse, 1000))
@@ -437,7 +440,7 @@ class Modele:
             if i.vie <= 0:
                 self.pointage += 5
                 self.score += 50
-                self.argent += 50
+                self.argent += 20
                 self.liste_monstres_terrain.remove(i)
             if i.x > 1143:
                 self.liste_monstres_terrain.remove(i)

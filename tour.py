@@ -80,7 +80,7 @@ class Tour_Glace(Tour):
 
 
 class Tour_Sniper(Tour):
-    prix = 300
+    prix = 400
 
     def __init__(self, x, y, rayon, demie_taille, id):
         Tour.__init__(self, x, y, rayon, demie_taille, 60, 100)
@@ -132,7 +132,7 @@ class Tour_Bombe(Tour):
     prix = 600
 
     def __init__(self, x, y, rayon, demie_taille, id):
-        Tour.__init__(self, x, y, rayon, demie_taille, 60, 100)
+        Tour.__init__(self, x, y, rayon, demie_taille, 60, 50)
         self.delai_tire = 0
         self.liste_projectiles = []
         self.id = id
@@ -152,7 +152,7 @@ class Tour_Bombe(Tour):
 
 
 class Tour_Mitraillette(Tour):
-    prix = 200
+    prix = 300
 
     def __init__(self, x, y, rayon, demie_taille, id):
         Tour.__init__(self, x, y, rayon, demie_taille, 10, 10)
