@@ -37,7 +37,24 @@ class Vue:
         self.root = Tk()
         self.root.title("TowerDefence, alpha_0.1")
         self.dictionnaire_images = {}
-        self.creer_interface()
+        self.cadre_actif = None
+        self.cadres = {}
+        self.creer_cadres()
+        self.changer_cadre("cadre_splash")
+
+    def changer_cadre(self,nom_cadre):
+        if nom_cadre in self.cadres.keys():
+            if self.cadre_actif:
+                self.cadre_actif.pack_forget()
+            cadre = self.cadres[nom_cadre]
+            self.cadre_actif = cadre
+            cadre.pack()
+
+    def creer_cadres(self):
+        self.cadres["cadre_splash"] = self.creer_cadre_splash()
+        self.cadres["cadre_jeu"] = self.creer_interface()
+        self.cadres["menu_mort"] = self.creer_cadre_mort()
+
 
     def creer_tour(self, event):
         self.parent.creer_tour(event)
@@ -57,9 +74,34 @@ class Vue:
     def creer_tour_bombe(self):
         self.parent.creer_tour_bombe()
 
+
+    def creer_cadre_splash(self):
+        self.cadre_splash = Frame(self.root)
+        self.ouverture_canvas = Canvas(self.cadre_splash, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
+        self.menu_bg = PhotoImage(file="Images/background2.png")
+
+        bouton_depart = Button(self.ouverture_canvas, text='Jouer')
+        bouton_depart.bind("<Button>",self.test_jeu)
+        self.ouverture_canvas.create_window(200,100,window=bouton_depart)
+        self.ouverture_canvas.pack()
+        self.ouverture_canvas.create_image(800, self.modele.hauteur_carte -25, image=self.menu_bg,
+                                  tags=("statique", "bg_menu"))
+
+        return self.cadre_splash
+
+    def creer_cadre_mort(self):
+        self.cadre_mort = Frame(self.root)
+        self.mort_canvas = Canvas(self.cadre_mort,width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
+        self.ouverture_canvas.pack()
+
+    def test_jeu(self,evt):
+        self.changer_cadre("cadre_jeu")
+
     def creer_interface(self):
+
+        self.cadre_jeu = Frame(self.root)
         # cadre HUD affichant la duree
-        self.canevas = Canvas(self.root, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
+        self.canevas = Canvas(self.cadre_jeu, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
         self.bg = PhotoImage(file="Images/carte.png")
         self.bg.width()
 
@@ -89,8 +131,8 @@ class Vue:
         self.image_tour_bombe2 = PhotoImage(file="Images/towers/tower_bombe2.png")
         self.image_tour_bombe3 = PhotoImage(file="Images/towers/tower_bombe3.png")
 
-        self.cadre_depart = Frame(self.root, bg='gray')
-        self.cadre_fin = Frame(self.root, bg='gray')
+        self.cadre_depart = Frame(self.cadre_jeu, bg='gray')
+        self.cadre_fin = Frame(self.cadre_jeu, bg='gray')
 
         bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
         bouton_tour_glace = Button(self.cadre_fin, text='TOUR GLACE - ' + str(tour.Tour_Glace.prix) + '$', width=20,
@@ -145,6 +187,7 @@ class Vue:
         label_vague_texte.pack(side=RIGHT, padx=20)
         self.canevas.pack()
         self.cadre_fin.pack(expand=True, fill=BOTH)
+        return self.cadre_jeu
 
     def afficher_debut_partie(self):
         self.canevas.delete("dynamique")
@@ -306,6 +349,8 @@ class Vue:
         return val
 
 
+
+
 class Modele:
     def __init__(self, parent):
         self.tour_en_cours = None
@@ -462,11 +507,21 @@ class Modele:
 class Controleur:
     def __init__(self):
         self.partie_en_cours = 0
-
         self.modele = Modele(self)
         self.vue = Vue(self)
+        self.ouverture_jeu = 0
         self.vue.afficher_debut_partie()
+        #self.menu_ouverture()
         self.vue.root.mainloop()
+
+    def ouvrir_jeu(self):
+        self.ouverture_jeu = 1
+
+    def menu_ouverture(self):
+        if self.ouverture_jeu == 1:
+            self.vue.afficher_debut_partie()
+        else:
+            self.vue.menu_ouverture_jeu()
 
     def debuter_partie(self):
         if not self.partie_en_cours:
