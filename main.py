@@ -103,9 +103,9 @@ class Vue:
         self.menu_bg.width()
         self.menu_bg.height()
 
-        bouton_depart = Button(self.ouverture_canvas, text='Jouer')
+        bouton_depart = Button(self.ouverture_canvas, text='Jouer', width=12, height=1, font=('', 15))
         bouton_depart.bind("<Button>", self.test_jeu)
-        self.ouverture_canvas.create_window(menu_bg_width / 2, menu_bg_heigth / 2 + 100, window=bouton_depart)
+        self.ouverture_canvas.create_window(menu_bg_width / 2, menu_bg_heigth / 2 + 90, window=bouton_depart)
         self.ouverture_canvas.pack()
         self.ouverture_canvas.create_image(menu_bg_width / 2, menu_bg_heigth / 2, image=self.menu_bg,
                                            tags=("statique", "bg_menu"))
