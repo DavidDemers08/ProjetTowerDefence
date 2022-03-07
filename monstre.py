@@ -1,6 +1,3 @@
-import random
-
-
 class Monstre(object):
     vie_max = 100
     prix = 20
