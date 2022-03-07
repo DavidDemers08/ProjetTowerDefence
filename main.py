@@ -3,6 +3,7 @@ from tkinter import *
 import monstre
 import tour
 
+
 mon_id = 0
 
 
@@ -13,6 +14,7 @@ def creer_id():
     return id
 
 
+
 class Vue:
     def __init__(self, parent):
         self.tour_selectionne = None
@@ -20,6 +22,7 @@ class Vue:
         self.modele = self.parent.modele
         self.root = Tk()
         self.root.title("TowerDefence, alpha_0.1")
+        self.root.geometry('+%d+%d' % (0, 0))
         self.dictionnaire_images = {}
         self.cadre_actif = None
         self.cadres = {}
@@ -48,10 +51,12 @@ class Vue:
         self.dictionnaire_images["portail"] = "Images/gifs/portal.gif"
         self.dictionnaire_images["boss"] = "Images/gifs/Boss.gif"
 
+
     def ouvrir_gif(self):
         animations = self.charger_gifs()
         if animations:
             self.parent.inserer_animation(animations)
+
 
     def charger_gifs(self):
         dictionnaire_temp = {}
@@ -89,10 +94,10 @@ class Vue:
     def creer_tour_bombe(self):
         self.parent.creer_tour_bombe()
 
+
     def creer_cadre_splash(self):
         menu_bg_width = 1000
         menu_bg_heigth = 667
-
         self.cadre_splash = Frame(self.root)
         self.ouverture_canvas = Canvas(self.cadre_splash, width=menu_bg_width, height=menu_bg_heigth)
         self.menu_bg = PhotoImage(file="Images/backgrounds/splash_bg.png")
@@ -130,7 +135,6 @@ class Vue:
         mort_bg_width = 640
         mort_bg_heigth = 469
         self.cadre_mort = Frame(self.root)
-
         self.canvas_mort = Canvas(self.cadre_mort, width=mort_bg_width, height=mort_bg_heigth)
         self.mort_bg = PhotoImage(file="Images/backgrounds/mort_bg.png")
         self.mort_bg.width()
@@ -194,8 +198,13 @@ class Vue:
         self.image_tour_bombe2 = PhotoImage(file="Images/towers/tower_bombe2.png")
         self.image_tour_bombe3 = PhotoImage(file="Images/towers/tower_bombe3.png")
 
-        self.cadre_depart = Frame(self.cadre_jeu, bg='gray')
-        self.cadre_fin = Frame(self.cadre_jeu, bg='gray')
+        self.cadre_depart = Frame(self.cadre_jeu, bg='darkgreen')
+        self.cadre_fin = Frame(self.cadre_jeu, bg="darkgreen")
+        self.icon_tour_glace = PhotoImage(file="Images/ice_tower1_icon.png")
+        self.icon_tour_bombe = PhotoImage(file="Images/tower_bombe_icon.png")
+        self.icon_tour_poison = PhotoImage(file="Images/tour_feu1_icon.png")
+        self.icon_tour_sniper = PhotoImage(file="Images/tour_sniper1_icon.png")
+        self.icon_tour_mitrailette = PhotoImage(file="Images/tour_mitraillette1_icon.png")
 
         bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
         bouton_pause = Button(self.cadre_depart, text='Pause', command=self.parent.partie_pause)
@@ -216,7 +225,7 @@ class Vue:
                                     font=('Arial', 8), width=20, height=1,
                                     command=self.creer_tour_sniper)
 
-        bouton_upgrade = Button(self.cadre_fin, text="Amélioration de la tour", command=self.upgrade)
+        bouton_upgrade = Button(self.cadre_depart, text="Amélioration de la tour", command=self.upgrade)
         label_information_amelioration = Label(self.cadre_fin, height=1, textvariable=self.var_upgrade)
 
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
@@ -225,6 +234,11 @@ class Vue:
         label_image_score = Label(self.cadre_depart, text='SCORE', height=1)
         label_vague_texte = Label(self.cadre_depart, text='VAGUE', height=1)
         label_vie_texte = Label(self.cadre_depart, text='VIE', height=1)
+        label_tour_glace = Label(self.cadre_fin,image=self.icon_tour_glace,height=50,bg="darkgreen")
+        label_tour_poison = Label(self.cadre_fin, image=self.icon_tour_poison, height=50,bg="darkgreen")
+        label_tour_bombe = Label(self.cadre_fin, image=self.icon_tour_bombe, height=50,bg="darkgreen")
+        label_tour_sniper = Label(self.cadre_fin, image=self.icon_tour_sniper, height=50,bg="darkgreen")
+        label_tour_mitraillette = Label(self.cadre_fin, image=self.icon_tour_mitrailette, height=50,bg="darkgreen")
 
         label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=30)
         label_argent = Label(self.cadre_depart, width=10, height=2, font=('Arial', 11),
@@ -240,14 +254,21 @@ class Vue:
         self.cadre_depart.pack(expand=True, fill=BOTH)
         bouton_depart.pack(side=LEFT, padx=20)
         bouton_pause.pack(side=LEFT, padx=5)
-        bouton_tour_glace.pack(side=LEFT, padx=5)
-        bouton_tour_poison.pack(side=LEFT, padx=5)
+        bouton_upgrade.pack(side=LEFT, padx=30)
+
+        label_tour_glace.pack(side=LEFT)
+        bouton_tour_glace.pack(side=LEFT)
+        label_tour_poison.pack(side=LEFT,padx=5)
+        bouton_tour_poison.pack(side=LEFT)
+        label_tour_sniper.pack(side=LEFT)
         bouton_tour_sniper.pack(side=LEFT, padx=5)
+        label_tour_mitraillette.pack(side=LEFT)
         bouton_tour_mitraillette.pack(side=LEFT, padx=5)
+        label_tour_bombe.pack(side=LEFT)
         bouton_tour_bombe.pack(side=LEFT, padx=5)
 
-        bouton_upgrade.pack(side=RIGHT, padx=5)
-        label_information_amelioration.pack(side=RIGHT, padx=5)
+        label_information_amelioration.pack(side=LEFT, padx=5)
+
 
         label_argent.pack(side=RIGHT)
         label_image_argent.pack(side=RIGHT)
@@ -268,6 +289,7 @@ class Vue:
                                   tags=("statique", "bg"))
         self.afficher_path()
 
+
         self.ouvrir_gif()
 
     def afficher_partie(self):
@@ -276,6 +298,7 @@ class Vue:
         self.var_score.set(self.modele.pointage)
         self.var_vie.set(self.modele.vie)
         self.var_vague.set(self.modele.vague)
+        self.update_message()
 
         self.var_upgrade.set(self.message)
         if len(self.modele.dictionnaire_tours) > 0:
@@ -301,6 +324,7 @@ class Vue:
                                                       fill="#6b83a6", tags="dynamique")
         self.afficher_portail()
         self.afficher_monstres()
+
 
     def afficher_portail(self):
         portail = self.modele.portail
@@ -362,6 +386,7 @@ class Vue:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_mitraillette3,
                                           tags=("statique", tour_a_afficher.id, "tour", "mn3"))
 
+
     def afficher_path(self):
         self.canevas.create_rectangle(0, 355, 240, 475, fill="", outline="", tags="statique")
         self.canevas.create_rectangle(160, 140, 240, 400, fill="", outline="", tags="statique")
@@ -397,11 +422,14 @@ class Vue:
 
             if isinstance(i, monstre.Boss):
                 self.canevas.create_image(i.x, i.y, image=i.images[i.indice], tags=("dynamique"))
+                # self.canevas.create_oval(i.x - 15, i.y - 15, i.x + 15, i.y + 15, fill="red", tags=("dynamique", "boss"))
                 x1 = i.x - 10
                 x2 = x1 + 20
-                x3 = x1 + (i.vie / monstre.Boss.vie_max * 20)
+                x3 = x1 + (i.vie / monstre.Boss.vie_max *20)
                 self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red", tags="dynamique")
                 self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green", tags="dynamique")
+
+
 
     def afficher_fin_partie(self):
         self.canevas.delete("dynamique")
@@ -433,7 +461,6 @@ class Vue:
         if self.tour_selectionne:
             self.message = "niveau : " + str(self.tour_selectionne.niveau) + " - prix de l'amélioration : " + str(
                 self.tour_selectionne.prix_niveau) + " $"
-
 
 
 class Modele:
@@ -501,6 +528,7 @@ class Modele:
                 monstre.Monstre(-10, 450, vitesse, monstre.Monstre.vie_max, self.animations["monstre"]))
         self.delai_creation_creep = 0
 
+
     def bouger_monstres(self):
         if not self.liste_monstres_entrepot and not self.liste_monstres_terrain:
             self.creer_monstre()
@@ -508,6 +536,7 @@ class Modele:
         self.spawn_monstre()
         for i in self.liste_monstres_terrain:
             i.avancer_monstre(self.path)
+
 
     def spawn_monstre(self):
         self.delai_creation_creep += 1
@@ -532,10 +561,10 @@ class Modele:
             t = tour.Tour_Sniper(x, y, 250, 10, id)
         if self.tour_en_cours == 'P':
             self.argent -= tour.Tour_Poison.prix
-            t = tour.Tour_Poison(x, y, 100, 10, id)
+            t = tour.Tour_Poison(x, y, 120, 10, id)
         if self.tour_en_cours == 'G':
             self.argent -= tour.Tour_Glace.prix
-            t = tour.Tour_Glace(x, y, 200, 10, id)
+            t = tour.Tour_Glace(x, y, 120, 10, id)
         if self.tour_en_cours == 'B':
             self.argent -= tour.Tour_Bombe.prix
             t = tour.Tour_Bombe(x, y, 100, 10, id)
@@ -565,6 +594,9 @@ class Modele:
         if self.vie == 0:
             self.parent.partie_en_cours = 0
             self.fin_de_partie = 0
+
+
+
 
     def reinitialiser(self):
         self.liste_monstres_terrain = []
@@ -608,6 +640,7 @@ class Modele:
             tour.upgrade()
 
 
+
 class Controleur:
     def __init__(self):
         self.partie_en_cours = 0
@@ -616,6 +649,7 @@ class Controleur:
         self.vue = Vue(self)
         self.vue.afficher_debut_partie()
         self.vue.root.mainloop()
+
 
     def debuter_partie(self):
         if not self.partie_en_cours:
