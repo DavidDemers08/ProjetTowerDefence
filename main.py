@@ -549,7 +549,7 @@ class Modele:
         if tour.prix_niveau <= self.argent:
             self.argent -= tour.prix_niveau
             tour.upgrade()
-            self.update_
+
 
 
 class Controleur:
