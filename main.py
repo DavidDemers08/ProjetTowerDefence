@@ -110,7 +110,7 @@ class Vue:
 
         bouton_score = Button(self.ouverture_canvas, text='Scores')
         bouton_score.bind("<Button>", self.redirection_score)
-        self.ouverture_canvas.create_window(menu_bg_width / 2 + 200, menu_bg_heigth / 2 + 150, window=bouton_score)
+        self.ouverture_canvas.create_window(menu_bg_width / 2 , menu_bg_heigth / 2 + 150, window=bouton_score)
 
         self.ouverture_canvas.pack()
         self.ouverture_canvas.create_image(menu_bg_width / 2, menu_bg_heigth / 2, image=self.menu_bg,
