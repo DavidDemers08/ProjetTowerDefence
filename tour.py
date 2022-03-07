@@ -52,9 +52,9 @@ class Tour(object):
 class Tour_Glace(Tour):
     prix = 500
 
-    def __init__(self, x, y, rayon, demie_taille, id):
-        Tour.__init__(self, x, y, rayon, 75, demie_taille)
-        self.vitesse_ralentissement = 1
+    def __init__(self, x, y, demie_taille, id):
+        Tour.__init__(self, x, y, 75, demie_taille)
+        self.vitesse_ralentissement = 0.2
         self.id = id
         self.prix_niveau = Tour_Glace.prix + 100
 
@@ -63,8 +63,10 @@ class Tour_Glace(Tour):
         for monstre in liste_monstre:
 
             if self.analyse_rayon(monstre):
-                monstre.vitesse = self.vitesse_ralentissement
+                print(monstre.vitesse)
+                monstre.vitesse = 1-self.vitesse_ralentissement
                 monstre.frozen = True
+                print(monstre.vitesse)
             else:
                 monstre.vitesse = Monstre.vitesse
                 monstre.frozen = False
@@ -74,13 +76,13 @@ class Tour_Glace(Tour):
         if self.niveau < 3:
             self.niveau += 1
             if self.niveau == 1:
-                self.vitesse_ralentissement -= 1
+                self.vitesse_ralentissement -= 0.2
             elif self.niveau == 2:
                 self.prix_niveau += 200
                 self.rayon += 25
             elif self.niveau == 3:
                 self.prix_niveau = "max"
-                self.vitesse_ralentissement -= 1
+                self.vitesse_ralentissement -= 0.6
 
 
 class Tour_Sniper(Tour):
