@@ -257,7 +257,13 @@ class Vue:
                     elif isinstance(i, tour.Tour_Sniper):
                         self.canevas.create_rectangle(j.x - 5, j.y - 5, j.x + 5, j.y + 5,
                                                       fill="#6b83a6", tags="dynamique")
+        self.afficher_portail()
         self.afficher_monstres()
+
+
+    def afficher_portail(self):
+        portail = self.modele.portail
+        self.canevas.create_image(portail.x, portail.y, image=portail.images[portail.indice], tags=("dynamique"))
 
     def afficher_tour(self, tour_a_afficher):
         self.canevas.delete(tour_a_afficher.id)
@@ -357,6 +363,8 @@ class Vue:
                 self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red", tags="dynamique")
                 self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green", tags="dynamique")
 
+
+
     def afficher_fin_partie(self):
         self.canevas.delete("dynamique")
         self.var_argent.set(str(self.modele.argent) + "$")
@@ -408,6 +416,9 @@ class Modele:
         self.liste_projectiles = []
         self.dictionnaire_tours = {}
         self.animations = {}
+        self.portail = None
+
+
 
 
     def jouer_partie(self):
@@ -423,6 +434,7 @@ class Modele:
         self.bouger_monstres()
 
     def creer_monstre(self):
+        self.portail = monstre.Portail(self.animations["portail"])
         self.vague += 1
         vitesse = 2 + self.vague
         monstre.Monstre.vie_max = 100 + self.vague * 20
@@ -436,14 +448,13 @@ class Modele:
 
 
     def bouger_monstres(self):
-
+        if not self.liste_monstres_entrepot and not self.liste_monstres_terrain:
+            self.creer_monstre()
+        self.portail.animer()
         self.spawn_monstre()
-
         for i in self.liste_monstres_terrain:
             i.avancer_monstre(self.path)
 
-        if not self.liste_monstres_entrepot and not self.liste_monstres_terrain:
-            self.creer_monstre()
 
     def spawn_monstre(self):
         self.delai_creation_creep += 1

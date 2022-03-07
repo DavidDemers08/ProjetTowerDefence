@@ -51,3 +51,17 @@ class Boss(Monstre):
 
     def avancer_monstre(self, path):
         super().avancer_monstre(path)
+
+
+class Portail():
+    def __init__(self,listeimages):
+        self.x = 1143
+        self.y = 350
+        self.images = listeimages
+        self.indice = 0
+        self.max_image = len(self.images)
+
+    def animer(self):
+        self.indice += 1
+        if self.indice == self.max_image:
+            self.indice = 0
