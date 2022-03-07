@@ -2,7 +2,7 @@ from tkinter import *
 
 import monstre
 import tour
-from animer_gif import Animer_gif
+from tkinter import filedialog as fd
 
 mon_id = 0
 
@@ -14,27 +14,11 @@ def creer_id():
     return id
 
 
-def charger_gifs():
-    nom_gif = "Images/portal.gif"
-    if nom_gif:
-        listeimages = []
-        testverite = 1
-        noindex = 0
-        while testverite:
-            try:
-                img = PhotoImage(file=nom_gif, format="gif -index " + str(noindex))
-                listeimages.append(img)
-                noindex += 1
-            except Exception:
-                testverite = 0
-        return [nom_gif, listeimages]
-
 
 class Vue:
     def __init__(self, parent):
         self.tour_selectionne = None
         self.parent = parent
-
         self.modele = self.parent.modele
         self.root = Tk()
         self.root.title("TowerDefence, alpha_0.1")
@@ -42,7 +26,9 @@ class Vue:
         self.cadre_actif = None
         self.cadres = {}
         self.creer_cadres()
+        self.initialiser_images()
         self.changer_cadre("cadre_splash")
+        self.ouvrir_gif()
 
     def changer_cadre(self,nom_cadre):
         if nom_cadre in self.cadres.keys():
@@ -57,6 +43,36 @@ class Vue:
         self.cadres["cadre_jeu"] = self.creer_interface()
         self.cadres["menu_mort"] = self.creer_cadre_mort()
 
+
+    def initialiser_images(self):
+        self.dictionnaire_images["monstre"] = "Images/monstres.gif"
+        self.dictionnaire_images["portail"] = "Images/portal.gif"
+
+
+    def ouvrir_gif(self):
+        animations = self.charger_gifs()
+        if animations:
+            self.parent.inserer_animation(animations)
+
+
+    def charger_gifs(self):
+        dictionnaire_temp = {}
+        for nom_gif,chemin in self.dictionnaire_images.items():
+            if chemin:
+                listeimages = []
+                testverite = 1
+                noindex = 0
+                while testverite:
+                    try:
+                        img = PhotoImage(file=chemin, format="gif -index " + str(noindex))
+                        listeimages.append(img)
+                        noindex += 1
+                    except Exception:
+                        testverite = 0
+                dictionnaire_temp[nom_gif] = listeimages
+
+
+        return dictionnaire_temp
 
     def creer_tour(self, event):
         self.parent.creer_tour(event)
@@ -241,10 +257,6 @@ class Vue:
                     elif isinstance(i, tour.Tour_Sniper):
                         self.canevas.create_rectangle(j.x - 5, j.y - 5, j.x + 5, j.y + 5,
                                                       fill="#6b83a6", tags="dynamique")
-
-        for i in self.modele.animations:
-            i = self.modele.animations[i]
-            self.canevas.create_image(i.x, i.y, image=i.images[i.indice], tags="dynamique")
         self.afficher_monstres()
 
     def afficher_tour(self, tour_a_afficher):
@@ -303,10 +315,6 @@ class Vue:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_mitraillette3,
                                           tags=("statique", tour_a_afficher.id, "tour", "mn3"))
 
-    def ouvrir_gif(self):
-        rep = charger_gifs()
-        if rep:
-            self.parent.creer_anim(rep)
 
     def afficher_path(self):
         self.canevas.create_rectangle(0, 355, 240, 475, fill="", outline="red", tags="statique")
@@ -321,7 +329,11 @@ class Vue:
         for i in self.modele.liste_monstres_terrain:
 
             if isinstance(i, monstre.Monstre):
-                self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black", tags=("dynamique"))
+
+                if i.images != None:
+                    self.canevas.create_image(i.x,i.y,image= i.images[i.indice], tags=("dynamique"))
+                else:
+                    self.canevas.create_oval(i.x - 5, i.y - 5, i.x + 5, i.y + 5, fill="black", tags=("dynamique"))
                 x1 = i.x - 10
                 x2 = x1 + 20
                 longueur = 30
@@ -397,6 +409,7 @@ class Modele:
         self.dictionnaire_tours = {}
         self.animations = {}
 
+
     def jouer_partie(self):
         if not self.parent.pause:
             self.bouger_monstres()
@@ -405,6 +418,9 @@ class Modele:
             self.verifier_etat_monstre()
             self.verifier_etat_joueur()
         return self.fin_de_partie
+
+    def jouer_tour(self):
+        self.bouger_monstres()
 
     def creer_monstre(self):
         self.vague += 1
@@ -415,8 +431,9 @@ class Modele:
         if self.vague == 10:
             self.liste_monstres_terrain.append(monstre.Boss(-10, 450, vitesse, 1000))
         for i in range(self.nb_creep_vague):
-            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, vitesse, monstre.Monstre.vie_max))
+            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, vitesse, monstre.Monstre.vie_max,self.animations["monstre"]))
         self.delai_creation_creep = 0
+
 
     def bouger_monstres(self):
 
@@ -485,13 +502,8 @@ class Modele:
             self.parent.partie_en_cours = 0
             self.fin_de_partie = 0
 
-    def jouer_tour(self):
-        for i in self.animations:
-            self.animations[i].jouer_tour()
 
-    def creer_anim(self, info_gif):
-        nom_gif, listeimages = info_gif
-        self.animations[nom_gif] = Animer_gif(self, listeimages, 1143, 350)
+
 
     def reinitialiser(self):
         self.liste_monstres_terrain = []
@@ -540,7 +552,6 @@ class Controleur:
     def __init__(self):
         self.partie_en_cours = 0
         self.pause = False
-
         self.modele = Modele(self)
         self.vue = Vue(self)
         self.vue.afficher_debut_partie()
@@ -554,8 +565,8 @@ class Controleur:
 
     def jouer_partie(self):
         if self.partie_en_cours:
-            rep = self.modele.jouer_partie()
-            if rep:
+            partie_roule = self.modele.jouer_partie()
+            if partie_roule:
                 if not self.pause:
                     self.modele.jouer_tour()
                 self.vue.afficher_partie()
@@ -589,8 +600,8 @@ class Controleur:
         if self.partie_en_cours:
             self.modele.creer_bombe()
 
-    def creer_anim(self, info_gif):
-        self.modele.creer_anim(info_gif)
+    def inserer_animation(self, info_gif):
+        self.modele.animations = info_gif
 
     def trouver_tour(self, id):
         self.modele.trouver_tour(id)
@@ -610,8 +621,10 @@ class Controleur:
 
     def upgrade(self, tour):
         self.modele.upgrade(tour)
+
     def update_upgrade(self):
         self.vue.update_upgrade()
+
 
 
 if __name__ == '__main__':

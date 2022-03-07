@@ -7,8 +7,7 @@ class Monstre(object):
     point = 50
     vitesse = 2
 
-
-    def __init__(self, x, y, vitesse, vie):
+    def __init__(self, x, y, vitesse, vie, listeimages):
         self.x = x
         self.y = y
         self.vitesse = vitesse
@@ -17,6 +16,10 @@ class Monstre(object):
         self.empoisonne = False
         self.stack_poison = 0
         self.frozen = False
+
+        self.images = listeimages
+        self.indice = 0
+        self.max_image = len(self.images)
 
     def avancer_monstre(self, path):
         if self.index != len(path):
@@ -35,7 +38,9 @@ class Monstre(object):
                 self.y = cibleY
                 self.index += 1
 
-
+            self.indice += 1
+            if self.indice == self.max_image:
+                self.indice = 0
 
 
 class Boss(Monstre):
