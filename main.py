@@ -427,7 +427,7 @@ class Modele:
         vitesse = 0.5 + self.vague/3
         monstre.Monstre.vie_max = 100 + self.vague * 20
 
-        if self.vague == 5:
+        if self.vague % 5 == 0:
             self.liste_monstres_terrain.append(monstre.Boss(-10, 450, vitesse, 1000, self.animations["boss"]))
         for i in range(self.nb_creep_vague):
             self.liste_monstres_entrepot.append(
