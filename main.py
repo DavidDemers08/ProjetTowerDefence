@@ -45,8 +45,8 @@ class Vue:
 
 
     def initialiser_images(self):
-        self.dictionnaire_images["monstre"] = "Images/monstres.gif"
-        self.dictionnaire_images["portail"] = "Images/portal.gif"
+        self.dictionnaire_images["monstre"] = "Images/gifs/monstres.gif"
+        self.dictionnaire_images["portail"] = "Images/gifs/portal.gif"
 
 
     def ouvrir_gif(self):
@@ -96,7 +96,7 @@ class Vue:
     def creer_cadre_splash(self):
         self.cadre_splash = Frame(self.root)
         self.ouverture_canvas = Canvas(self.cadre_splash, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
-        self.menu_bg = PhotoImage(file="Images/background2.png")
+        self.menu_bg = PhotoImage(file="Images/backgrounds/splash_bg.png")
 
         bouton_depart = Button(self.ouverture_canvas, text='Jouer')
         bouton_depart.bind("<Button>",self.test_jeu)
@@ -120,7 +120,7 @@ class Vue:
         self.cadre_jeu = Frame(self.root)
         # cadre HUD affichant la duree
         self.canevas = Canvas(self.cadre_jeu, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
-        self.bg = PhotoImage(file="Images/carte.png")
+        self.bg = PhotoImage(file="Images/backgrounds/carte.png")
         self.bg.width()
 
         self.message = ""

@@ -20,6 +20,8 @@ class Monstre(object):
         self.images = listeimages
         self.indice = 0
         self.max_image = len(self.images)
+        self.delai_indice = 0
+        self.delai_max = 2
 
     def avancer_monstre(self, path):
         if self.index != len(path):
@@ -38,7 +40,11 @@ class Monstre(object):
                 self.y = cibleY
                 self.index += 1
 
-            self.indice += 1
+
+            self.delai_indice += 1
+            if self.delai_indice == self.delai_max:
+                self.delai_indice = 0
+                self.indice += 1
             if self.indice == self.max_image:
                 self.indice = 0
 
@@ -60,8 +66,14 @@ class Portail():
         self.images = listeimages
         self.indice = 0
         self.max_image = len(self.images)
+        self.delai_indice = 0
+        self.delai_max = 2
 
     def animer(self):
-        self.indice += 1
+        self.delai_indice += 1
+        if self.delai_indice == self.delai_max:
+            self.delai_indice = 0
+            self.indice += 1
+
         if self.indice == self.max_image:
             self.indice = 0
