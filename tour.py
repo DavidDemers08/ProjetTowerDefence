@@ -167,7 +167,7 @@ class Tour_Bombe(Tour):
 
 
 class Tour_Mitraillette(Tour):
-    prix = 250
+    prix = 300
 
     def __init__(self, x, y, rayon, demie_taille, id):
         Tour.__init__(self, x, y, rayon, demie_taille, 10, 10)
