@@ -1,8 +1,7 @@
 from tkinter import *
-
 import monstre
 import tour
-from tkinter import filedialog as fd
+
 
 mon_id = 0
 
@@ -71,8 +70,6 @@ class Vue:
                     except Exception:
                         testverite = 0
                 dictionnaire_temp[nom_gif] = listeimages
-
-
         return dictionnaire_temp
 
     def creer_tour(self, event):
@@ -113,9 +110,21 @@ class Vue:
         return self.cadre_splash
 
     def creer_cadre_mort(self):
+        mort_bg_width = 640
+        mort_bg_heigth = 469
         self.cadre_mort = Frame(self.root)
-        self.mort_canvas = Canvas(self.cadre_mort,width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
-        self.ouverture_canvas.pack()
+        self.canvas_mort = Canvas(self.cadre_mort, width=mort_bg_width, height=mort_bg_heigth)
+        self.mort_bg = PhotoImage(file="Images/backgrounds/mort_bg.png")
+        self.mort_bg.width()
+        self.menu_bg.height()
+        bouton_depart = Button(self.canvas_mort, text='Rejouer')
+        bouton_depart.bind("<Button>", self.test_jeu)
+        self.canvas_mort.create_window(mort_bg_width/2 + 200, mort_bg_heigth/2 + 200,window=bouton_depart)
+        self.canvas_mort.pack()
+        self.canvas_mort.create_image(mort_bg_width/2, mort_bg_heigth/2, image=self.mort_bg,
+                                                                               tags=("statique", "bg_mort"))
+
+        return self.cadre_mort
 
     def test_jeu(self,evt):
         self.changer_cadre("cadre_jeu")
@@ -219,7 +228,6 @@ class Vue:
         label_image_score.pack(side=RIGHT)
         label_vague.pack(side=RIGHT, padx=20)
         label_vague_texte.pack(side=RIGHT, padx=20)
-
         self.canevas.pack()
         self.cadre_fin.pack(expand=True, fill=BOTH)
         return self.cadre_jeu
@@ -229,8 +237,6 @@ class Vue:
         self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg,
                                   tags=("statique", "bg"))
         self.afficher_path()
-
-
         self.ouvrir_gif()
 
     def afficher_partie(self):
@@ -377,6 +383,7 @@ class Vue:
         self.var_score.set(self.modele.pointage)
         self.var_vie.set(self.modele.vie)
         self.var_vague.set(self.modele.vague)
+        self.changer_cadre("menu_mort")
 
         print("fin de partie")
 
