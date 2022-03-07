@@ -22,6 +22,7 @@ class Vue:
         self.modele = self.parent.modele
         self.root = Tk()
         self.root.title("TowerDefence, alpha_0.1")
+        self.root.geometry('+%d+%d' % (0, 0))
         self.dictionnaire_images = {}
         self.cadre_actif = None
         self.cadres = {}
