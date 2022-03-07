@@ -522,10 +522,10 @@ class Modele:
             t = tour.Tour_Sniper(x, y, 250, 10, id)
         if self.tour_en_cours == 'P':
             self.argent -= tour.Tour_Poison.prix
-            t = tour.Tour_Poison(x, y, 100, 10, id)
+            t = tour.Tour_Poison(x, y, 120, 10, id)
         if self.tour_en_cours == 'G':
             self.argent -= tour.Tour_Glace.prix
-            t = tour.Tour_Glace(x, y, 200, 10, id)
+            t = tour.Tour_Glace(x, y, 120, 10, id)
         if self.tour_en_cours == 'B':
             self.argent -= tour.Tour_Bombe.prix
             t = tour.Tour_Bombe(x, y, 100, 10, id)
