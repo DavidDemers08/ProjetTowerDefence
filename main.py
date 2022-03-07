@@ -3,7 +3,6 @@ from tkinter import *
 import monstre
 import tour
 
-
 mon_id = 0
 
 
@@ -12,7 +11,6 @@ def creer_id():
     mon_id += 1
     id = "id_" + str(mon_id)
     return id
-
 
 
 class Vue:
@@ -30,7 +28,7 @@ class Vue:
         self.changer_cadre("cadre_splash")
         self.ouvrir_gif()
 
-    def changer_cadre(self,nom_cadre):
+    def changer_cadre(self, nom_cadre):
         if nom_cadre in self.cadres.keys():
             if self.cadre_actif:
                 self.cadre_actif.pack_forget()
@@ -42,6 +40,7 @@ class Vue:
         self.cadres["cadre_splash"] = self.creer_cadre_splash()
         self.cadres["cadre_jeu"] = self.creer_interface()
         self.cadres["menu_mort"] = self.creer_cadre_mort()
+        self.cadres["scores"] = self.creer_menu_score()
 
 
     def initialiser_images(self):
@@ -49,12 +48,10 @@ class Vue:
         self.dictionnaire_images["portail"] = "Images/gifs/portal.gif"
         self.dictionnaire_images["boss"] = "Images/gifs/Boss.gif"
 
-
     def ouvrir_gif(self):
         animations = self.charger_gifs()
         if animations:
             self.parent.inserer_animation(animations)
-
 
     def charger_gifs(self):
         dictionnaire_temp = {}
@@ -92,10 +89,10 @@ class Vue:
     def creer_tour_bombe(self):
         self.parent.creer_tour_bombe()
 
-
     def creer_cadre_splash(self):
         menu_bg_width = 1000
         menu_bg_heigth = 667
+
         self.cadre_splash = Frame(self.root)
         self.ouverture_canvas = Canvas(self.cadre_splash, width=menu_bg_width, height=menu_bg_heigth)
         self.menu_bg = PhotoImage(file="Images/backgrounds/splash_bg.png")
@@ -103,33 +100,63 @@ class Vue:
         self.menu_bg.height()
 
         bouton_depart = Button(self.ouverture_canvas, text='Jouer')
-        bouton_depart.bind("<Button>", self.test_jeu)
+        bouton_depart.bind("<Button>", self.redirection_jeu)
         self.ouverture_canvas.create_window(menu_bg_width / 2, menu_bg_heigth / 2 + 100, window=bouton_depart)
+
+        bouton_score = Button(self.ouverture_canvas, text='Scores')
+        bouton_score.bind("<Button>", self.redirection_score)
+        self.ouverture_canvas.create_window(menu_bg_width / 2 + 200, menu_bg_heigth / 2 + 150, window=bouton_score)
+
         self.ouverture_canvas.pack()
         self.ouverture_canvas.create_image(menu_bg_width / 2, menu_bg_heigth / 2, image=self.menu_bg,
                                            tags=("statique", "bg_menu"))
 
         return self.cadre_splash
 
+
+
+    def creer_menu_score(self):
+        self.cadre_scores = Frame(self.root, bg="blue")
+        text = Text(self.cadre_scores)
+        text.insert(INSERT, self.modele.get_scores())
+        text.pack()
+        bouton = Button(self.cadre_scores, text='Menu', width=15, height=2)
+        bouton.bind("<Button>", self.redirection_menu)
+        bouton.pack(expand=True)
+
+        return self.cadre_scores
+
     def creer_cadre_mort(self):
         mort_bg_width = 640
         mort_bg_heigth = 469
         self.cadre_mort = Frame(self.root)
+
         self.canvas_mort = Canvas(self.cadre_mort, width=mort_bg_width, height=mort_bg_heigth)
         self.mort_bg = PhotoImage(file="Images/backgrounds/mort_bg.png")
         self.mort_bg.width()
         self.menu_bg.height()
-        bouton_depart = Button(self.canvas_mort, text='Rejouer')
-        bouton_depart.bind("<Button>", self.test_jeu)
-        self.canvas_mort.create_window(mort_bg_width/2 + 200, mort_bg_heigth/2 + 200,window=bouton_depart)
-        self.canvas_mort.pack()
-        self.canvas_mort.create_image(mort_bg_width/2, mort_bg_heigth/2, image=self.mort_bg,
-                                                                               tags=("statique", "bg_mort"))
 
+        bouton_jeu = Button(self.canvas_mort, text='Rejouer')
+        bouton_jeu.bind("<Button>", self.redirection_jeu)
+        self.canvas_mort.create_window(mort_bg_width / 2 + 200, mort_bg_heigth / 2 + 100, window=bouton_jeu)
+
+        bouton_menu = Button(self.canvas_mort, text='Menu')
+        bouton_menu.bind("<Button>", self.redirection_menu)
+        self.canvas_mort.create_window(mort_bg_width / 2 + 200, mort_bg_heigth / 2 + 150, window=bouton_menu)
+
+        self.canvas_mort.pack()
+        self.canvas_mort.create_image(mort_bg_width / 2, mort_bg_heigth / 2, image=self.mort_bg,
+                                      tags=("statique", "bg_mort"))
         return self.cadre_mort
 
-    def test_jeu(self, evt):
+    def redirection_jeu(self, evt):
         self.changer_cadre("cadre_jeu")
+
+    def redirection_menu(self, evt):
+        self.changer_cadre("cadre_splash")
+
+    def redirection_score(self, evt):
+        self.changer_cadre("scores")
 
     def creer_interface(self):
 
@@ -241,7 +268,6 @@ class Vue:
                                   tags=("statique", "bg"))
         self.afficher_path()
 
-
         self.ouvrir_gif()
 
     def afficher_partie(self):
@@ -275,7 +301,6 @@ class Vue:
                                                       fill="#6b83a6", tags="dynamique")
         self.afficher_portail()
         self.afficher_monstres()
-
 
     def afficher_portail(self):
         portail = self.modele.portail
@@ -337,7 +362,6 @@ class Vue:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_mitraillette3,
                                           tags=("statique", tour_a_afficher.id, "tour", "mn3"))
 
-
     def afficher_path(self):
         self.canevas.create_rectangle(0, 355, 240, 475, fill="", outline="", tags="statique")
         self.canevas.create_rectangle(160, 140, 240, 400, fill="", outline="", tags="statique")
@@ -373,14 +397,11 @@ class Vue:
 
             if isinstance(i, monstre.Boss):
                 self.canevas.create_image(i.x, i.y, image=i.images[i.indice], tags=("dynamique"))
-                # self.canevas.create_oval(i.x - 15, i.y - 15, i.x + 15, i.y + 15, fill="red", tags=("dynamique", "boss"))
                 x1 = i.x - 10
                 x2 = x1 + 20
                 x3 = x1 + (i.vie / monstre.Boss.vie_max * 20)
                 self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red", tags="dynamique")
                 self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green", tags="dynamique")
-
-
 
     def afficher_fin_partie(self):
         self.canevas.delete("dynamique")
@@ -388,21 +409,19 @@ class Vue:
         self.var_score.set(self.modele.pointage)
         self.var_vie.set(self.modele.vie)
         self.var_vague.set(self.modele.vague)
+        self.parent.score_dans_fichier("Utilisateur1", self.modele.pointage)
         self.changer_cadre("menu_mort")
 
-        print("fin de partie")
 
     def reinitialiser_vue(self):
         self.canevas.delete(ALL)
         self.afficher_debut_partie()
-
 
     def update_information(self, event):
         val = self.canevas.gettags(CURRENT)
         self.canevas.delete("rayon")
         self.tour_selectionne = self.modele.dictionnaire_tours[(val[1])]
         self.tour_selectionne.rayon_visible()
-
 
     def upgrade(self):
         self.parent.upgrade(self.tour_selectionne)
@@ -413,7 +432,8 @@ class Vue:
     def update_message(self):
         if self.tour_selectionne:
             self.message = "niveau : " + str(self.tour_selectionne.niveau) + " - prix de l'amélioration : " + str(
-            self.tour_selectionne.prix_niveau) + " $"
+                self.tour_selectionne.prix_niveau) + " $"
+
 
 
 class Modele:
@@ -439,8 +459,19 @@ class Modele:
         self.animations = {}
         self.portail = None
 
+    def get_scores(self):
+        texte = ""
+        file = open('scores.txt', 'r')
+        while True:
+            line = file.readline()
+            texte += line
+            if line == '': break
+        return texte
 
-
+    def score_dans_fichier(self, nom, score):
+        fichier = open('scores.txt', 'a')
+        fichier.write(nom + ' : ' + str(score) + "\n")
+        fichier.close()
 
     def jouer_partie(self):
         if not self.parent.pause:
@@ -457,7 +488,7 @@ class Modele:
     def creer_monstre(self):
         self.portail = monstre.Portail(self.animations["portail"])
         self.vague += 1
-        self.argent += 50*self.vague
+        self.argent += 50 * self.vague
         vitesse = 1 + self.vague / 3
         monstre.Monstre.vie_max = 100 + self.vague * 20
         self.nb_creep_vague = self.vague * 7
@@ -470,7 +501,6 @@ class Modele:
                 monstre.Monstre(-10, 450, vitesse, monstre.Monstre.vie_max, self.animations["monstre"]))
         self.delai_creation_creep = 0
 
-
     def bouger_monstres(self):
         if not self.liste_monstres_entrepot and not self.liste_monstres_terrain:
             self.creer_monstre()
@@ -478,7 +508,6 @@ class Modele:
         self.spawn_monstre()
         for i in self.liste_monstres_terrain:
             i.avancer_monstre(self.path)
-
 
     def spawn_monstre(self):
         self.delai_creation_creep += 1
@@ -537,9 +566,6 @@ class Modele:
             self.parent.partie_en_cours = 0
             self.fin_de_partie = 0
 
-
-
-
     def reinitialiser(self):
         self.liste_monstres_terrain = []
         self.liste_monstres_entrepot = []
@@ -582,7 +608,6 @@ class Modele:
             tour.upgrade()
 
 
-
 class Controleur:
     def __init__(self):
         self.partie_en_cours = 0
@@ -591,7 +616,6 @@ class Controleur:
         self.vue = Vue(self)
         self.vue.afficher_debut_partie()
         self.vue.root.mainloop()
-
 
     def debuter_partie(self):
         if not self.partie_en_cours:
@@ -640,6 +664,9 @@ class Controleur:
 
     def trouver_tour(self, id):
         self.modele.trouver_tour(id)
+
+    def score_dans_fichier(self, nom, score):
+        self.modele.score_dans_fichier(nom, score)
 
     def afficher_tour(self, tour):
         self.vue.afficher_tour(tour)
