@@ -52,8 +52,8 @@ class Tour(object):
 class Tour_Glace(Tour):
     prix = 500
 
-    def __init__(self, x, y, demie_taille, id):
-        Tour.__init__(self, x, y, 75, demie_taille)
+    def __init__(self, x, y, rayon, demie_taille, id):
+        Tour.__init__(self, x, y, rayon, 75, demie_taille)
         self.vitesse_ralentissement = 1
         self.id = id
         self.prix_niveau = Tour_Glace.prix + 100

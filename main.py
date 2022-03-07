@@ -468,7 +468,7 @@ class Modele:
             t = tour.Tour_Poison(x, y, 100, 10, id)
         if self.tour_en_cours == 'G':
             self.argent -= tour.Tour_Glace.prix
-            t = tour.Tour_Glace(x, y, 10, id)
+            t = tour.Tour_Glace(x, y, 200, 10, id)augmenter rayon
         if self.tour_en_cours == 'B':
             self.argent -= tour.Tour_Bombe.prix
             t = tour.Tour_Bombe(x, y, 100, 10, id)
@@ -485,7 +485,7 @@ class Modele:
             if i.vie <= 0:
                 self.pointage += 5
                 self.score += 50
-                self.argent += 20
+                self.argent += 25
                 self.liste_monstres_terrain.remove(i)
             if i.x > 1143:
                 self.liste_monstres_terrain.remove(i)
