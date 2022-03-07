@@ -47,6 +47,7 @@ class Vue:
     def initialiser_images(self):
         self.dictionnaire_images["monstre"] = "Images/gifs/monstres.gif"
         self.dictionnaire_images["portail"] = "Images/gifs/portal.gif"
+        self.dictionnaire_images["boss"] = "Images/gifs/Boss.gif"
 
 
     def ouvrir_gif(self):
@@ -356,7 +357,8 @@ class Vue:
                     self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="darkblue", tags=("dynamique"))
 
             if isinstance(i, monstre.Boss):
-                self.canevas.create_oval(i.x - 15, i.y - 15, i.x + 15, i.y + 15, fill="red", tags=("dynamique", "boss"))
+                self.canevas.create_image(i.x, i.y, image=i.images[i.indice], tags=("dynamique"))
+                #self.canevas.create_oval(i.x - 15, i.y - 15, i.x + 15, i.y + 15, fill="red", tags=("dynamique", "boss"))
                 x1 = i.x - 10
                 x2 = x1 + 20
                 x3 = x1 + (i.vie / monstre.Boss.vie_max * 20)
@@ -440,8 +442,8 @@ class Modele:
         monstre.Monstre.vie_max = 100 + self.vague * 20
         self.nb_creep_vague = self.vague*10
 
-        if self.vague == 10:
-            self.liste_monstres_terrain.append(monstre.Boss(-10, 450, vitesse, 1000))
+        if self.vague == 1:
+            self.liste_monstres_terrain.append(monstre.Boss(-10, 450, vitesse, 1000,self.animations["boss"]))
         for i in range(self.nb_creep_vague):
             self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, vitesse, monstre.Monstre.vie_max,self.animations["monstre"]))
         self.delai_creation_creep = 0
