@@ -231,16 +231,16 @@ class Vue:
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
         self.canevas.tag_bind("tour", "<Button-1>", self.update_information)
 
-        label_image_score = Label(self.cadre_depart, text='SCORE', height=1)
-        label_vague_texte = Label(self.cadre_depart, text='VAGUE', height=1)
-        label_vie_texte = Label(self.cadre_depart, text='VIE', height=1)
+        label_image_score = Label(self.cadre_depart, text='SCORE', height=1, font='Arial 11 bold')
+        label_vague_texte = Label(self.cadre_depart, text='VAGUE', height=1, font='Arial 11 bold')
+        label_vie_texte = Label(self.cadre_depart, text='VIE', height=1, font='Arial 11 bold')
         label_tour_glace = Label(self.cadre_fin,image=self.icon_tour_glace,height=50,bg="darkgreen")
         label_tour_poison = Label(self.cadre_fin, image=self.icon_tour_poison, height=50,bg="darkgreen")
         label_tour_bombe = Label(self.cadre_fin, image=self.icon_tour_bombe, height=50,bg="darkgreen")
         label_tour_sniper = Label(self.cadre_fin, image=self.icon_tour_sniper, height=50,bg="darkgreen")
         label_tour_mitraillette = Label(self.cadre_fin, image=self.icon_tour_mitrailette, height=50,bg="darkgreen")
 
-        label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=30)
+        label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=36)
         label_argent = Label(self.cadre_depart, width=10, height=2, font=('Arial', 11),
                              textvariable=self.var_argent)
         label_vague = Label(self.cadre_depart, width=5, height=1, font=('Arial', 11),
@@ -273,11 +273,11 @@ class Vue:
         label_argent.pack(side=RIGHT)
         label_image_argent.pack(side=RIGHT)
         label_score.pack(side=RIGHT, padx=20)
-        label_vie_texte.pack(side=RIGHT, padx=20)
+        label_vie_texte.pack(side=RIGHT)
         label_vie.pack(side=RIGHT, padx=20)
         label_image_score.pack(side=RIGHT)
         label_vague.pack(side=RIGHT, padx=20)
-        label_vague_texte.pack(side=RIGHT, padx=20)
+        label_vague_texte.pack(side=RIGHT)
 
         self.canevas.pack()
         self.cadre_fin.pack(expand=True, fill=BOTH)
