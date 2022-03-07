@@ -54,7 +54,7 @@ class Tour_Glace(Tour):
 
     def __init__(self, x, y, demie_taille, id):
         Tour.__init__(self, x, y, 75, demie_taille)
-        self.vitesse_ralentissement = 1
+        self.vitesse_ralentissement = 1.5
         self.id = id
         self.prix_niveau = Tour_Glace.prix + 100
 
@@ -63,7 +63,7 @@ class Tour_Glace(Tour):
         for monstre in liste_monstre:
 
             if self.analyse_rayon(monstre):
-                monstre.vitesse = self.vitesse_ralentissement
+                monstre.vitesse = 0.2
                 monstre.frozen = True
             else:
                 monstre.vitesse = Monstre.vitesse

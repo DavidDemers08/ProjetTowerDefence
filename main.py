@@ -14,7 +14,6 @@ def creer_id():
     return id
 
 
-
 class Vue:
     def __init__(self, parent):
         self.tour_selectionne = None
@@ -30,7 +29,7 @@ class Vue:
         self.changer_cadre("cadre_splash")
         self.ouvrir_gif()
 
-    def changer_cadre(self,nom_cadre):
+    def changer_cadre(self, nom_cadre):
         if nom_cadre in self.cadres.keys():
             if self.cadre_actif:
                 self.cadre_actif.pack_forget()
@@ -43,22 +42,19 @@ class Vue:
         self.cadres["cadre_jeu"] = self.creer_interface()
         self.cadres["menu_mort"] = self.creer_cadre_mort()
 
-
     def initialiser_images(self):
         self.dictionnaire_images["monstre"] = "Images/gifs/monstres.gif"
         self.dictionnaire_images["portail"] = "Images/gifs/portal.gif"
         self.dictionnaire_images["boss"] = "Images/gifs/Boss.gif"
-
 
     def ouvrir_gif(self):
         animations = self.charger_gifs()
         if animations:
             self.parent.inserer_animation(animations)
 
-
     def charger_gifs(self):
         dictionnaire_temp = {}
-        for nom_gif,chemin in self.dictionnaire_images.items():
+        for nom_gif, chemin in self.dictionnaire_images.items():
             if chemin:
                 listeimages = []
                 testverite = 1
@@ -71,7 +67,6 @@ class Vue:
                     except Exception:
                         testverite = 0
                 dictionnaire_temp[nom_gif] = listeimages
-
 
         return dictionnaire_temp
 
@@ -93,7 +88,6 @@ class Vue:
     def creer_tour_bombe(self):
         self.parent.creer_tour_bombe()
 
-
     def creer_cadre_splash(self):
         menu_bg_width = 1000
         menu_bg_heigth = 667
@@ -104,20 +98,20 @@ class Vue:
         self.menu_bg.height()
 
         bouton_depart = Button(self.ouverture_canvas, text='Jouer')
-        bouton_depart.bind("<Button>",self.test_jeu)
-        self.ouverture_canvas.create_window(menu_bg_width/2, menu_bg_heigth/2 + 100,window=bouton_depart)
+        bouton_depart.bind("<Button>", self.test_jeu)
+        self.ouverture_canvas.create_window(menu_bg_width / 2, menu_bg_heigth / 2 + 100, window=bouton_depart)
         self.ouverture_canvas.pack()
-        self.ouverture_canvas.create_image(menu_bg_width/2, menu_bg_heigth/2, image=self.menu_bg,
-                                  tags=("statique", "bg_menu"))
+        self.ouverture_canvas.create_image(menu_bg_width / 2, menu_bg_heigth / 2, image=self.menu_bg,
+                                           tags=("statique", "bg_menu"))
 
         return self.cadre_splash
 
     def creer_cadre_mort(self):
         self.cadre_mort = Frame(self.root)
-        self.mort_canvas = Canvas(self.cadre_mort,width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
+        self.mort_canvas = Canvas(self.cadre_mort, width=self.modele.largeur_carte, height=self.modele.hauteur_carte)
         self.ouverture_canvas.pack()
 
-    def test_jeu(self,evt):
+    def test_jeu(self, evt):
         self.changer_cadre("cadre_jeu")
 
     def creer_interface(self):
@@ -230,7 +224,6 @@ class Vue:
                                   tags=("statique", "bg"))
         self.afficher_path()
 
-
         self.ouvrir_gif()
 
     def afficher_partie(self):
@@ -239,8 +232,9 @@ class Vue:
         self.var_score.set(self.modele.pointage)
         self.var_vie.set(self.modele.vie)
         self.var_vague.set(self.modele.vague)
-
+        self.update_message()
         self.var_upgrade.set(self.message)
+
         if len(self.modele.dictionnaire_tours) > 0:
             if self.tour_selectionne is not None:
                 if self.tour_selectionne.voir_rayon:
@@ -264,7 +258,6 @@ class Vue:
                                                       fill="#6b83a6", tags="dynamique")
         self.afficher_portail()
         self.afficher_monstres()
-
 
     def afficher_portail(self):
         portail = self.modele.portail
@@ -326,7 +319,6 @@ class Vue:
                 self.canevas.create_image(tour_a_afficher.x, tour_a_afficher.y, image=self.image_tour_mitraillette3,
                                           tags=("statique", tour_a_afficher.id, "tour", "mn3"))
 
-
     def afficher_path(self):
         self.canevas.create_rectangle(0, 355, 240, 475, fill="", outline="", tags="statique")
         self.canevas.create_rectangle(160, 140, 240, 400, fill="", outline="", tags="statique")
@@ -369,8 +361,6 @@ class Vue:
                 self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red", tags="dynamique")
                 self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green", tags="dynamique")
 
-
-
     def afficher_fin_partie(self):
         self.canevas.delete("dynamique")
         self.var_argent.set(str(self.modele.argent) + "$")
@@ -384,21 +374,23 @@ class Vue:
         self.canevas.delete(ALL)
         self.afficher_debut_partie()
 
-
     def update_information(self, event):
         val = self.canevas.gettags(CURRENT)
         self.canevas.delete("rayon")
         self.tour_selectionne = self.modele.dictionnaire_tours[(val[1])]
         self.tour_selectionne.rayon_visible()
-        self.message = "niveau : " + str(self.tour_selectionne.niveau) + " - prix de l'amélioration : " + str(
-            self.tour_selectionne.prix_niveau) + " $"
-        self.update_upgrade()
+
 
     def upgrade(self):
         self.parent.upgrade(self.tour_selectionne)
 
         self.canevas.delete("rayon")
         self.afficher_tour(self.tour_selectionne)
+
+    def update_message(self):
+        if self.tour_selectionne:
+            self.message = "niveau : " + str(self.tour_selectionne.niveau) + " - prix de l'amélioration : " + str(
+            self.tour_selectionne.prix_niveau) + " $"
 
 
 class Modele:
@@ -411,7 +403,7 @@ class Modele:
         self.fin_de_partie = 1
         self.delai_creation_creep = 0
         self.nb_creep_vague = 10
-        self.delai_creation_creep_max = 20
+        self.delai_creation_creep_max = 50
         self.pointage = 0
         self.argent = 1000
         self.score = 0
@@ -423,9 +415,6 @@ class Modele:
         self.dictionnaire_tours = {}
         self.animations = {}
         self.portail = None
-
-
-
 
     def jouer_partie(self):
         if not self.parent.pause:
@@ -442,16 +431,18 @@ class Modele:
     def creer_monstre(self):
         self.portail = monstre.Portail(self.animations["portail"])
         self.vague += 1
-        vitesse = 2 + self.vague
+        self.argent += 50*self.vague
+        vitesse = 1 + self.vague / 3
         monstre.Monstre.vie_max = 100 + self.vague * 20
-        self.nb_creep_vague = self.vague*10
+        self.nb_creep_vague = self.vague * 7
+        self.delai_creation_creep -= 3
 
         if self.vague % 5 == 0:
             self.liste_monstres_terrain.append(monstre.Boss(-10, 450, vitesse, 1000, self.animations["boss"]))
         for i in range(self.nb_creep_vague):
-            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, vitesse, monstre.Monstre.vie_max,self.animations["monstre"]))
+            self.liste_monstres_entrepot.append(
+                monstre.Monstre(-10, 450, vitesse, monstre.Monstre.vie_max, self.animations["monstre"]))
         self.delai_creation_creep = 0
-
 
     def bouger_monstres(self):
         if not self.liste_monstres_entrepot and not self.liste_monstres_terrain:
@@ -460,7 +451,6 @@ class Modele:
         self.spawn_monstre()
         for i in self.liste_monstres_terrain:
             i.avancer_monstre(self.path)
-
 
     def spawn_monstre(self):
         self.delai_creation_creep += 1
@@ -519,9 +509,6 @@ class Modele:
             self.parent.partie_en_cours = 0
             self.fin_de_partie = 0
 
-
-
-
     def reinitialiser(self):
         self.liste_monstres_terrain = []
         self.liste_monstres_entrepot = []
@@ -562,7 +549,7 @@ class Modele:
         if tour.prix_niveau <= self.argent:
             self.argent -= tour.prix_niveau
             tour.upgrade()
-            self.parent.update_upgrade()
+            self.update_
 
 
 class Controleur:
@@ -573,7 +560,6 @@ class Controleur:
         self.vue = Vue(self)
         self.vue.afficher_debut_partie()
         self.vue.root.mainloop()
-
 
     def debuter_partie(self):
         if not self.partie_en_cours:
@@ -638,10 +624,6 @@ class Controleur:
 
     def upgrade(self, tour):
         self.modele.upgrade(tour)
-
-    def update_upgrade(self):
-        self.vue.update_upgrade()
-
 
 
 if __name__ == '__main__':
