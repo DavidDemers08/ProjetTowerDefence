@@ -478,7 +478,7 @@ class Modele:
             t = tour.Tour_Poison(x, y, 100, 10, id)
         if self.tour_en_cours == 'G':
             self.argent -= tour.Tour_Glace.prix
-            t = tour.Tour_Glace(x, y, 200, 10, id)augmenter rayon
+            t = tour.Tour_Glace(x, y, 200, 10, id)
         if self.tour_en_cours == 'B':
             self.argent -= tour.Tour_Bombe.prix
             t = tour.Tour_Bombe(x, y, 100, 10, id)
