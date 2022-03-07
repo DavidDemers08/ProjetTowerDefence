@@ -570,7 +570,7 @@ class Modele:
             t = tour.Tour_Bombe(x, y, 100, 10, id)
         if self.tour_en_cours == 'M':
             self.argent -= tour.Tour_Mitraillette.prix
-            t = tour.Tour_Mitraillette(x, y, 100, 10, id)
+            t = tour.Tour_Mitraillette(x, y, 200, 8, id)
         if t is not None:
             self.dictionnaire_tours[id] = t
             self.parent.afficher_tour(t)
