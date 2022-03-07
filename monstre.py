@@ -2,7 +2,7 @@ class Monstre(object):
     vie_max = 100
     prix = 20
     point = 50
-    vitesse = 2
+    vitesse = 1
 
     def __init__(self, x, y, vitesse, vie, listeimages):
         self.x = x
