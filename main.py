@@ -609,6 +609,7 @@ class Modele:
         self.fin_de_partie = 1
         self.argent = 1000
         self.parent.reinitialiser_vue()
+        self.tour_en_cours = None
 
     def creer_sniper(self):
         if (self.argent - tour.Tour_Sniper.prix) >= 0:
@@ -709,10 +710,11 @@ class Controleur:
         self.vue.reinitialiser_vue()
 
     def partie_pause(self):
-        if self.pause:
-            self.pause = False
-            return self.pause
-        self.pause = True
+        if self.partie_en_cours:
+            if self.pause:
+                self.pause = False
+                return self.pause
+            self.pause = True
         return self.pause
 
     def upgrade(self, tour):

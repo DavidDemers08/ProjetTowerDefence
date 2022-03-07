@@ -1,5 +1,5 @@
 class Monstre(object):
-    vie_max = 100
+    vie_max = 70
     prix = 20
     point = 50
     vitesse = 1
