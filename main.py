@@ -167,14 +167,20 @@ class Vue:
         self.image_tour_bombe2 = PhotoImage(file="Images/towers/tower_bombe2.png")
         self.image_tour_bombe3 = PhotoImage(file="Images/towers/tower_bombe3.png")
 
-        self.cadre_depart = Frame(self.cadre_jeu, bg='gray')
-        self.cadre_fin = Frame(self.cadre_jeu, bg='gray')
+        self.cadre_depart = Frame(self.cadre_jeu, bg='darkgreen')
+        self.cadre_fin = Frame(self.cadre_jeu, bg="darkgreen")
+        self.icon_tour_glace = PhotoImage(file="Images/ice_tower1_icon.png")
+        self.icon_tour_bombe = PhotoImage(file="Images/tower_bombe_icon.png")
+        self.icon_tour_poison = PhotoImage(file="Images/tour_feu1_icon.png")
+        self.icon_tour_sniper = PhotoImage(file="Images/tour_sniper1_icon.png")
+        self.icon_tour_mitrailette = PhotoImage(file="Images/tour_mitraillette1_icon.png")
 
         bouton_depart = Button(self.cadre_depart, text='Commencer la partie', command=self.parent.debuter_partie)
         bouton_pause = Button(self.cadre_depart, text='Pause', command=self.parent.partie_pause)
         bouton_tour_glace = Button(self.cadre_fin, text='TOUR GLACE - ' + str(tour.Tour_Glace.prix) + '$', width=20,
                                    height=1, font=('Arial', 8),
                                    command=self.creer_tour_glace)
+
         bouton_tour_poison = Button(self.cadre_fin, text='TOUR POISON - ' + str(tour.Tour_Poison.prix) + '$',
                                     font=('Arial', 8), width=20, height=1,
                                     command=self.creer_tour_poison)
@@ -189,7 +195,7 @@ class Vue:
                                     font=('Arial', 8), width=20, height=1,
                                     command=self.creer_tour_sniper)
 
-        bouton_upgrade = Button(self.cadre_fin, text="Amélioration de la tour", command=self.upgrade)
+        bouton_upgrade = Button(self.cadre_depart, text="Amélioration de la tour", command=self.upgrade)
         label_information_amelioration = Label(self.cadre_fin, height=1, textvariable=self.var_upgrade)
 
         self.canevas.tag_bind("bg", "<Button-1>", self.creer_tour)
@@ -198,6 +204,11 @@ class Vue:
         label_image_score = Label(self.cadre_depart, text='SCORE', height=1)
         label_vague_texte = Label(self.cadre_depart, text='VAGUE', height=1)
         label_vie_texte = Label(self.cadre_depart, text='VIE', height=1)
+        label_tour_glace = Label(self.cadre_fin,image=self.icon_tour_glace,height=50,bg="darkgreen")
+        label_tour_poison = Label(self.cadre_fin, image=self.icon_tour_poison, height=50,bg="darkgreen")
+        label_tour_bombe = Label(self.cadre_fin, image=self.icon_tour_bombe, height=50,bg="darkgreen")
+        label_tour_sniper = Label(self.cadre_fin, image=self.icon_tour_sniper, height=50,bg="darkgreen")
+        label_tour_mitraillette = Label(self.cadre_fin, image=self.icon_tour_mitrailette, height=50,bg="darkgreen")
 
         label_image_argent = Label(self.cadre_depart, image=self.image_argent, height=30)
         label_argent = Label(self.cadre_depart, width=10, height=2, font=('Arial', 11),
@@ -213,14 +224,21 @@ class Vue:
         self.cadre_depart.pack(expand=True, fill=BOTH)
         bouton_depart.pack(side=LEFT, padx=20)
         bouton_pause.pack(side=LEFT, padx=5)
-        bouton_tour_glace.pack(side=LEFT, padx=5)
-        bouton_tour_poison.pack(side=LEFT, padx=5)
+        bouton_upgrade.pack(side=LEFT, padx=30)
+
+        label_tour_glace.pack(side=LEFT)
+        bouton_tour_glace.pack(side=LEFT)
+        label_tour_poison.pack(side=LEFT,padx=5)
+        bouton_tour_poison.pack(side=LEFT)
+        label_tour_sniper.pack(side=LEFT)
         bouton_tour_sniper.pack(side=LEFT, padx=5)
+        label_tour_mitraillette.pack(side=LEFT)
         bouton_tour_mitraillette.pack(side=LEFT, padx=5)
+        label_tour_bombe.pack(side=LEFT)
         bouton_tour_bombe.pack(side=LEFT, padx=5)
 
-        bouton_upgrade.pack(side=RIGHT, padx=5)
-        label_information_amelioration.pack(side=RIGHT, padx=5)
+        label_information_amelioration.pack(side=LEFT, padx=5)
+
 
         label_argent.pack(side=RIGHT)
         label_image_argent.pack(side=RIGHT)
@@ -250,6 +268,7 @@ class Vue:
         self.var_score.set(self.modele.pointage)
         self.var_vie.set(self.modele.vie)
         self.var_vague.set(self.modele.vague)
+        self.update_message()
 
         self.var_upgrade.set(self.message)
         if len(self.modele.dictionnaire_tours) > 0:
@@ -376,7 +395,7 @@ class Vue:
                 # self.canevas.create_oval(i.x - 15, i.y - 15, i.x + 15, i.y + 15, fill="red", tags=("dynamique", "boss"))
                 x1 = i.x - 10
                 x2 = x1 + 20
-                x3 = x1 + (i.vie / monstre.Boss.vie_max * 20)
+                x3 = x1 + (i.vie / monstre.Boss.vie_max *20)
                 self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="red", tags="dynamique")
                 self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="green", tags="dynamique")
 
