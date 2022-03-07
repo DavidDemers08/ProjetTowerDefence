@@ -1,4 +1,5 @@
 from tkinter import *
+
 import monstre
 import tour
 
@@ -57,7 +58,7 @@ class Vue:
 
     def charger_gifs(self):
         dictionnaire_temp = {}
-        for nom_gif,chemin in self.dictionnaire_images.items():
+        for nom_gif, chemin in self.dictionnaire_images.items():
             if chemin:
                 listeimages = []
                 testverite = 1
@@ -70,6 +71,7 @@ class Vue:
                     except Exception:
                         testverite = 0
                 dictionnaire_temp[nom_gif] = listeimages
+
         return dictionnaire_temp
 
     def creer_tour(self, event):
@@ -101,11 +103,11 @@ class Vue:
         self.menu_bg.height()
 
         bouton_depart = Button(self.ouverture_canvas, text='Jouer')
-        bouton_depart.bind("<Button>",self.test_jeu)
-        self.ouverture_canvas.create_window(menu_bg_width/2, menu_bg_heigth/2 + 100,window=bouton_depart)
+        bouton_depart.bind("<Button>", self.test_jeu)
+        self.ouverture_canvas.create_window(menu_bg_width / 2, menu_bg_heigth / 2 + 100, window=bouton_depart)
         self.ouverture_canvas.pack()
-        self.ouverture_canvas.create_image(menu_bg_width/2, menu_bg_heigth/2, image=self.menu_bg,
-                                  tags=("statique", "bg_menu"))
+        self.ouverture_canvas.create_image(menu_bg_width / 2, menu_bg_heigth / 2, image=self.menu_bg,
+                                           tags=("statique", "bg_menu"))
 
         return self.cadre_splash
 
@@ -126,7 +128,7 @@ class Vue:
 
         return self.cadre_mort
 
-    def test_jeu(self,evt):
+    def test_jeu(self, evt):
         self.changer_cadre("cadre_jeu")
 
     def creer_interface(self):
@@ -228,6 +230,7 @@ class Vue:
         label_image_score.pack(side=RIGHT)
         label_vague.pack(side=RIGHT, padx=20)
         label_vague_texte.pack(side=RIGHT, padx=20)
+
         self.canevas.pack()
         self.cadre_fin.pack(expand=True, fill=BOTH)
         return self.cadre_jeu
@@ -237,6 +240,8 @@ class Vue:
         self.canevas.create_image(self.modele.largeur_carte / 2, self.modele.hauteur_carte / 2, image=self.bg,
                                   tags=("statique", "bg"))
         self.afficher_path()
+
+
         self.ouvrir_gif()
 
     def afficher_partie(self):
@@ -397,15 +402,18 @@ class Vue:
         self.canevas.delete("rayon")
         self.tour_selectionne = self.modele.dictionnaire_tours[(val[1])]
         self.tour_selectionne.rayon_visible()
-        self.message = "niveau : " + str(self.tour_selectionne.niveau) + " - prix de l'amélioration : " + str(
-            self.tour_selectionne.prix_niveau) + " $"
-        self.update_upgrade()
+
 
     def upgrade(self):
         self.parent.upgrade(self.tour_selectionne)
 
         self.canevas.delete("rayon")
         self.afficher_tour(self.tour_selectionne)
+
+    def update_message(self):
+        if self.tour_selectionne:
+            self.message = "niveau : " + str(self.tour_selectionne.niveau) + " - prix de l'amélioration : " + str(
+            self.tour_selectionne.prix_niveau) + " $"
 
 
 class Modele:
@@ -418,7 +426,7 @@ class Modele:
         self.fin_de_partie = 1
         self.delai_creation_creep = 0
         self.nb_creep_vague = 10
-        self.delai_creation_creep_max = 20
+        self.delai_creation_creep_max = 50
         self.pointage = 0
         self.argent = 1000
         self.score = 0
@@ -449,14 +457,17 @@ class Modele:
     def creer_monstre(self):
         self.portail = monstre.Portail(self.animations["portail"])
         self.vague += 1
-        vitesse = 2 + self.vague
+        self.argent += 50*self.vague
+        vitesse = 1 + self.vague / 3
         monstre.Monstre.vie_max = 100 + self.vague * 20
-        self.nb_creep_vague = self.vague*10
+        self.nb_creep_vague = self.vague * 7
+        self.delai_creation_creep -= 3
 
         if self.vague % 5 == 0:
             self.liste_monstres_terrain.append(monstre.Boss(-10, 450, vitesse, 1000, self.animations["boss"]))
         for i in range(self.nb_creep_vague):
-            self.liste_monstres_entrepot.append(monstre.Monstre(-10, 450, vitesse, monstre.Monstre.vie_max,self.animations["monstre"]))
+            self.liste_monstres_entrepot.append(
+                monstre.Monstre(-10, 450, vitesse, monstre.Monstre.vie_max, self.animations["monstre"]))
         self.delai_creation_creep = 0
 
 
@@ -495,7 +506,7 @@ class Modele:
             t = tour.Tour_Poison(x, y, 100, 10, id)
         if self.tour_en_cours == 'G':
             self.argent -= tour.Tour_Glace.prix
-            t = tour.Tour_Glace(x, y, 10, id)
+            t = tour.Tour_Glace(x, y, 200, 10, id)
         if self.tour_en_cours == 'B':
             self.argent -= tour.Tour_Bombe.prix
             t = tour.Tour_Bombe(x, y, 100, 10, id)
@@ -512,7 +523,7 @@ class Modele:
             if i.vie <= 0:
                 self.pointage += 5
                 self.score += 50
-                self.argent += 20
+                self.argent += 25
                 self.liste_monstres_terrain.remove(i)
             if i.x > 1143:
                 self.liste_monstres_terrain.remove(i)
@@ -569,7 +580,7 @@ class Modele:
         if tour.prix_niveau <= self.argent:
             self.argent -= tour.prix_niveau
             tour.upgrade()
-            self.parent.update_upgrade()
+
 
 
 class Controleur:
@@ -645,10 +656,6 @@ class Controleur:
 
     def upgrade(self, tour):
         self.modele.upgrade(tour)
-
-    def update_upgrade(self):
-        self.vue.update_upgrade()
-
 
 
 if __name__ == '__main__':
