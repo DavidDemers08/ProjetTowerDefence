@@ -341,6 +341,7 @@ class Vue:
                 self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="#7a0004", tags=("dynamique"))
                 self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="#33673b", tags=("dynamique"))
 
+
                 if i.empoisonne:
                     self.canevas.create_rectangle(x1, i.y - 15, x2, i.y - 10, fill="#e09f3e", tags=("dynamique"))
                     self.canevas.create_rectangle(x1, i.y - 15, x3, i.y - 10, fill="darkgreen", tags=("dynamique"))
@@ -394,8 +395,8 @@ class Modele:
         self.path = [[200, 450], [200, 200], [440, 200], [440, 520], [760, 520], [760, 370], [1250, 370]]
         self.fin_de_partie = 1
         self.delai_creation_creep = 0
-        self.nb_creep_vague = 10
-        self.delai_creation_creep_max = 20
+        self.nb_creep_vague = 5
+        self.delai_creation_creep_max = 100
         self.pointage = 0
         self.argent = 1000
         self.score = 0
@@ -423,11 +424,10 @@ class Modele:
     def creer_monstre(self):
         self.portail = monstre.Portail(self.animations["portail"])
         self.vague += 1
-        vitesse = 2 + self.vague
+        vitesse = 0.5 + self.vague/3
         monstre.Monstre.vie_max = 100 + self.vague * 20
-        self.nb_creep_vague = self.vague * 10
 
-        if self.vague == 1:
+        if self.vague == 5:
             self.liste_monstres_terrain.append(monstre.Boss(-10, 450, vitesse, 1000, self.animations["boss"]))
         for i in range(self.nb_creep_vague):
             self.liste_monstres_entrepot.append(
@@ -539,7 +539,6 @@ class Modele:
         if tour.prix_niveau <= self.argent:
             self.argent -= tour.prix_niveau
             tour.upgrade()
-            self.parent.update_upgrade()
 
 
 class Controleur:
@@ -563,6 +562,8 @@ class Controleur:
                 if not self.pause:
                     self.modele.jouer_tour()
                 self.vue.afficher_partie()
+                if self.modele.liste_monstres_terrain:
+                    print(self.modele.liste_monstres_terrain[0].stack_poison)
                 self.vue.root.after(40, self.jouer_partie)
             else:
                 self.vue.afficher_fin_partie()
@@ -615,8 +616,6 @@ class Controleur:
     def upgrade(self, tour):
         self.modele.upgrade(tour)
 
-    def update_upgrade(self):
-        self.vue.update_upgrade()
 
 
 if __name__ == '__main__':
